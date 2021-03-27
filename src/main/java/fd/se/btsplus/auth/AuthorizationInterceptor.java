@@ -33,7 +33,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             annotation = method.getDeclaringClass().getAnnotation(Authorized.class);
         }
         if (annotation == null) {
-            return false;
+            return true;
         } else {
             final List<Role> roles = Arrays.stream(annotation.required()).collect(Collectors.toList());
             if (roles.contains(Role.ANY)) {
