@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import fd.se.btsplus.auth.Subject;
 import fd.se.btsplus.bts.exception.BtsForbiddenException;
 import fd.se.btsplus.bts.exception.BtsUnauthorizedException;
+import fd.se.btsplus.bts.exception.BtsUnknownException;
 import fd.se.btsplus.bts.model.response.BtsBaseRes;
 import fd.se.btsplus.bts.model.response.BtsCurrUserRes;
 import fd.se.btsplus.bts.model.response.BtsLoginRes;
@@ -83,7 +84,7 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
         try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
-            throw new BtsUnauthorizedException(e.getMessage(), e);
+            throw new BtsUnknownException(e.getMessage(), e);
         }
         switch (response.code()) {
             case HTTP_UNAUTHORIZED:

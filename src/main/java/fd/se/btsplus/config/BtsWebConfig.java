@@ -16,8 +16,14 @@ public class BtsWebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor).
-                excludePathPatterns("/login");
+                addPathPatterns().
+                excludePathPatterns("/login").
+                excludePathPatterns("/**");
         registry.addInterceptor(authorizationInterceptor).
-                excludePathPatterns("/login");
+                addPathPatterns().
+                excludePathPatterns("/login").
+                excludePathPatterns("/**");
     }
 }
+
+
