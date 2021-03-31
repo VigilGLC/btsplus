@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constant {
 
-    public static final String LOGIN_TOKEN_HEADER = "login-header";
+    public static final String LOGIN_TOKEN_HEADER = "login-token";
 
 
     public static final String HTTP_GET = "GET";

@@ -13,16 +13,18 @@ public class BtsWebConfig implements WebMvcConfigurer {
     final AuthenticationInterceptor authenticationInterceptor;
     final AuthorizationInterceptor authorizationInterceptor;
 
+    private static final String[] PATTERNS = new String[]{
+//            ""
+    };
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor).
-                addPathPatterns().
-                excludePathPatterns("/login").
-                excludePathPatterns("/**");
+                addPathPatterns(PATTERNS).
+                excludePathPatterns("/login");
         registry.addInterceptor(authorizationInterceptor).
-                addPathPatterns().
-                excludePathPatterns("/login").
-                excludePathPatterns("/**");
+                addPathPatterns(PATTERNS).
+                excludePathPatterns("/login");
     }
 }
 
