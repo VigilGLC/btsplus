@@ -1,6 +1,7 @@
 package fd.se.btsplus.controller;
 
 import fd.se.btsplus.bts.http.IBtsHttpCaller;
+import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.BtsLoanRes;
 import fd.se.btsplus.model.request.LoanReq;
 import fd.se.btsplus.model.response.LoanRes;
@@ -29,7 +30,7 @@ public class LoanController {
     })
     @GetMapping("/loan")
     public ResponseEntity<?> loan(@RequestBody LoanReq request) {
-        BtsLoanRes res = caller.loan(request.getPageNum(), request.getPageSize(), request.getParams());
+        BtsLoanRes res = caller.loan(Param.of("pageNum",request.getPageNum()), Param.of("pageSize",request.getPageSize()));
         return ResponseEntity.
                 status(res.getCode()).
                 body(ResWrapper.wrap(res.getCode(), LoanRes.from(res)));

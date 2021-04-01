@@ -1,10 +1,11 @@
 package fd.se.btsplus.controller;
 
 import fd.se.btsplus.bts.http.IBtsHttpCaller;
+import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.BtsTransactionRes;
 import fd.se.btsplus.model.request.TransactionReq;
-import fd.se.btsplus.model.response.TransactionRes;
 import fd.se.btsplus.model.response.ResWrapper;
+import fd.se.btsplus.model.response.TransactionRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,7 +29,7 @@ public class TransactionController {
     })
     @GetMapping("/Transaction")
     public ResponseEntity<?> Transaction(@RequestBody TransactionReq request) {
-        BtsTransactionRes res = caller.transaction(request.getPageNum(), request.getPageSize(), request.getParams());
+        BtsTransactionRes res = caller.transaction(Param.of("pageNum",request.getPageNum()), Param.of("pageSize",request.getPageSize()));
         return ResponseEntity.
                 status(res.getCode()).
                 body(ResWrapper.wrap(res.getCode(), TransactionRes.from(res)));

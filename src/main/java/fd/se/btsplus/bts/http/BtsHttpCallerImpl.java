@@ -7,6 +7,7 @@ import fd.se.btsplus.auth.Subject;
 import fd.se.btsplus.bts.exception.BtsForbiddenException;
 import fd.se.btsplus.bts.exception.BtsUnauthorizedException;
 import fd.se.btsplus.bts.exception.BtsUnknownException;
+import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.*;
 import fd.se.btsplus.model.consts.Constant;
 import lombok.AllArgsConstructor;
@@ -33,9 +34,7 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
 
     @Override
     public BtsLoginRes login(String username, String password) {
-        final HttpUrl url = new HttpUrl.Builder().
-                host(IBtsHttpCaller.BTS_URL).
-                addPathSegments("/sys/login/restful").build();
+        final HttpUrl url = buildUrl("/sys/login/restful");
         final RequestBody body = new FormBody.Builder().
                 add("username", username).
                 add("password", password).build();
@@ -49,26 +48,18 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     }
 
     @Override
-    public BtsLoanRes loan(String pageNum, String pageSize, String params){
-        final RequestBody body = new FormBody.Builder().
-                add("pageNum", pageNum).
-                add("pageSize", pageSize).
-                add("params", params).
-                build();
+    public BtsLoanRes loan(Param... params) {
+        final HttpUrl url = buildUrl("/loan", params);
         final Request request = buildRequest(HTTP_GET,
-                "/loan", body, true);
+                url, null, true);
         return callBtsRequest(request, BtsLoanRes.class);
     }
 
     @Override
-    public BtsTransactionRes transaction(String pageNum, String pageSize, String params){
-        final RequestBody body = new FormBody.Builder().
-                add("pageNum", pageNum).
-                add("pageSize", pageSize).
-                add("params", params).
-                build();
+    public BtsTransactionRes transaction(Param... params) {
+        final HttpUrl url = buildUrl("/transaction", params);
         final Request request = buildRequest(HTTP_GET,
-                "/transaction", body, true);
+                url, null, true);
         return callBtsRequest(request, BtsTransactionRes.class);
     }
 
@@ -93,6 +84,21 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
 
     //region okhttp request, response helpers.
     private final OkHttpClient client = new OkHttpClient();
+
+    private HttpUrl buildUrl(String path, Param... params) {
+        final HttpUrl.Builder builder = new HttpUrl.Builder().
+                host(IBtsHttpCaller.BTS_URL).
+                addPathSegments(path);
+        if (params != null) {
+            for (Param param : params) {
+                if (param.getQuery() != null && param.getValue() != null &&
+                        !param.getQuery().isEmpty()) {
+                    builder.addQueryParameter(param.getQuery(), param.getValue());
+                }
+            }
+        }
+       return builder.build();
+    }
 
     @SneakyThrows
     private Request buildRequest(String method, HttpUrl url, RequestBody body, boolean withToken) {
