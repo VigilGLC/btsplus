@@ -7,9 +7,7 @@ import fd.se.btsplus.auth.Subject;
 import fd.se.btsplus.bts.exception.BtsForbiddenException;
 import fd.se.btsplus.bts.exception.BtsUnauthorizedException;
 import fd.se.btsplus.bts.exception.BtsUnknownException;
-import fd.se.btsplus.bts.model.response.BtsBaseRes;
-import fd.se.btsplus.bts.model.response.BtsCurrUserRes;
-import fd.se.btsplus.bts.model.response.BtsLoginRes;
+import fd.se.btsplus.bts.model.response.*;
 import fd.se.btsplus.model.consts.Constant;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -21,6 +19,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
+import static fd.se.btsplus.model.consts.Constant.HTTP_GET;
 import static fd.se.btsplus.model.consts.Constant.HTTP_POST;
 import static java.net.HttpURLConnection.*;
 
@@ -47,6 +46,30 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     @Override
     public BtsCurrUserRes currUser() {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public BtsLoanRes loan(String pageNum, String pageSize, String params){
+        final RequestBody body = new FormBody.Builder().
+                add("pageNum", pageNum).
+                add("pageSize", pageSize).
+                add("params", params).
+                build();
+        final Request request = buildRequest(HTTP_GET,
+                "/loan", body, true);
+        return callBtsRequest(request, BtsLoanRes.class);
+    }
+
+    @Override
+    public BtsTransactionRes transaction(String pageNum, String pageSize, String params){
+        final RequestBody body = new FormBody.Builder().
+                add("pageNum", pageNum).
+                add("pageSize", pageSize).
+                add("params", params).
+                build();
+        final Request request = buildRequest(HTTP_GET,
+                "/transaction", body, true);
+        return callBtsRequest(request, BtsTransactionRes.class);
     }
 
     @SneakyThrows

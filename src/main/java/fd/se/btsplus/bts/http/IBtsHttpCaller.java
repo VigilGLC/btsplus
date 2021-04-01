@@ -1,7 +1,9 @@
 package fd.se.btsplus.bts.http;
 
 import fd.se.btsplus.bts.model.response.BtsCurrUserRes;
+import fd.se.btsplus.bts.model.response.BtsLoanRes;
 import fd.se.btsplus.bts.model.response.BtsLoginRes;
+import fd.se.btsplus.bts.model.response.BtsTransactionRes;
 
 public interface IBtsHttpCaller {
 
@@ -10,5 +12,9 @@ public interface IBtsHttpCaller {
     BtsLoginRes login(String username, String password);
 
     BtsCurrUserRes currUser();
+
+    BtsLoanRes loan(String pageNum, String pageSize, String params);
+
+    BtsTransactionRes transaction(String pageNum, String pageSize, String params);
 
 }
