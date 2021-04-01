@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
-import java.net.URL;
 
 import static fd.se.btsplus.model.consts.Constant.HTTP_POST;
 import static java.net.HttpURLConnection.*;
@@ -35,11 +34,13 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
 
     @Override
     public BtsLoginRes login(String username, String password) {
+        final HttpUrl url = new HttpUrl.Builder().
+                host(IBtsHttpCaller.BTS_URL).
+                addPathSegments("/sys/login/restful").build();
         final RequestBody body = new FormBody.Builder().
                 add("username", username).
                 add("password", password).build();
-        final Request request = buildRequest(HTTP_POST,
-                "/sys/login/restful", body, false);
+        final Request request = buildRequest(HTTP_POST, url, body, false);
         return callBtsRequest(request, BtsLoginRes.class);
     }
 
@@ -71,12 +72,12 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     private final OkHttpClient client = new OkHttpClient();
 
     @SneakyThrows
-    private Request buildRequest(String method, String path, RequestBody body, boolean withToken) {
+    private Request buildRequest(String method, HttpUrl url, RequestBody body, boolean withToken) {
         final Request.Builder builder = new Request.Builder();
         if (withToken) {
             builder.header(Constant.LOGIN_TOKEN_HEADER, subject.getLoginToken());
         }
-        return builder.url(new URL(new URL(BTS_URL), path)).method(method, body).build();
+        return builder.url(url).method(method, body).build();
     }
 
     private Response callRequest(Request request) {
