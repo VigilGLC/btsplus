@@ -1,7 +1,9 @@
 package fd.se.btsplus.bts.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
+@Data
 public class BtsLoan {
     private String iouNum;
     private String customerCode;
