@@ -44,7 +44,18 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
 
     @Override
     public BtsCurrUserRes currUser() {
-        throw new NotImplementedException();
+        final HttpUrl url = buildUrl("/users/current");
+        final Request request = buildRequest(HTTP_GET,
+                url, null, true);
+        return callBtsRequest(request, BtsCurrUserRes.class);
+    }
+
+    @Override
+    public BtsQueryAccountRes queryAccount(Param... params){
+        final HttpUrl url = buildUrl("/account", params);
+        final Request request = buildRequest(HTTP_GET,
+                url, null, true);
+        return callBtsRequest(request, BtsQueryAccountRes.class);
     }
 
     @Override
@@ -88,6 +99,7 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     private HttpUrl buildUrl(String path, Param... params) {
         final HttpUrl.Builder builder = new HttpUrl.Builder().
                 host(IBtsHttpCaller.BTS_URL).
+                port(IBtsHttpCaller.PORT).
                 addPathSegments(path);
         if (params != null) {
             for (Param param : params) {
