@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BtsAccountData {
-    //    private Object accountDtos []
     private String address;
     private String alternateName;
     private String alternatePhone;
@@ -28,5 +27,4 @@ public class BtsAccountData {
     private int sex;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private String updateTime;
-//    updater: null
 }

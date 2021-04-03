@@ -14,7 +14,7 @@ import java.util.List;
 public class TransactionRes extends BaseRes{
     private List<BtsTransaction> transactions;
     public static TransactionRes from(BtsTransactionRes res) {
-        return new TransactionRes(res.getTransactions());
+        return new TransactionRes(res.getList());
     }
 
 }

@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class BtsLoanRes extends BtsBaseRes {
-    private List<BtsLoan> loans;
+    private List<BtsLoan> list;
 }
