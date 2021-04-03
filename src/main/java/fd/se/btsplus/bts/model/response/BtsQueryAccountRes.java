@@ -1,9 +1,11 @@
 package fd.se.btsplus.bts.model.response;
 
-import fd.se.btsplus.bts.model.domain.BtsAccountData;
+import fd.se.btsplus.bts.model.domain.BtsAccountDatum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -11,8 +13,7 @@ import lombok.NoArgsConstructor;
 public class BtsQueryAccountRes extends BtsBaseRes {
     private int code;
     private long count;
-    private BtsAccountData data;
+    private List<BtsAccountDatum> data;
     private boolean flag;
     private String message;
-
 }

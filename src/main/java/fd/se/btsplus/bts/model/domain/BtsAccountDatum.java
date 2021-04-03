@@ -5,10 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BtsAccountData {
+public class BtsAccountDatum {
+    private List<AccountDto> accountDtos;
+
     private String address;
     private String alternateName;
     private String alternatePhone;
