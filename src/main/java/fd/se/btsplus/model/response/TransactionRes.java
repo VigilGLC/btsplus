@@ -16,5 +16,4 @@ public class TransactionRes extends BaseRes{
     public static TransactionRes from(BtsTransactionRes res) {
         return new TransactionRes(res.getList());
     }
-
 }

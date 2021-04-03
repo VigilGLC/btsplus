@@ -15,10 +15,10 @@ public class BtsWebConfig implements WebMvcConfigurer {
 
     private static final String[] PATTERNS = new String[]{
             "/placeholder",
-            "/loan",
-            "transaction",
             "/users/current",
-            "/account"
+            "/account",
+            "/loan",
+            "/transaction",
     };
 
     @Override

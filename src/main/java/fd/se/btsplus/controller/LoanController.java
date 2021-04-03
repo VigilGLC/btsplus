@@ -7,6 +7,8 @@ import fd.se.btsplus.model.response.LoanRes;
 import fd.se.btsplus.model.response.ResWrapper;
 import fd.se.btsplus.model.response.TransactionRes;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +25,7 @@ public class LoanController {
     private final IBtsHttpCaller caller;
 
     @Operation(method = "GET", tags = "Loan", summary = "贷款查询")
+    @Parameter(in = ParameterIn.HEADER,required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = LoanRes.class), mediaType = "application/json")
     })
