@@ -1,0 +1,9 @@
+package fd.se.btsplus.repository.term;
+
+import fd.se.btsplus.model.entity.term.TermPurchase;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface TermPurchaseRepository extends CrudRepository<TermPurchase,Long> {
+}
