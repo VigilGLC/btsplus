@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BtsData {
+public class BtsAccountData {
     //    private Object accountDtos []
     private String address;
     private String alternateName;
