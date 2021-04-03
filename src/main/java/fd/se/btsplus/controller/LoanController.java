@@ -3,9 +3,11 @@ package fd.se.btsplus.controller;
 import fd.se.btsplus.bts.http.IBtsHttpCaller;
 import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.BtsLoanRes;
+import fd.se.btsplus.bts.model.response.BtsTransactionRes;
 import fd.se.btsplus.model.request.LoanReq;
 import fd.se.btsplus.model.response.LoanRes;
 import fd.se.btsplus.model.response.ResWrapper;
+import fd.se.btsplus.model.response.TransactionRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -21,18 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoanController {
     private final IBtsHttpCaller caller;
+//    String str = "{\"orderBy\":\"order by b.updateTime desc\",\"iouNum\":\"\",\"customerCode\":\"AB2121202104012\",\"loanStatus\":2}"
 
     @Operation(method = "GET", tags = "Loan", summary = "贷款查询")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
-            content = @Content(schema = @Schema(implementation = LoanReq.class)))
     @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = LoanRes.class), mediaType = "application/json")
     })
     @GetMapping("/loan")
-    public ResponseEntity<?> loan(@RequestBody LoanReq request) {
-        BtsLoanRes res = caller.loan(Param.of("pageNum",request.getPageNum()), Param.of("pageSize",request.getPageSize()));
+    public ResponseEntity<?> Loan(@RequestParam String pageNum, @RequestParam String pageSize, @RequestParam(required = false) String params) {
+        BtsTransactionRes res = caller.transaction(Param.of("pageNum", pageNum),Param.of("pageSize", pageSize), Param.of("params", params));
         return ResponseEntity.
                 status(res.getCode()).
-                body(ResWrapper.wrap(res.getCode(), LoanRes.from(res)));
+                body(ResWrapper.wrap(res.getCode(), TransactionRes.from(res)));
     }
 }

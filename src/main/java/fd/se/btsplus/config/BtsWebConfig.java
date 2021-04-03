@@ -14,7 +14,9 @@ public class BtsWebConfig implements WebMvcConfigurer {
     final AuthorizationInterceptor authorizationInterceptor;
 
     private static final String[] PATTERNS = new String[]{
-        "/placeholder"
+        "/placeholder",
+            "/loan",
+            "transaction"
     };
 
     @Override

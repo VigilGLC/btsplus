@@ -14,7 +14,7 @@ import java.util.List;
 public class LoanRes extends BaseRes{
     private List<BtsLoan> loans;
     public static LoanRes from(BtsLoanRes res) {
-        return new LoanRes(res.getLoans());
+        return new LoanRes(res.getList());
     }
 
 }
