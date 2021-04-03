@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
@@ -34,7 +33,6 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
 
     @Override
     public BtsLoginRes login(String username, String password) {
-
         final HttpUrl url = buildUrl("/sys/login/restful");
         final RequestBody body = new FormBody.Builder().
                 add("username", username).
@@ -52,7 +50,7 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     }
 
     @Override
-    public BtsQueryAccountRes queryAccount(Param... params){
+    public BtsQueryAccountRes queryAccount(Param... params) {
         final HttpUrl url = buildUrl("/account", params);
         final Request request = buildRequest(HTTP_GET,
                 url, null, true);
@@ -75,24 +73,6 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
         return callBtsRequest(request, BtsTransactionRes.class);
     }
 
-    @SneakyThrows
-    private <T extends BtsBaseRes> T callBtsRequest(Request request, Class<T> clazz) {
-        T res = clazz.newInstance();
-        try (Response response = callRequest(request)) {
-            if (response.code() == HTTP_OK) {
-                if (response.body() != null) {
-                    res = readJSON(response.body().string(), clazz);
-                }
-            }
-            res.setCode(response.code());
-        } catch (JsonProcessingException e) {
-            log.error(String.format("JSON Read Error: %s", e.getMessage()), e);
-        } catch (IOException e) {
-            log.error(String.format("Unknown Error: %s", e.getMessage()), e);
-        }
-        return res;
-    }
-
 
     //region okhttp request, response helpers.
     private final OkHttpClient client = new OkHttpClient();
@@ -112,7 +92,7 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
                 }
             }
         }
-       return builder.build();
+        return builder.build();
     }
 
     @SneakyThrows
@@ -142,6 +122,25 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
         }
         return response;
     }
+
+    @SneakyThrows
+    private <T extends BtsBaseRes> T callBtsRequest(Request request, Class<T> clazz) {
+        T res = clazz.newInstance();
+        try (Response response = callRequest(request)) {
+            if (response.code() == HTTP_OK) {
+                if (response.body() != null) {
+                    res = readJSON(response.body().string(), clazz);
+                }
+            }
+            res.setCode(response.code());
+        } catch (JsonProcessingException e) {
+            log.error(String.format("JSON Read Error: %s", e.getMessage()), e);
+        } catch (IOException e) {
+            log.error(String.format("Unknown Error: %s", e.getMessage()), e);
+        }
+        return res;
+    }
+
     //endregion
 
     //region JSON helpers.
