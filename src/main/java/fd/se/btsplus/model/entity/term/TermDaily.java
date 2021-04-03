@@ -1,4 +1,4 @@
-package fd.se.btsplus.model.entity.fund;
+package fd.se.btsplus.model.entity.term;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @Data
 @Entity
 @RequiredArgsConstructor
-public class FundDaily {
+public class TermDaily {
     @Id
     private Long id;
     @ManyToOne
-    private Fund fund;
+    private Term term;
     private LocalDate date;
     private Double rate;
 }

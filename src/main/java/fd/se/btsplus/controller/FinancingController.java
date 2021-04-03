@@ -56,6 +56,7 @@ public class FinancingController {
     })
     @PostMapping("/wmprods/fund")
     public boolean purchaseFund(@RequestBody FundPurchaseReq request) {
+        financingService.purchaseFund(request);
         throw new NotImplementedException();
     }
 
