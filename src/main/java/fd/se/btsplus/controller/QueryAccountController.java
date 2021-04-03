@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ public class QueryAccountController {
             @Content(schema = @Schema(implementation = QueryAccountRes.class), mediaType = "application/json")
     })
     @Parameter(in = ParameterIn.HEADER,required = true, name = "login-token", schema = @Schema(type = "string"))
-    @PostMapping("/account")
+    @GetMapping("/account")
     public ResponseEntity<?> queryAccount(@Valid @RequestBody QueryAccountReq request) {
         BtsQueryAccountRes res = caller.queryAccount(Param.of("customerCode",request.getCustomerCode()),
                 Param.of("IDNumber",request.getIDNumber()),

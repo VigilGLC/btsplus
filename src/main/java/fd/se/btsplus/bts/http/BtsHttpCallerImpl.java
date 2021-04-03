@@ -34,6 +34,7 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
 
     @Override
     public BtsLoginRes login(String username, String password) {
+
         final HttpUrl url = buildUrl("/sys/login/restful");
         final RequestBody body = new FormBody.Builder().
                 add("username", username).
@@ -97,10 +98,12 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     private final OkHttpClient client = new OkHttpClient();
 
     private HttpUrl buildUrl(String path, Param... params) {
-        final HttpUrl.Builder builder = new HttpUrl.Builder().
-                host(IBtsHttpCaller.BTS_URL).
-                port(IBtsHttpCaller.PORT).
-                addPathSegments(path);
+        final HttpUrl.Builder builder = new HttpUrl.Builder()
+                .scheme(IBtsHttpCaller.SCHEME)
+                .host(IBtsHttpCaller.HOST)
+                .port(IBtsHttpCaller.PORT)
+                .addPathSegments(path);
+
         if (params != null) {
             for (Param param : params) {
                 if (param.getQuery() != null && param.getValue() != null &&
@@ -120,6 +123,7 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
         }
         return builder.url(url).method(method, body).build();
     }
+
 
     private Response callRequest(Request request) {
         Response response;

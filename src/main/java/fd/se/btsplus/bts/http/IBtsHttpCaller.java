@@ -5,7 +5,8 @@ import fd.se.btsplus.bts.model.response.*;
 
 public interface IBtsHttpCaller {
 
-    String BTS_URL = "http://10.176.122.171";
+    String SCHEME = "http";
+    String HOST = "10.176.122.171";
     int PORT = 8012;
 
     BtsLoginRes login(String username, String password);

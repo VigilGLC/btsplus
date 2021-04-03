@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class CurrUserController {
             @Content(schema = @Schema(implementation = CurrUserRes.class), mediaType = "application/json")
     })
     @Parameter(in = ParameterIn.HEADER,required = true, name = "login-token", schema = @Schema(type = "string"))
-    @PostMapping("/users/current")
+    @GetMapping("/users/current")
     public ResponseEntity<?> currUser(){
         BtsCurrUserRes res = caller.currUser();
         return ResponseEntity.
