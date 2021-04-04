@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -66,28 +66,27 @@ public class FinancingController {
     })
     @PostMapping("/wmprods/fund")
     public boolean purchaseFund(@RequestBody FundPurchaseReq request) {
-        financingService.purchaseFund(request);
-        throw new NotImplementedException();
+        return financingService.purchaseFund(request);
     }
 
-    @Operation(method = "POST", tags = "Financing", summary = "购买定期理财")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
-    @ApiResponse(responseCode = "200", content = {
-            @Content(schema = @Schema(type = "boolean"))
-    })
-    @PostMapping("/wmprods/term")
-    public boolean purchaseTerm(@RequestBody TermPurchaseReq request) {
-        throw new NotImplementedException();
-    }
-
-    @Operation(method = "POST", tags = "Financing", summary = "购买股票")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
-    @ApiResponse(responseCode = "200", content = {
-            @Content(schema = @Schema(type = "boolean"))
-    })
-    @PostMapping("/wmprods/stock")
-    public boolean purchaseStock(@RequestBody StockPurchaseReq request) {
-        throw new NotImplementedException();
-    }
+//    @Operation(method = "POST", tags = "Financing", summary = "购买定期理财")
+//    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+//    @ApiResponse(responseCode = "200", content = {
+//            @Content(schema = @Schema(type = "boolean"))
+//    })
+//    @PostMapping("/wmprods/term")
+//    public boolean purchaseTerm(@RequestBody TermPurchaseReq request) {
+//        throw new NotImplementedException();
+//    }
+//
+//    @Operation(method = "POST", tags = "Financing", summary = "购买股票")
+//    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+//    @ApiResponse(responseCode = "200", content = {
+//            @Content(schema = @Schema(type = "boolean"))
+//    })
+//    @PostMapping("/wmprods/stock")
+//    public boolean purchaseStock(@RequestBody StockPurchaseReq request) {
+//        throw new NotImplementedException();
+//    }
 
 }

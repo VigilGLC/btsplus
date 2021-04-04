@@ -3,12 +3,11 @@ package fd.se.btsplus.controller;
 import fd.se.btsplus.bts.http.IBtsHttpCaller;
 import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.BtsCurrUserRes;
-import fd.se.btsplus.bts.model.response.BtsLoginRes;
 import fd.se.btsplus.bts.model.response.BtsQueryAccountRes;
-import fd.se.btsplus.model.request.LoginReq;
+import fd.se.btsplus.bts.model.response.BtsTransferRes;
 import fd.se.btsplus.model.response.CurrUserRes;
-import fd.se.btsplus.model.response.LoginRes;
 import fd.se.btsplus.model.response.QueryAccountRes;
+import fd.se.btsplus.model.response.TransferRes;
 import fd.se.btsplus.model.response.ResWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +19,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @AllArgsConstructor
 @RestController
@@ -59,6 +57,28 @@ public class TestController {
         return ResponseEntity.
                 status(res.getCode()).
                 body(ResWrapper.wrap(res.getCode(), QueryAccountRes.from(res)));
+    }
+
+    //  转账
+    @Operation(method = "PUT", tags = "Transfer", summary = "转账")
+    @ApiResponse(responseCode = "200", content = {
+            @Content(schema = @Schema(implementation = TransferRes.class), mediaType = "application/json")
+    })
+    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @PutMapping("/account/transfer")
+    public ResponseEntity<?> transfer(String account, String password, String reciprocalAccount, String amount, String transactionCode) {
+        BtsTransferRes res = caller.transfer(
+                Param.of("account", account),
+                Param.of("password", password),
+                Param.of("reciprocalAccount", reciprocalAccount),
+                Param.of("amount", amount),
+                Param.of("transactionCode", transactionCode),
+                Param.of("currency", "0"),
+                Param.of("operator", "210")
+        );
+        return ResponseEntity.
+                status(res.getCode()).
+                body(ResWrapper.wrap(res.getCode(), TransferRes.from(res)));
     }
 
 

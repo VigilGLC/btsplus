@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface FundRepository extends CrudRepository<Fund,Long> {
     List<Fund> findAll();
-
+    boolean existsById(long prodId);
 }

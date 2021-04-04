@@ -19,4 +19,6 @@ public interface IBtsHttpCaller {
 
     BtsTransactionRes transaction(Param... params);
 
+    BtsTransferRes transfer(Param... params);
+
 }

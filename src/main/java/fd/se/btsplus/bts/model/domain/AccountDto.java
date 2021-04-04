@@ -14,7 +14,7 @@ public class AccountDto {
     private String accountNum;
     private int accountType;
     private String accountTypeName;
-    private long balance;
+    private double balance;
     private String branchNum;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;

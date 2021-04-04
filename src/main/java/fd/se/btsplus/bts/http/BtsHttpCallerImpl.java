@@ -11,6 +11,7 @@ import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.*;
 import fd.se.btsplus.model.consts.Constant;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -19,8 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-import static fd.se.btsplus.model.consts.Constant.HTTP_GET;
-import static fd.se.btsplus.model.consts.Constant.HTTP_POST;
+import static fd.se.btsplus.model.consts.Constant.*;
 import static java.net.HttpURLConnection.*;
 
 @Profile("prod")
@@ -73,7 +73,14 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
         return callBtsRequest(request, BtsTransactionRes.class);
     }
 
-
+    @Override
+    public BtsTransferRes transfer(Param... params){
+        final HttpUrl url = buildUrl("/account/transfer",params);
+        final RequestBody body = buildBody(params);
+        final Request request = buildRequest(HTTP_PUT,
+                url, body, true);
+        return callBtsRequest(request, BtsTransferRes.class);
+    }
     //region okhttp request, response helpers.
     private final OkHttpClient client = new OkHttpClient();
 
@@ -90,6 +97,17 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
                         !param.getQuery().isEmpty()) {
                     builder.addQueryParameter(param.getQuery(), param.getValue());
                 }
+            }
+        }
+        return builder.build();
+    }
+
+    private RequestBody buildBody(Param... params){
+        final FormBody.Builder builder = new FormBody.Builder();
+        for (Param param : params){
+            if (param.getQuery() != null && param.getValue() != null &&
+                    !param.getQuery().isEmpty()) {
+                builder.add(param.getQuery(), param.getValue());
             }
         }
         return builder.build();
