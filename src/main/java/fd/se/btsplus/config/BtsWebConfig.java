@@ -19,6 +19,7 @@ public class BtsWebConfig implements WebMvcConfigurer {
             "/account",
             "/loan",
             "/transaction",
+            "/account/transfer"
     };
 
     @Override

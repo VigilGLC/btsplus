@@ -71,7 +71,7 @@ public class TestController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @PutMapping("/account/transfer")
     public ResponseEntity<?> transfer(String account, String password, String reciprocalAccount, String amount, String transactionCode) {
-        BtsTransferRes res = caller.transfer(new BtsTransferReq());
+        BtsTransferRes res = caller.transfer(new BtsTransferReq(account, password, reciprocalAccount, amount, transactionCode, "0", "210"));
         return ResponseEntity.
                 status(res.getCode()).
                 body(ResWrapper.wrap(res.getCode(), TransferRes.from(res)));
