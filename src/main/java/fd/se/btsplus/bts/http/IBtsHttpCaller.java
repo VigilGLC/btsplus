@@ -1,5 +1,6 @@
 package fd.se.btsplus.bts.http;
 
+import fd.se.btsplus.bts.model.request.BtsTransferReq;
 import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.*;
 
@@ -19,6 +20,6 @@ public interface IBtsHttpCaller {
 
     BtsTransactionRes transaction(Param... params);
 
-    BtsTransferRes transfer(Param... params);
+    BtsTransferRes transfer(BtsTransferReq req);
 
 }

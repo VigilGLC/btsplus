@@ -1,14 +1,15 @@
 package fd.se.btsplus.controller;
 
 import fd.se.btsplus.bts.http.IBtsHttpCaller;
+import fd.se.btsplus.bts.model.request.BtsTransferReq;
 import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.BtsCurrUserRes;
 import fd.se.btsplus.bts.model.response.BtsQueryAccountRes;
 import fd.se.btsplus.bts.model.response.BtsTransferRes;
 import fd.se.btsplus.model.response.CurrUserRes;
 import fd.se.btsplus.model.response.QueryAccountRes;
-import fd.se.btsplus.model.response.TransferRes;
 import fd.se.btsplus.model.response.ResWrapper;
+import fd.se.btsplus.model.response.TransferRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -17,7 +18,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @AllArgsConstructor
@@ -67,15 +71,7 @@ public class TestController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @PutMapping("/account/transfer")
     public ResponseEntity<?> transfer(String account, String password, String reciprocalAccount, String amount, String transactionCode) {
-        BtsTransferRes res = caller.transfer(
-                Param.of("account", account),
-                Param.of("password", password),
-                Param.of("reciprocalAccount", reciprocalAccount),
-                Param.of("amount", amount),
-                Param.of("transactionCode", transactionCode),
-                Param.of("currency", "0"),
-                Param.of("operator", "210")
-        );
+        BtsTransferRes res = caller.transfer(new BtsTransferReq());
         return ResponseEntity.
                 status(res.getCode()).
                 body(ResWrapper.wrap(res.getCode(), TransferRes.from(res)));

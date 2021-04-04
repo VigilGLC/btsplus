@@ -7,11 +7,11 @@ import fd.se.btsplus.auth.Subject;
 import fd.se.btsplus.bts.exception.BtsForbiddenException;
 import fd.se.btsplus.bts.exception.BtsUnauthorizedException;
 import fd.se.btsplus.bts.exception.BtsUnknownException;
+import fd.se.btsplus.bts.model.request.BtsTransferReq;
 import fd.se.btsplus.bts.model.request.Param;
 import fd.se.btsplus.bts.model.response.*;
 import fd.se.btsplus.model.consts.Constant;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -74,13 +74,13 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     }
 
     @Override
-    public BtsTransferRes transfer(Param... params){
-        final HttpUrl url = buildUrl("/account/transfer",params);
-        final RequestBody body = buildBody(params);
-        final Request request = buildRequest(HTTP_PUT,
-                url, body, true);
+    public BtsTransferRes transfer(BtsTransferReq req) {
+        final HttpUrl url = buildUrl("/account/transfer");
+        final RequestBody body = buildBody(req);
+        final Request request = buildRequest(HTTP_PUT, url, body, true);
         return callBtsRequest(request, BtsTransferRes.class);
     }
+
     //region okhttp request, response helpers.
     private final OkHttpClient client = new OkHttpClient();
 
@@ -102,15 +102,9 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
         return builder.build();
     }
 
-    private RequestBody buildBody(Param... params){
-        final FormBody.Builder builder = new FormBody.Builder();
-        for (Param param : params){
-            if (param.getQuery() != null && param.getValue() != null &&
-                    !param.getQuery().isEmpty()) {
-                builder.add(param.getQuery(), param.getValue());
-            }
-        }
-        return builder.build();
+    @SneakyThrows
+    private RequestBody buildBody(Object object) {
+        return RequestBody.create(MediaType.parse("application/json"), writeJSON(object));
     }
 
     @SneakyThrows
@@ -164,6 +158,10 @@ public final class BtsHttpCallerImpl implements IBtsHttpCaller {
     //region JSON helpers.
     private static <T> T readJSON(String json, Class<T> clazz) throws JsonProcessingException {
         return MAPPER.readValue(json, clazz);
+    }
+
+    private static String writeJSON(Object object) throws JsonProcessingException {
+        return MAPPER.writeValueAsString(object);
     }
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
