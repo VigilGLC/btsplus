@@ -33,9 +33,9 @@ public class TestController {
     @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = CurrUserRes.class), mediaType = "application/json")
     })
-    @Parameter(in = ParameterIn.HEADER,required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @GetMapping("/users/current")
-    public ResponseEntity<?> currUser(){
+    public ResponseEntity<?> currUser() {
         BtsCurrUserRes res = caller.currUser();
         return ResponseEntity.
                 status(res.getCode()).
@@ -48,13 +48,13 @@ public class TestController {
     @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = QueryAccountRes.class), mediaType = "application/json")
     })
-    @Parameter(in = ParameterIn.HEADER,required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @GetMapping("/account")
-    public ResponseEntity<?> queryAccount(@RequestParam(required = false) String customerCode, @RequestParam(required = false) String IDNumber, @RequestParam(required = false) String accountNum, @RequestParam(required = false)String password) {
-        BtsQueryAccountRes res = caller.queryAccount(Param.of("customerCode",customerCode),
-                Param.of("IDNumber",IDNumber),
-                Param.of("accountNum",accountNum),
-                Param.of("password",password)
+    public ResponseEntity<?> queryAccount(@RequestParam(required = false) String customerCode, @RequestParam(required = false) String IDNumber, @RequestParam(required = false) String accountNum, @RequestParam(required = false) String password) {
+        BtsQueryAccountRes res = caller.queryAccount(Param.of("customerCode", customerCode),
+                Param.of("IDNumber", IDNumber),
+                Param.of("accountNum", accountNum),
+                Param.of("password", password)
         );
         return ResponseEntity.
                 status(res.getCode()).

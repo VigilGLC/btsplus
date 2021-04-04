@@ -1,11 +1,14 @@
 package fd.se.btsplus.model.response;
 
 
+import fd.se.btsplus.bts.model.domain.BtsAccountDatum;
 import fd.se.btsplus.bts.model.response.BtsQueryAccountRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -16,8 +19,7 @@ public class QueryAccountRes extends BaseRes {
     @Schema(description = "count")
     private long count;
     @Schema(description = "data")
-//    private BtsData data;
-    private Object data;
+    private List<BtsAccountDatum> data;
 
     @Schema(description = "flag")
     private boolean flag;
