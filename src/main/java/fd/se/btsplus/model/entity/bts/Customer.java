@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -17,7 +18,7 @@ public class Customer {
     private String name;
     @ManyToOne
     private User creator;
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     private int sex;
     private String phone;

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -20,7 +21,7 @@ public class Account {
     private User creator;
     @ManyToOne
     private Customer customer;
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
     private Long balance;
 }

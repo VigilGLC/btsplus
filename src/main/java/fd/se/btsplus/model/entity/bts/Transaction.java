@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -16,7 +17,7 @@ public class Transaction {
     private Long id;
     @ManyToOne
     private User operator;
-    private LocalDateTime operatedTime;
+    private Date operatedTime;
 
     private String transactionCode;
     private String transactionNum;

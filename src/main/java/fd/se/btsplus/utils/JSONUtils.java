@@ -6,11 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+
 @Slf4j
 @Component
 @AllArgsConstructor
 public class JSONUtils {
     private final ObjectMapper mapper = new ObjectMapper();
+
+    {
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm"));
+    }
 
     public String write(Object obj) {
         try {

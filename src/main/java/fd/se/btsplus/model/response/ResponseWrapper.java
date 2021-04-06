@@ -11,10 +11,10 @@ public class ResponseWrapper {
     private Object data;
 
     public static ResponseWrapper wrap(int code, Object data) {
-        return wrap(code, data);
+        return wrap(code, null,data);
     }
 
-    public static ResponseWrapper wrap(int code, String mesasge, Object data) {
-        return new ResponseWrapper(code, mesasge, data);
+    public static ResponseWrapper wrap(int code, String message, Object data) {
+        return new ResponseWrapper(code, message, data);
     }
 }

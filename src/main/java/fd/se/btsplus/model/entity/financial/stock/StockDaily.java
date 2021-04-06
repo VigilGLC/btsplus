@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Entity
@@ -16,6 +17,6 @@ public class StockDaily {
     private Long id;
     @ManyToOne
     private Stock stock;
-    private LocalDate date;
+    private Date date;
     private Double price;
 }

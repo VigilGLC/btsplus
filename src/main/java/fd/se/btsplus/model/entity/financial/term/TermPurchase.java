@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -21,6 +22,6 @@ public class TermPurchase {
     private Double initAmount;
 
     private Double currAmount;
-    private LocalDate beginDate;
-    private LocalDate endDate;
+    private Date beginDate;
+    private Date endDate;
 }

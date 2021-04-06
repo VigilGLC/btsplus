@@ -6,8 +6,8 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -18,9 +18,9 @@ public class Bill {
     private User creator;
     private LocalDateTime createdTime;
 
-    private LocalDate beginDate;
-    private LocalDate endDate;
-    private LocalDate updateDate;
+    private Date beginDate;
+    private Date endDate;
+    private Date updateDate;
 
     private int planNum;
     private Double planPrincipal;

@@ -9,9 +9,9 @@ import fd.se.btsplus.repository.bts.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 
 @Component
 @AllArgsConstructor
@@ -40,12 +40,16 @@ public class TokenUtils {
         return userRepository.findByUsernameAndPassword(username, password);
     }
 
-    private boolean expired(DecodedJWT decodedJWT) {
-        return decodedJWT.getExpiresAt().before(dateAfter(0));
+    public Date getExpireAt(String token) {
+        return JWT.decode(token).getExpiresAt();
     }
 
-    public static java.util.Date dateAfter(int hours) {
-        return Date.from(LocalDateTime.now().plusHours(hours).
+    private boolean expired(String token) {
+        return getExpireAt(token).before(new java.util.Date());
+    }
+
+    public static Date dateAfter(int hours) {
+        return java.sql.Date.from(LocalDateTime.now().plusHours(hours).
                 atZone(ZoneId.systemDefault()).toInstant());
     }
 }

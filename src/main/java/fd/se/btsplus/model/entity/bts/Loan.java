@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -16,9 +17,9 @@ public class Loan {
     private String iouNum;
     @ManyToOne
     private User creator;
-    private LocalDateTime createdTime;
+    private Date createdTime;
 
-    private LocalDate loanDate;
+    private Date loanDate;
 
     private String transactionCode;
     private String transactionNum;

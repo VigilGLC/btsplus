@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -16,5 +17,5 @@ public class Term implements IFinancialProduct {
     @Id
     private Long id;
     private String name;
-    private LocalDateTime createdTime;
+    private Date createdTime;
 }

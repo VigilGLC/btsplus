@@ -1,5 +1,6 @@
 package fd.se.btsplus.model.consts;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
@@ -15,6 +16,7 @@ public enum Role {
         this.value = value;
     }
 
+    @JsonCreator
     public static Role of(int roleType) {
         for (Role role : Role.values()) {
             if (role.value == roleType) {
