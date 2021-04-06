@@ -6,7 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -30,6 +36,15 @@ public class JSONUtils {
     public <T> T read(String json, Class<T> clazz) {
         try {
             return mapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public <T> List<T> readList(String json, Class<T> clazz) {
+        try {
+            return mapper.readerForListOf(clazz).readValue(json);
         } catch (JsonProcessingException e) {
             log.error(e.getMessage(), e);
         }

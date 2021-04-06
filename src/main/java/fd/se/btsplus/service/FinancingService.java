@@ -1,8 +1,8 @@
 package fd.se.btsplus.service;
 
-import fd.se.btsplus.repository.fund.FundRepository;
-import fd.se.btsplus.repository.stock.StockRepository;
-import fd.se.btsplus.repository.term.TermRepository;
+import fd.se.btsplus.repository.financial.fund.FundRepository;
+import fd.se.btsplus.repository.financial.stock.StockRepository;
+import fd.se.btsplus.repository.financial.term.TermRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package fd.se.btsplus.repository.stock;
+package fd.se.btsplus.repository.financial.stock;
 
 import fd.se.btsplus.model.entity.financial.stock.Stock;
 import org.springframework.data.repository.CrudRepository;
