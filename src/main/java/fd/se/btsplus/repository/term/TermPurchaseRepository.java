@@ -1,6 +1,6 @@
 package fd.se.btsplus.repository.term;
 
-import fd.se.btsplus.model.entity.term.TermPurchase;
+import fd.se.btsplus.model.entity.financial.term.TermPurchase;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -5,19 +5,19 @@ import lombok.Getter;
 
 @Getter
 public enum Role {
-    ANY(-1),
-    TELLER(4),
-    ADMIN(3);
+    TELLER(1),
+    ADMIN(2),
+    ANY(3);
 
-    private final int roleType;
+    private final int value;
 
-    Role(int roleType) {
-        this.roleType = roleType;
+    Role(int value) {
+        this.value = value;
     }
 
     public static Role of(int roleType) {
         for (Role role : Role.values()) {
-            if (role.roleType == roleType) {
+            if (role.value == roleType) {
                 return role;
             }
         }
@@ -26,6 +26,13 @@ public enum Role {
 
     @JsonValue
     public int value() {
-        return roleType;
+        return value;
+    }
+
+    public boolean satisfy(Role role) {
+        if (role == null) {
+            return true;
+        }
+        return (this.value & role.value) != 0;
     }
 }

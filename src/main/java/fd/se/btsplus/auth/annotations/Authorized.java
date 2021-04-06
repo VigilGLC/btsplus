@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Authorized {
-    Role[] required() default Role.ANY;
+    Role required() default Role.ANY;
 }

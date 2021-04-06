@@ -1,10 +1,6 @@
 package fd.se.btsplus.controller;
 
-import fd.se.btsplus.bts.http.IBtsHttpCaller;
-import fd.se.btsplus.bts.model.request.Param;
-import fd.se.btsplus.bts.model.response.BtsTransactionRes;
-import fd.se.btsplus.model.response.ResWrapper;
-import fd.se.btsplus.model.response.TransactionRes;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -20,20 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 public class TransactionController {
-    private final IBtsHttpCaller caller;
-
-    @Operation(method = "GET", tags = "Transaction", summary = "交易流水查询")
-    @Parameter(in = ParameterIn.HEADER,required = true, name = "login-token", schema = @Schema(type = "string"))
-    @ApiResponse(responseCode = "200", content = {
-            @Content(schema = @Schema(implementation = TransactionRes.class), mediaType = "application/json")
-    })
-    @GetMapping("/transaction")
-    public ResponseEntity<?> transaction(@RequestParam String pageNum, @RequestParam String pageSize, @RequestParam String params) {
-        BtsTransactionRes res = caller.transaction(Param.of("pageNum", pageNum),
-                Param.of("pageSize", pageSize),
-                Param.of("params", params));
-        return ResponseEntity.
-                status(res.getCode()).
-                body(ResWrapper.wrap(res.getCode(), TransactionRes.from(res)));
-    }
+//    private final IBtsHttpCaller caller;
+//
+//    @Operation(method = "GET", tags = "Transaction", summary = "交易流水查询")
+//    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+//    @ApiResponse(responseCode = "200", content = {
+//            @Content(schema = @Schema(implementation = TransactionRes.class), mediaType = "application/json")
+//    })
+//    @GetMapping("/transaction")
+//    public ResponseEntity<?> transaction(@RequestParam String pageNum, @RequestParam String pageSize, @RequestParam String params) {
+//        BtsTransactionRes res = caller.transaction(Param.of("pageNum", pageNum),
+//                Param.of("pageSize", pageSize),
+//                Param.of("params", params));
+//        return ResponseEntity.
+//                status(res.getCode()).
+//                body(ResWrapper.wrap(res.getCode(), TransactionRes.from(res)));
+//    }
 }

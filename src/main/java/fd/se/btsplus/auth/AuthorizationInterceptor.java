@@ -1,7 +1,7 @@
 package fd.se.btsplus.auth;
 
 import fd.se.btsplus.auth.annotations.Authorized;
-import fd.se.btsplus.model.consts.Role;
+import fd.se.btsplus.model.entity.bts.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -10,14 +10,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Component
 public class AuthorizationInterceptor implements HandlerInterceptor {
-
     private final Subject subject;
 
     @Override
@@ -34,12 +30,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         }
         if (annotation == null) {
             return true;
-        } else {
-            final List<Role> roles = Arrays.stream(annotation.required()).collect(Collectors.toList());
-            if (roles.contains(Role.ANY)) {
-                return true;
-            }
-            return subject.getCurrUser().getRoles().containsAll(roles);
         }
+        final User user = subject.getCurrUser();
+        if (user == null) {
+            return false;
+        }
+        return user.getRole().satisfy(annotation.required());
     }
 }

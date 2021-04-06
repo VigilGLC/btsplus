@@ -1,6 +1,6 @@
 package fd.se.btsplus.repository.term;
 
-import fd.se.btsplus.model.entity.term.Term;
+import fd.se.btsplus.model.entity.financial.term.Term;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

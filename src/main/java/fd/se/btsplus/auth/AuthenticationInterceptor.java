@@ -1,37 +1,62 @@
 package fd.se.btsplus.auth;
 
-import fd.se.btsplus.bts.http.IBtsHttpCaller;
-import fd.se.btsplus.bts.model.response.BtsCurrUserRes;
 import fd.se.btsplus.model.consts.Constant;
-import fd.se.btsplus.model.domain.User;
+import fd.se.btsplus.model.entity.bts.User;
+import fd.se.btsplus.model.response.ResponseWrapper;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.TokenUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import static java.net.HttpURLConnection.HTTP_OK;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
+@Slf4j
 @AllArgsConstructor
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
+    private final TokenUtils tokenUtils;
+    private final JSONUtils jsonUtils;
 
     private final Subject subject;
-    private final IBtsHttpCaller caller;
+    private static final String PREFIX = "Bear";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String logInToken = request.getHeader(Constant.LOGIN_TOKEN_HEADER);
-        if (logInToken == null || (logInToken = logInToken.trim()).isEmpty()) {
-            return false;
+        boolean succeed = false;
+        String token = request.getHeader(Constant.LOGIN_TOKEN_HEADER);
+        try {
+            if (token == null || (token = token.trim()).isEmpty()) {
+                return false;
+            }
+            if (!token.startsWith(PREFIX)) {
+                return false;
+            }
+            token = token.substring(PREFIX.length()).trim();
+            final User user = tokenUtils.getUser(token);
+            if (user == null) {
+                return false;
+            }
+            succeed = true;
+            subject.setCurrUser(user);
+            return true;
+        } finally {
+            if (!succeed) {
+                response.setStatus(HTTP_UNAUTHORIZED);
+                final ResponseWrapper resp = ResponseWrapper.
+                        wrap(HTTP_UNAUTHORIZED, "Authentication Failed.", null);
+                try {
+                    response.getWriter().write(jsonUtils.write(resp));
+                    response.flushBuffer();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
-        subject.setLoginToken(logInToken);
-        final BtsCurrUserRes res = caller.currUser();
-        if (res.getCode() != HTTP_OK) {
-            return false;
-        }
-        subject.setCurrUser(User.from(res));
-        return true;
     }
 }
