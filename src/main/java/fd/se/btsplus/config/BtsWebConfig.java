@@ -10,16 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AllArgsConstructor
 @Configuration
 public class BtsWebConfig implements WebMvcConfigurer {
-    final AuthenticationInterceptor authenticationInterceptor;
-    final AuthorizationInterceptor authorizationInterceptor;
-
     private static final String[] PATTERNS = new String[]{
-           "/user/curr",
+            "/user/curr",
             "/customer/**",
             "/loans/**",
             "/transactions/**",
             "/financial/**",
     };
+    final AuthenticationInterceptor authenticationInterceptor;
+    final AuthorizationInterceptor authorizationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

@@ -2,10 +2,36 @@ package fd.se.btsplus.repository.financial.stock.mock;
 
 import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
 import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
+@Profile("!prod")
+@Component
+@AllArgsConstructor
 public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
+    private static final String path = "json/financial/stock/stockPurchase's.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<StockPurchase> stockPurchases;
+
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.stockPurchases = new HashSet<>(jsonUtils.readList(jsonStr, StockPurchase.class));
+    }
+
+    @Override
+    public List<StockPurchase> findAll() {
+        return new ArrayList<>(this.stockPurchases);
+    }
 
     //<editor-fold desc="useless">
     @Override
@@ -28,10 +54,6 @@ public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
         return false;
     }
 
-    @Override
-    public Iterable<StockPurchase> findAll() {
-        return null;
-    }
 
     @Override
     public Iterable<StockPurchase> findAllById(Iterable<Long> longs) {

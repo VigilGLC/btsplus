@@ -1,12 +1,11 @@
 package fd.se.btsplus.model.entity.bts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -20,7 +19,7 @@ public class Loan {
     @ManyToOne
     private User creator;
     private Date createdTime;
-
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date loanDate;
 
     private String productCode;

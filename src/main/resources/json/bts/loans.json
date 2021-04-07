@@ -2,8 +2,18 @@
   {
     "id": 123,
     "iouNum": "L2104032014071",
-    "customer": null,
-    "creator": 209,
+    "customer": {
+      "id": 13,
+      "code": "AB2121202104031",
+      "name": "请不要侮辱二次元",
+      "creator": null,
+      "createdTime": "2021-04-03 19:33:41",
+      "sex": 0,
+      "phone": "13333333333",
+      "email": "3333333@fudan.edu.cn",
+      "address": "上海市杨浦区键盘侠只能出门右转2500号"
+    },
+    "creator": null,
     "createdTime": "2021-04-03 20:14:07",
     "loanDate": "2021-04-03",
     "productCode": "20005",
@@ -13,9 +23,20 @@
     "total": 100667.3394
   },
   {
+    "id": 321,
     "iouNum": "L2104031952191",
-    "customer": null,
-    "creator": 207,
+    "customer": {
+      "id": 13,
+      "code": "AB2121202104031",
+      "name": "请不要侮辱二次元",
+      "creator": null,
+      "createdTime": "2021-04-03 19:33:41",
+      "sex": 0,
+      "phone": "13333333333",
+      "email": "3333333@fudan.edu.cn",
+      "address": "上海市杨浦区键盘侠只能出门右转2500号"
+    },
+    "creator": null,
     "createdTime": "2021-04-03 19:52:20",
     "loanDate": "2021-04-03",
     "productCode": "20001",

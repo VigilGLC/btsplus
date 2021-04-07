@@ -1,13 +1,10 @@
 package fd.se.btsplus.model.entity.bts;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.apache.tomcat.jni.Local;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data

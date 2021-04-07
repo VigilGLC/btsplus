@@ -11,7 +11,7 @@ public class ResponseWrapper {
     private Object data;
 
     public static ResponseWrapper wrap(int code, Object data) {
-        return wrap(code, null,data);
+        return wrap(code, null, data);
     }
 
     public static ResponseWrapper wrap(int code, String message, Object data) {

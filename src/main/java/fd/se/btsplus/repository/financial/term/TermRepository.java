@@ -1,10 +1,16 @@
 package fd.se.btsplus.repository.financial.term;
 
 import fd.se.btsplus.model.entity.financial.term.Term;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Profile("prod")
+@Repository
 public interface TermRepository extends CrudRepository<Term, Long> {
     List<Term> findAll();
+
+    Term findById(long id);
 }

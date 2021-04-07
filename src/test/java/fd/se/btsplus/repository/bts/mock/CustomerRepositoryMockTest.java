@@ -1,7 +1,7 @@
 package fd.se.btsplus.repository.bts.mock;
 
-import fd.se.btsplus.model.entity.bts.Transaction;
-import fd.se.btsplus.repository.bts.TransactionRepository;
+import fd.se.btsplus.model.entity.bts.Customer;
+import fd.se.btsplus.repository.bts.CustomerRepository;
 import fd.se.btsplus.utils.JSONUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,25 +10,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
-
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class TransactionRepositoryMockTest {
+class CustomerRepositoryMockTest {
     @Autowired
-    private TransactionRepository transactionRepository;
+    private CustomerRepository customerRepository;
     @Autowired
     private JSONUtils jsonUtils;
 
     @Test
     void test() {
-        final List<Transaction> list = transactionRepository.findAll();
-        for (Transaction tx : list) {
-            System.out.println(jsonUtils.write(tx));
+        final Iterable<Customer> list = customerRepository.findAll();
+        for (Customer customer : list) {
+            System.out.println(jsonUtils.write(customer));
         }
     }
-
 }
-
-

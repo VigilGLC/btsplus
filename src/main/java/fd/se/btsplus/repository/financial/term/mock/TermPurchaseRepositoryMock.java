@@ -2,10 +2,36 @@ package fd.se.btsplus.repository.financial.term.mock;
 
 import fd.se.btsplus.model.entity.financial.term.TermPurchase;
 import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
+@Profile("!prod")
+@Component
+@AllArgsConstructor
 public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
+    private static final String path = "json/financial/term/termPurchase's.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<TermPurchase> termPurchases;
+
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.termPurchases = new HashSet<>(jsonUtils.readList(jsonStr, TermPurchase.class));
+    }
+
+    @Override
+    public List<TermPurchase> findAll() {
+        return new ArrayList<>(this.termPurchases);
+    }
 
     //<editor-fold desc="useless">
     @Override
@@ -26,11 +52,6 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
     @Override
     public boolean existsById(Long aLong) {
         return false;
-    }
-
-    @Override
-    public Iterable<TermPurchase> findAll() {
-        return null;
     }
 
     @Override

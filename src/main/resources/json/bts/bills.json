@@ -1,8 +1,30 @@
 [
   {
     "id": 67,
-    "loan": null,
-    "creator": 209,
+    "loan": {
+      "id": 123,
+      "iouNum": "L2104032014071",
+      "customer": {
+        "id": 13,
+        "code": "AB2121202104031",
+        "name": "请不要侮辱二次元",
+        "creator": null,
+        "createdTime": "2021-04-03 19:33:41",
+        "sex": 0,
+        "phone": "13333333333",
+        "email": "3333333@fudan.edu.cn",
+        "address": "上海市杨浦区键盘侠只能出门右转2500号"
+      },
+      "creator": null,
+      "createdTime": "2021-04-03 20:14:07",
+      "loanDate": "2021-04-03",
+      "productCode": "20005",
+      "productName": "请键盘侠出门右转贷款",
+      "amount": 100000.0000,
+      "interest": 667.3394,
+      "total": 100667.3394
+    },
+    "creator": null,
     "createdTime": "2021-04-03 20:17:57",
     "updatedTime": "2021-04-03 20:17:57",
     "beginDate": "2021-04-03",
@@ -16,8 +38,30 @@
   },
   {
     "id": 68,
-    "loan": null,
-    "creator": 209,
+    "loan": {
+      "id": 123,
+      "iouNum": "L2104032014071",
+      "customer": {
+        "id": 13,
+        "code": "AB2121202104031",
+        "name": "请不要侮辱二次元",
+        "creator": null,
+        "createdTime": "2021-04-03 19:33:41",
+        "sex": 0,
+        "phone": "13333333333",
+        "email": "3333333@fudan.edu.cn",
+        "address": "上海市杨浦区键盘侠只能出门右转2500号"
+      },
+      "creator": null,
+      "createdTime": "2021-04-03 20:14:07",
+      "loanDate": "2021-04-03",
+      "productCode": "20005",
+      "productName": "请键盘侠出门右转贷款",
+      "amount": 100000.0000,
+      "interest": 667.3394,
+      "total": 100667.3394
+    },
+    "creator": null,
     "createdTime": "2021-04-03 20:17:57",
     "updatedTime": "2021-04-03 20:17:57",
     "beginDate": "2021-05-03",
@@ -31,8 +75,30 @@
   },
   {
     "id": 69,
-    "loan": null,
-    "creator": 209,
+    "loan": {
+      "id": 123,
+      "iouNum": "L2104032014071",
+      "customer": {
+        "id": 13,
+        "code": "AB2121202104031",
+        "name": "请不要侮辱二次元",
+        "creator": null,
+        "createdTime": "2021-04-03 19:33:41",
+        "sex": 0,
+        "phone": "13333333333",
+        "email": "3333333@fudan.edu.cn",
+        "address": "上海市杨浦区键盘侠只能出门右转2500号"
+      },
+      "creator": null,
+      "createdTime": "2021-04-03 20:14:07",
+      "loanDate": "2021-04-03",
+      "productCode": "20005",
+      "productName": "请键盘侠出门右转贷款",
+      "amount": 100000.0000,
+      "interest": 667.3394,
+      "total": 100667.3394
+    },
+    "creator": null,
     "createdTime": "2021-04-03 20:17:57",
     "updatedTime": "2021-04-03 20:17:57",
     "beginDate": "2021-06-03",

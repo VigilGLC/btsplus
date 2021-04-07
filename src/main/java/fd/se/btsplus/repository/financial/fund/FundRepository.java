@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface FundRepository extends CrudRepository<Fund, Long> {
     List<Fund> findAll();
+
     Fund findById(long id);
 }

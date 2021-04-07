@@ -3,7 +3,17 @@
     "id": 13,
     "code": "AB2121202104031",
     "name": "请不要侮辱二次元",
-    "creator": null,
+    "creator": {
+      "id": 208,
+      "username": "JT2103253794",
+      "password": "imbus123",
+      "role": 1,
+      "nickname": "高龙超",
+      "sex": 1,
+      "phone": "13832789992",
+      "email": "31937@fudan.edu.cn",
+      "address": "上海市杨浦区邯郸2500号"
+    },
     "createdTime": "2021-04-03 19:33:41",
     "sex": 0,
     "phone": "13333333333",

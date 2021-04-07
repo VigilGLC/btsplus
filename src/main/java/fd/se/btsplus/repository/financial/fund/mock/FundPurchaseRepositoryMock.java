@@ -1,25 +1,52 @@
 package fd.se.btsplus.repository.financial.fund.mock;
 
-import fd.se.btsplus.model.entity.financial.fund.Fund;
+import fd.se.btsplus.model.entity.financial.fund.FundPurchase;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
+@Profile("!prod")
+@Component
+@AllArgsConstructor
 public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
+    private static final String path = "json/financial/fund/fundPurchase's.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<FundPurchase> fundPurchases;
+
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.fundPurchases = new HashSet<>(jsonUtils.readList(jsonStr, FundPurchase.class));
+    }
+
+    @Override
+    public List<FundPurchase> findAll() {
+        return new ArrayList<>(this.fundPurchases);
+    }
 
     //<editor-fold desc="useless">
+
     @Override
-    public <S extends Fund> S save(S entity) {
+    public <S extends FundPurchase> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Fund> Iterable<S> saveAll(Iterable<S> entities) {
+    public <S extends FundPurchase> Iterable<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
     @Override
-    public Optional<Fund> findById(Long aLong) {
+    public Optional<FundPurchase> findById(Long aLong) {
         return Optional.empty();
     }
 
@@ -29,12 +56,7 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
     }
 
     @Override
-    public Iterable<Fund> findAll() {
-        return null;
-    }
-
-    @Override
-    public Iterable<Fund> findAllById(Iterable<Long> longs) {
+    public Iterable<FundPurchase> findAllById(Iterable<Long> longs) {
         return null;
     }
 
@@ -49,12 +71,12 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
     }
 
     @Override
-    public void delete(Fund entity) {
+    public void delete(FundPurchase entity) {
 
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Fund> entities) {
+    public void deleteAll(Iterable<? extends FundPurchase> entities) {
 
     }
 
@@ -63,4 +85,5 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
 
     }
     //</editor-fold>
+
 }

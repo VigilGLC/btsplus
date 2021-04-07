@@ -2,18 +2,38 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Bill;
 import fd.se.btsplus.repository.bts.BillRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
 @Profile("!prod")
 @Component
 @AllArgsConstructor
 public class BillRepositoryMock implements BillRepository {
+    private static final String path = "json/bts/bills.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<Bill> bills;
 
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.bills = new HashSet<>(jsonUtils.readList(jsonStr, Bill.class));
+    }
+
+    @Override
+    public List<Bill> findAll() {
+        return new ArrayList<>(this.bills);
+    }
     //<editor-fold desc="useless">
+
     @Override
     public <S extends Bill> S save(S entity) {
         return null;
@@ -32,11 +52,6 @@ public class BillRepositoryMock implements BillRepository {
     @Override
     public boolean existsById(Long aLong) {
         return false;
-    }
-
-    @Override
-    public Iterable<Bill> findAll() {
-        return null;
     }
 
     @Override

@@ -2,10 +2,37 @@ package fd.se.btsplus.repository.financial.term.mock;
 
 import fd.se.btsplus.model.entity.financial.term.TermDaily;
 import fd.se.btsplus.repository.financial.term.TermDailyRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
+@Profile("!prod")
+@Component
+@AllArgsConstructor
 public class TermDailyRepositoryMock implements TermDailyRepository {
+
+    private static final String path = "json/financial/term/termDaily's.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<TermDaily> termDailies;
+
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.termDailies = new HashSet<>(jsonUtils.readList(jsonStr, TermDaily.class));
+    }
+
+    @Override
+    public List<TermDaily> findAll() {
+        return new ArrayList<>(this.termDailies);
+    }
 
     //<editor-fold desc="useless">
     @Override
@@ -26,11 +53,6 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
     @Override
     public boolean existsById(Long aLong) {
         return false;
-    }
-
-    @Override
-    public Iterable<TermDaily> findAll() {
-        return null;
     }
 
     @Override

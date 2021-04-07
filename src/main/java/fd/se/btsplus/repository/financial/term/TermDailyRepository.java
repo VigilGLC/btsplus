@@ -5,7 +5,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Profile("prod")
 @Repository
-public interface TermDailyRepository extends CrudRepository<TermDaily,Long> {
+public interface TermDailyRepository extends CrudRepository<TermDaily, Long> {
+    List<TermDaily> findAll();
 }

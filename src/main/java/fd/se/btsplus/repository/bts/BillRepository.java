@@ -5,7 +5,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Profile("prod")
 @Repository
-public interface BillRepository extends CrudRepository<Bill,Long> {
+public interface BillRepository extends CrudRepository<Bill, Long> {
+    List<Bill> findAll();
 }

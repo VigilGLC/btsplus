@@ -2,20 +2,41 @@ package fd.se.btsplus.repository.financial.fund.mock;
 
 import fd.se.btsplus.model.entity.financial.fund.Fund;
 import fd.se.btsplus.repository.financial.fund.FundRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
+@Profile("!prod")
+@Component
+@AllArgsConstructor
 public class FundRepositoryMock implements FundRepository {
+    private static final String path = "json/financial/fund/funds.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<Fund> funds;
+
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.funds = new HashSet<>(jsonUtils.readList(jsonStr, Fund.class));
+    }
 
     @Override
     public List<Fund> findAll() {
-        return null;
+        return new ArrayList<>(this.funds);
     }
 
     @Override
     public Fund findById(long id) {
-        return null;
+        return this.funds.stream().filter(f -> Long.valueOf(id).equals(f.getId())).
+                findFirst().orElse(null);
     }
 
     //<editor-fold desc="useless">

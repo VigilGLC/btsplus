@@ -1,12 +1,12 @@
 package fd.se.btsplus.model.entity.bts;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import fd.se.btsplus.model.consts.BillStatus;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -21,7 +21,9 @@ public class Bill {
     private Date createdTime;
     private Date updatedTime;
 
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date beginDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date endDate;
 
     private int planNum;

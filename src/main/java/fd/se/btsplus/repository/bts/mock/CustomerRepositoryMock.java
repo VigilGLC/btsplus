@@ -2,17 +2,39 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Customer;
 import fd.se.btsplus.repository.bts.CustomerRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
 @Profile("!prod")
 @Component
 @AllArgsConstructor
 public class CustomerRepositoryMock implements CustomerRepository {
+    private static final String path = "json/bts/customers.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<Customer> customers;
+
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.customers = new HashSet<>(jsonUtils.readList(jsonStr, Customer.class));
+    }
+
+    @Override
+    public List<Customer> findAll() {
+        return new ArrayList<>(this.customers);
+    }
+
     //<editor-fold desc="useless">
+
     @Override
     public <S extends Customer> S save(S entity) {
         return null;
@@ -31,11 +53,6 @@ public class CustomerRepositoryMock implements CustomerRepository {
     @Override
     public boolean existsById(Long aLong) {
         return false;
-    }
-
-    @Override
-    public Iterable<Customer> findAll() {
-        return null;
     }
 
     @Override

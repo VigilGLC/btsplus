@@ -16,9 +16,9 @@ import java.util.*;
 @Component
 @AllArgsConstructor
 public class TransactionRepositoryMock implements TransactionRepository {
+    private static final String path = "json/bts/transactions.json";
     private final ResourceUtils resourceUtils;
     private final JSONUtils jsonUtils;
-    private static final String path = "json/bts/transactions.json";
     private Set<Transaction> transactions;
 
     @SneakyThrows
@@ -53,7 +53,6 @@ public class TransactionRepositoryMock implements TransactionRepository {
     public boolean existsById(Long aLong) {
         return false;
     }
-
 
 
     @Override

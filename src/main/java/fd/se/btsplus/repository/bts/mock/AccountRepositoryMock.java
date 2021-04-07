@@ -2,18 +2,39 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.repository.bts.AccountRepository;
+import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
 @Profile("!prod")
 @Component
 @AllArgsConstructor
 public class AccountRepositoryMock implements AccountRepository {
+    private static final String path = "json/bts/accounts.json";
+    private final ResourceUtils resourceUtils;
+    private final JSONUtils jsonUtils;
+    private Set<Account> accounts;
+
+    @SneakyThrows
+    @PostConstruct
+    private void init() {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.accounts = new HashSet<>(jsonUtils.readList(jsonStr, Account.class));
+    }
+
+    @Override
+    public List<Account> findAll() {
+        return new ArrayList<>(accounts);
+    }
 
     //<editor-fold desc="useless">
+
     @Override
     public <S extends Account> S save(S entity) {
         return null;
@@ -32,11 +53,6 @@ public class AccountRepositoryMock implements AccountRepository {
     @Override
     public boolean existsById(Long aLong) {
         return false;
-    }
-
-    @Override
-    public Iterable<Account> findAll() {
-        return null;
     }
 
     @Override

@@ -18,9 +18,9 @@ import java.util.Set;
 @Component
 @AllArgsConstructor
 public class UserRepositoryMock implements UserRepository {
+    private static final String path = "json/bts/users.json";
     private final ResourceUtils resourceUtils;
     private final JSONUtils jsonUtils;
-    private static final String path = "bts/users.json";
     private Set<User> users;
 
     @SneakyThrows
@@ -41,8 +41,13 @@ public class UserRepositoryMock implements UserRepository {
         return null;
     }
 
+    @Override
+    public Set<User> findAll() {
+        return this.users;
+    }
 
     //<editor-fold desc="useless">
+
     @Override
     public <S extends User> Iterable<S> saveAll(Iterable<S> entities) {
         return null;
@@ -56,11 +61,6 @@ public class UserRepositoryMock implements UserRepository {
     @Override
     public boolean existsById(Long aLong) {
         return false;
-    }
-
-    @Override
-    public Iterable<User> findAll() {
-        return null;
     }
 
     @Override

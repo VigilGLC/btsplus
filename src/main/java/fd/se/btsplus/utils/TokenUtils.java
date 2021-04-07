@@ -19,6 +19,11 @@ public class TokenUtils {
     private final UserRepository userRepository;
     private final Algorithm algorithm = Algorithm.HMAC256("二刺螈");
 
+    public static Date dateAfter(int hours) {
+        return java.sql.Date.from(LocalDateTime.now().plusHours(hours).
+                atZone(ZoneId.systemDefault()).toInstant());
+    }
+
     public String generateToken(User user) {
         return JWT.create().
                 withClaim("username", user.getUsername()).
@@ -26,7 +31,6 @@ public class TokenUtils {
                 withExpiresAt(dateAfter(12)).
                 sign(algorithm);
     }
-
 
     public User getUser(String token) {
         final DecodedJWT decodedJWT;
@@ -46,10 +50,5 @@ public class TokenUtils {
 
     private boolean expired(String token) {
         return getExpireAt(token).before(new java.util.Date());
-    }
-
-    public static Date dateAfter(int hours) {
-        return java.sql.Date.from(LocalDateTime.now().plusHours(hours).
-                atZone(ZoneId.systemDefault()).toInstant());
     }
 }

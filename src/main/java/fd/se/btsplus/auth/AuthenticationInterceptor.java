@@ -20,11 +20,10 @@ import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 @AllArgsConstructor
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
+    private static final String PREFIX = "Bear";
     private final TokenUtils tokenUtils;
     private final JSONUtils jsonUtils;
-
     private final Subject subject;
-    private static final String PREFIX = "Bear";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
