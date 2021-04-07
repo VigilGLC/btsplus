@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+import static fd.se.btsplus.model.consts.Constant.LOGIN_TOKEN_HEADER;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 @AllArgsConstructor
@@ -27,7 +28,6 @@ import static java.net.HttpURLConnection.HTTP_OK;
 public class UserController {
 
     @Operation(method = "POST", tags = "User", summary = "用户登录")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.LoginRespOk)))
     @PostMapping("/login")
@@ -39,6 +39,7 @@ public class UserController {
     }
 
     @Operation(method = "GET", tags = "User", summary = "当前用户")
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.CurrUserRespOk)))
     @GetMapping("/curr")

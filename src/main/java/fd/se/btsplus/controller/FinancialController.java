@@ -18,8 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import static fd.se.btsplus.model.consts.Constant.HTTP_GET;
-import static fd.se.btsplus.model.consts.Constant.HTTP_POST;
+import static fd.se.btsplus.model.consts.Constant.*;
 
 @Authorized(required = Role.TELLER)
 @AllArgsConstructor
@@ -27,7 +26,7 @@ import static fd.se.btsplus.model.consts.Constant.HTTP_POST;
 public class FinancialController {
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "理财产品")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = {
                     @ExampleObject(value = OpenApiExamples.StocksRespOk),
@@ -35,14 +34,14 @@ public class FinancialController {
                     @ExampleObject(value = OpenApiExamples.TermsRespOk)
             }))
     @GetMapping("/financial/{prodType}")
-    public ResponseEntity<?> allProducts(@PathVariable(required = false) String prodType) {
+    public ResponseEntity<?> allProducts(@PathVariable String prodType) {
         throw new NotImplementedException();
     }
 
     //<editor-fold desc="Fund">
 
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买基金")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/fund/{fundId}/purchase")
@@ -51,10 +50,10 @@ public class FinancialController {
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看基金")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.FundPurchasesRespOk)))
-    @PostMapping("/customer/financial/funds/purchases")
+    @GetMapping("/customer/financial/funds/purchases")
     public ResponseEntity<?> fundPurchases() {
         throw new NotImplementedException();
     }
@@ -64,16 +63,16 @@ public class FinancialController {
     //<editor-fold desc="Stock">
 
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买股票")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
-    @GetMapping("/financial/stock/{stockId}/purchase")
+    @PostMapping("/financial/stock/{stockId}/purchase")
     public ResponseEntity<?> purchaseStock(@PathVariable String stockId, @RequestBody StockPurchaseRequest request) {
         throw new NotImplementedException();
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看股票")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.StockPurchasesRespOk)))
     @GetMapping("/customer/financial/stocks/purchases")
@@ -86,7 +85,7 @@ public class FinancialController {
     //<editor-fold desc="Term">
 
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买定期理财")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/term/{termId}/purchase")
@@ -95,7 +94,7 @@ public class FinancialController {
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看定期理财")
-    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.TermPurchasesRespOk)))
     @GetMapping("/customer/financial/terms/purchases")
