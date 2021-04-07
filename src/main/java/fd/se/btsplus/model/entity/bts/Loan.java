@@ -16,6 +16,8 @@ public class Loan {
     private Long id;
     private String iouNum;
     @ManyToOne
+    private Customer customer;
+    @ManyToOne
     private User creator;
     private Date createdTime;
 

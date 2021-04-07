@@ -1,5 +1,6 @@
 package fd.se.btsplus.model.entity.financial.fund;
 
+import fd.se.btsplus.model.entity.financial.IDaily;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +13,7 @@ import java.util.Date;
 @Data
 @Entity
 @RequiredArgsConstructor
-public class FundDaily {
+public class FundDaily implements IDaily {
     @Id
     private Long id;
     @ManyToOne

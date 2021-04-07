@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-public interface IFinancialProduct {
+public interface IProduct {
 
 }

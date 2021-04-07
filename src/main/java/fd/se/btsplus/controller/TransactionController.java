@@ -1,35 +1,48 @@
 package fd.se.btsplus.controller;
 
 
+import fd.se.btsplus.utils.OpenApiExamples;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.Date;
+
+import static fd.se.btsplus.model.consts.Constant.HTTP_POST;
+import static fd.se.btsplus.model.consts.Constant.LOGIN_TOKEN_HEADER;
 
 @AllArgsConstructor
 @RestController
 public class TransactionController {
-//    private final IBtsHttpCaller caller;
-//
-//    @Operation(method = "GET", tags = "Transaction", summary = "交易流水查询")
-//    @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
-//    @ApiResponse(responseCode = "200", content = {
-//            @Content(schema = @Schema(implementation = TransactionRes.class), mediaType = "application/json")
-//    })
-//    @GetMapping("/transaction")
-//    public ResponseEntity<?> transaction(@RequestParam String pageNum, @RequestParam String pageSize, @RequestParam String params) {
-//        BtsTransactionRes res = caller.transaction(Param.of("pageNum", pageNum),
-//                Param.of("pageSize", pageSize),
-//                Param.of("params", params));
-//        return ResponseEntity.
-//                status(res.getCode()).
-//                body(ResWrapper.wrap(res.getCode(), TransactionRes.from(res)));
-//    }
+
+    @Operation(method = HTTP_POST, tags = "Transactions", summary = "流水查询")
+    @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
+    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
+            examples = @ExampleObject(value = OpenApiExamples.TransactionsResponseOk)))
+    @GetMapping("/transactions")
+    public ResponseEntity<?> transactions(
+            @RequestParam(required = false) Integer pageNum,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) String accountNum,
+            @RequestParam(required = false) String transactionNum,
+            @RequestParam(required = false) String transactionCode,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) Date beginDate,
+            @RequestParam(required = false) Date endDate
+
+    ) {
+      throw new NotImplementedException();
+    }
 }

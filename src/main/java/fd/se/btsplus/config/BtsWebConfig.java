@@ -14,22 +14,21 @@ public class BtsWebConfig implements WebMvcConfigurer {
     final AuthorizationInterceptor authorizationInterceptor;
 
     private static final String[] PATTERNS = new String[]{
-            "/placeholder",
-            "/users/current",
-            "/account",
-            "/loan",
-            "/transaction",
-            "/account/transfer"
+           "/user/curr",
+            "/customer/**",
+            "/loans/**",
+            "/transactions/**",
+            "/financial/**",
     };
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor).
                 addPathPatterns(PATTERNS).
-                excludePathPatterns("/login");
+                excludePathPatterns("/user/login");
         registry.addInterceptor(authorizationInterceptor).
                 addPathPatterns(PATTERNS).
-                excludePathPatterns("/login");
+                excludePathPatterns("/user/login");
     }
 }
 

@@ -1,18 +1,17 @@
 package fd.se.btsplus.model.entity.financial.fund;
 
 import fd.se.btsplus.model.entity.bts.Customer;
+import fd.se.btsplus.model.entity.financial.IPurchase;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
 @Entity
-public class FundPurchase {
+public class FundPurchase implements IPurchase {
     @Id
     private Long id;
     @ManyToOne

@@ -15,6 +15,8 @@ public class Bill {
     @Id
     private Long id;
     @ManyToOne
+    private Loan loan;
+    @ManyToOne
     private User creator;
     private LocalDateTime createdTime;
 
