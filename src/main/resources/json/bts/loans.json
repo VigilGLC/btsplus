@@ -1,0 +1,27 @@
+[
+  {
+    "id": 123,
+    "iouNum": "L2104032014071",
+    "customer": null,
+    "creator": 209,
+    "createdTime": "2021-04-03 20:14:07",
+    "loanDate": "2021-04-03",
+    "productCode": "20005",
+    "productName": "请键盘侠出门右转贷款",
+    "amount": 100000.0000,
+    "interest": 667.3394,
+    "total": 100667.3394
+  },
+  {
+    "iouNum": "L2104031952191",
+    "customer": null,
+    "creator": 207,
+    "createdTime": "2021-04-03 19:52:20",
+    "loanDate": "2021-04-03",
+    "productCode": "20001",
+    "productName": "买房贷款",
+    "amount": 20000.0000,
+    "interest": 66.6600,
+    "total": 20066.6600
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": 208,
+    "username": "JT2103253794",
+    "password": "imbus123",
+    "role": 1,
+    "nickname": "高龙超",
+    "sex": 1,
+    "phone": "13832789992",
+    "email": "31937@fudan.edu.cn",
+    "address": "上海市杨浦区邯郸2500号"
+  },
+  {
+    "id": 200,
+    "username": "BA2103154781",
+    "password": "imbus123",
+    "role": 2,
+    "nickname": "三组管理员",
+    "sex": 1,
+    "phone": "13456890202",
+    "email": "12903821@fudan.edu.cn",
+    "address": "上海同济"
+  }
+]

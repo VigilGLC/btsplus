@@ -23,5 +23,5 @@ public class Account {
     private Customer customer;
     private Date createdTime;
 
-    private Long balance;
+    private Double balance;
 }

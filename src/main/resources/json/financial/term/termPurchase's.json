@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "customer": null,
+    "term": {
+      "id": 1,
+      "name": "Bilibili 定期",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "initAmount": 2000.0,
+    "currAmount": 2000.0,
+    "currDate": "2021-04-03",
+
+    "beginDate": "2021-04-03",
+    "endDate": "2021-05-03"
+  }
+]

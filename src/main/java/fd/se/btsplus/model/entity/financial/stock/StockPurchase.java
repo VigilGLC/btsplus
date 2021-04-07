@@ -20,5 +20,7 @@ public class StockPurchase implements IPurchase {
     private Stock stock;
     private Integer count;
     private Double price;
+    private Date currDate;
+
     private Date beginDate;
 }

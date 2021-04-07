@@ -23,14 +23,10 @@ public class Loan {
 
     private Date loanDate;
 
-    private String transactionCode;
-    private String transactionNum;
-    private String transactionType;
-
     private String productCode;
     private String productName;
 
     private Double amount;
-    private Double totalAmount;
-    private Double totalInterest;
+    private Double interest;
+    private Double total;
 }

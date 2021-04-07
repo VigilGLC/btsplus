@@ -1,0 +1,47 @@
+[
+  {
+    "id": 67,
+    "loan": null,
+    "creator": 209,
+    "createdTime": "2021-04-03 20:17:57",
+    "updatedTime": "2021-04-03 20:17:57",
+    "beginDate": "2021-04-03",
+    "endDate": "2021-05-03",
+    "planNum": 1,
+    "planAmount": 33222.4798,
+    "planInterest": 333.3000,
+    "remainAmount": 33222.4798,
+    "remainInterest": 333.3000,
+    "status": 1
+  },
+  {
+    "id": 68,
+    "loan": null,
+    "creator": 209,
+    "createdTime": "2021-04-03 20:17:57",
+    "updatedTime": "2021-04-03 20:17:57",
+    "beginDate": "2021-05-03",
+    "endDate": "2021-06-03",
+    "planNum": 2,
+    "planAmount": 33333.2103,
+    "planInterest": 222.5695,
+    "remainAmount": 33333.2103,
+    "remainInterest": 222.5695,
+    "status": 1
+  },
+  {
+    "id": 69,
+    "loan": null,
+    "creator": 209,
+    "createdTime": "2021-04-03 20:17:57",
+    "updatedTime": "2021-04-03 20:17:57",
+    "beginDate": "2021-06-03",
+    "endDate": "2021-07-03",
+    "planNum": 3,
+    "planAmount": 33444.3099,
+    "planInterest": 111.4699,
+    "remainAmount": 33444.3099,
+    "remainInterest": 111.4699,
+    "status": 1
+  }
+]

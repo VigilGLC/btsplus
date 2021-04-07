@@ -1,0 +1,38 @@
+[
+  {
+    "id": 70,
+    "operator": null,
+    "operatedTime": "2021-03-25 17:17:53",
+    "transactionCode": "1621",
+    "transactionNum": "AB212116210202103251717531",
+    "transactionType": "一本通开户",
+    "account": {},
+    "reciprocalAccount": {},
+    "amount": null,
+    "balance": 20000.0
+  },
+  {
+    "id": 71,
+    "operator": null,
+    "operatedTime": "2021-03-25 18:03:06",
+    "transactionCode": "0001",
+    "transactionNum": "AB21210001206202103251803061",
+    "transactionType": "营业单位开机作业",
+    "account": {},
+    "reciprocalAccount": null,
+    "amount": 0.0000,
+    "balance": 5000.0
+  },
+  {
+    "id": 72,
+    "operator": null,
+    "operatedTime": "2021-03-25 18:03:27",
+    "transactionCode": "0001",
+    "transactionNum": "AB21210001206202103251803271",
+    "transactionType": "营业单位开机作业",
+    "account": {},
+    "reciprocalAccount": null,
+    "amount": 100.0000,
+    "balance": 100.0000
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 32,
+    "accountNum": "6161710619136431439",
+    "password": "123456",
+    "accountType": "储蓄账户",
+    "creator": 209,
+    "customer": null,
+    "createdTime": "2021-04-03 20:08:58",
+    "balance": 129890.0000
+  }
+]

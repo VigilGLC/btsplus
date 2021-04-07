@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "customer": null,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "count": 100,
+    "price": 120,
+    "currDate": "2021-04-03",
+    "beginDate": "2021-04-03"
+  }
+]

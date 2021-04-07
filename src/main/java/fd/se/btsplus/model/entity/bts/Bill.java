@@ -18,17 +18,17 @@ public class Bill {
     private Loan loan;
     @ManyToOne
     private User creator;
-    private LocalDateTime createdTime;
+    private Date createdTime;
+    private Date updatedTime;
 
     private Date beginDate;
     private Date endDate;
-    private Date updateDate;
 
     private int planNum;
-    private Double planPrincipal;
+    private Double planAmount;
     private Double planInterest;
 
-    private Double remainPrincipal;
+    private Double remainAmount;
     private Double remainInterest;
 
     private BillStatus status;

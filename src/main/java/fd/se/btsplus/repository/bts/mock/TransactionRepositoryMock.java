@@ -1,7 +1,7 @@
 package fd.se.btsplus.repository.bts.mock;
 
-import fd.se.btsplus.model.entity.bts.User;
-import fd.se.btsplus.repository.bts.UserRepository;
+import fd.se.btsplus.model.entity.bts.Transaction;
+import fd.se.btsplus.repository.bts.TransactionRepository;
 import fd.se.btsplus.utils.JSONUtils;
 import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
@@ -10,46 +10,42 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-@Profile("!prod")
+@Profile("test")
 @Component
 @AllArgsConstructor
-public class UserRepositoryMock implements UserRepository {
+public class TransactionRepositoryMock implements TransactionRepository {
     private final ResourceUtils resourceUtils;
     private final JSONUtils jsonUtils;
-    private static final String path = "bts/users.json";
-    private Set<User> users;
+    private static final String path = "json/bts/transactions.json";
+    private Set<Transaction> transactions;
 
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.users = new HashSet<>(jsonUtils.readList(jsonStr, User.class));
-    }
-
-
-    @Override
-    public User findByUsernameAndPassword(String username, String password) {
-        return null;
+        this.transactions = new HashSet<>(jsonUtils.readList(jsonStr, Transaction.class));
     }
 
     @Override
-    public <S extends User> S save(S entity) {
-        return null;
+    public List<Transaction> findAll() {
+        return new ArrayList<>(this.transactions);
     }
-
 
     //<editor-fold desc="useless">
     @Override
-    public <S extends User> Iterable<S> saveAll(Iterable<S> entities) {
+    public <S extends Transaction> S save(S entity) {
         return null;
     }
 
     @Override
-    public Optional<User> findById(Long aLong) {
+    public <S extends Transaction> Iterable<S> saveAll(Iterable<S> entities) {
+        return null;
+    }
+
+    @Override
+    public Optional<Transaction> findById(Long aLong) {
         return Optional.empty();
     }
 
@@ -58,13 +54,10 @@ public class UserRepositoryMock implements UserRepository {
         return false;
     }
 
-    @Override
-    public Iterable<User> findAll() {
-        return null;
-    }
+
 
     @Override
-    public Iterable<User> findAllById(Iterable<Long> longs) {
+    public Iterable<Transaction> findAllById(Iterable<Long> longs) {
         return null;
     }
 
@@ -79,12 +72,12 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public void delete(User entity) {
+    public void delete(Transaction entity) {
 
     }
 
     @Override
-    public void deleteAll(Iterable<? extends User> entities) {
+    public void deleteAll(Iterable<? extends Transaction> entities) {
 
     }
 
