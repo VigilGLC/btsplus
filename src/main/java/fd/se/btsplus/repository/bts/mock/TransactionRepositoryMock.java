@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
-@Profile("test")
+@Profile("!prod")
 @Component
 @AllArgsConstructor
 public class TransactionRepositoryMock implements TransactionRepository {
