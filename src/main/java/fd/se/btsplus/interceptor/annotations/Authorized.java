@@ -1,4 +1,4 @@
-package fd.se.btsplus.auth.annotations;
+package fd.se.btsplus.interceptor.annotations;
 
 import fd.se.btsplus.model.consts.Role;
 

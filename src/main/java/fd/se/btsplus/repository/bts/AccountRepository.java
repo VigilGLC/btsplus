@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends CrudRepository<Account, Long> {
     List<Account> findAll();
+
+    Account findByAccountNumAndPassword(String accountNum, String password);
 }

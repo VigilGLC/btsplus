@@ -33,6 +33,15 @@ public class AccountRepositoryMock implements AccountRepository {
         return new ArrayList<>(accounts);
     }
 
+    @Override
+    public Account findByAccountNumAndPassword(String accountNum, String password) {
+        return accounts.stream().filter(ac -> {
+            final String acNum = ac.getAccountNum();
+            final String acPass = ac.getPassword();
+            return acNum!=null&&acPass!=null&&acNum.equals(accountNum)&&acPass.equals(password);
+        }).findFirst().orElse(null);
+    }
+
     //<editor-fold desc="useless">
 
     @Override

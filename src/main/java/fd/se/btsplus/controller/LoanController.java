@@ -1,6 +1,6 @@
 package fd.se.btsplus.controller;
 
-import fd.se.btsplus.auth.annotations.Authorized;
+import fd.se.btsplus.interceptor.annotations.Authorized;
 import fd.se.btsplus.model.consts.Role;
 import fd.se.btsplus.model.request.AccountRequest;
 import fd.se.btsplus.utils.OpenApiExamples;

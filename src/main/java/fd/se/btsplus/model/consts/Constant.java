@@ -14,4 +14,8 @@ public class Constant {
     public static final String HTTP_PUT = "PUT";
     public static final String HTTP_DELETE = "DELETE";
 
+    public static final String FUND = "fund";
+    public static final String STOCK = "stock";
+    public static final String TERM = "term";
+
 }

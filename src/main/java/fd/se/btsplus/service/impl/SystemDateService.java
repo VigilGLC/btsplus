@@ -33,7 +33,7 @@ public class SystemDateService implements IDateService {
         return event;
     }
 
-    @Scheduled(cron = "1 0 * * *")
+    @Scheduled(cron = "0 1 0 * * *")
     void dailyEmit() {
         emit();
     }

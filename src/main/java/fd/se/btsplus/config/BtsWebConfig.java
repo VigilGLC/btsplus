@@ -1,7 +1,9 @@
 package fd.se.btsplus.config;
 
-import fd.se.btsplus.auth.AuthenticationInterceptor;
-import fd.se.btsplus.auth.AuthorizationInterceptor;
+import fd.se.btsplus.interceptor.AccountCheckInterceptor;
+import fd.se.btsplus.interceptor.AuthenticationInterceptor;
+import fd.se.btsplus.interceptor.AuthorizationInterceptor;
+import fd.se.btsplus.interceptor.CreditCheckInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -10,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AllArgsConstructor
 @Configuration
 public class BtsWebConfig implements WebMvcConfigurer {
-    private static final String[] PATTERNS = new String[]{
+    private static final String[] AUTH_PATTERNS = new String[]{
             "/user/curr",
             "/customer/**",
             "/loans/**",
@@ -19,15 +21,24 @@ public class BtsWebConfig implements WebMvcConfigurer {
     };
     final AuthenticationInterceptor authenticationInterceptor;
     final AuthorizationInterceptor authorizationInterceptor;
+    final AccountCheckInterceptor accountCheckInterceptor;
+    final CreditCheckInterceptor creditCheckInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor).
-                addPathPatterns(PATTERNS).
+                addPathPatterns(AUTH_PATTERNS).
                 excludePathPatterns("/user/login");
         registry.addInterceptor(authorizationInterceptor).
-                addPathPatterns(PATTERNS).
+                addPathPatterns(AUTH_PATTERNS).
                 excludePathPatterns("/user/login");
+        registry.addInterceptor(accountCheckInterceptor).
+                addPathPatterns(
+                        "/customer/loan/bill/*/payment",
+                        "/financial/*/*/purchase"
+                );
+        registry.addInterceptor(creditCheckInterceptor).
+                addPathPatterns("/financial/*/*/purchase");
     }
 }
 

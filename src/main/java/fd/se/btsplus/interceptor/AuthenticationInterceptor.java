@@ -1,9 +1,10 @@
-package fd.se.btsplus.auth;
+package fd.se.btsplus.interceptor;
 
+import fd.se.btsplus.interceptor.subject.Subject;
 import fd.se.btsplus.model.consts.Constant;
 import fd.se.btsplus.model.entity.bts.User;
 import fd.se.btsplus.model.response.ResponseWrapper;
-import fd.se.btsplus.utils.JsonUtils;
+import fd.se.btsplus.utils.HttpUtils;
 import fd.se.btsplus.utils.TokenUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
@@ -22,7 +22,7 @@ import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 public class AuthenticationInterceptor implements HandlerInterceptor {
     private static final String PREFIX = "Bear";
     private final TokenUtils tokenUtils;
-    private final JsonUtils jsonUtils;
+    private final HttpUtils httpUtils;
     private final Subject subject;
 
     @Override
@@ -46,15 +46,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return true;
         } finally {
             if (!succeed) {
-                response.setStatus(HTTP_UNAUTHORIZED);
-                final ResponseWrapper resp = ResponseWrapper.
-                        wrap(HTTP_UNAUTHORIZED, "Authentication Failed.", null);
-                try {
-                    response.getWriter().write(jsonUtils.write(resp));
-                    response.flushBuffer();
-                } catch (IOException e) {
-                    log.error(e.getMessage(), e);
-                }
+                httpUtils.writeResponse(response, HTTP_UNAUTHORIZED,
+                        ResponseWrapper.wrap(
+                                HTTP_UNAUTHORIZED, "Authentication Failed.", null));
             }
         }
     }
