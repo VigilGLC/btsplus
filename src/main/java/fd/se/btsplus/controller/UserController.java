@@ -29,7 +29,7 @@ public class UserController {
     @Operation(method = "POST", tags = "User", summary = "用户登录")
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.LoginResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.LoginRespOk)))
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         final HashMap<String, Object> map = new HashMap<>();
@@ -40,7 +40,7 @@ public class UserController {
 
     @Operation(method = "GET", tags = "User", summary = "当前用户")
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.CurruserResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.CurrUserRespOk)))
     @GetMapping("/curr")
     public ResponseEntity<?> curr() {
         throw new NotImplementedException();

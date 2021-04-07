@@ -26,7 +26,7 @@ public class LoanController {
     @Operation(method = HTTP_GET, tags = "Loan", summary = "贷款查询")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.LoansResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.LoansRespOk)))
     @GetMapping("/customer/{customerCode}/loans")
     public ResponseEntity<?> loans(@PathVariable String customerCode) {
         throw new NotImplementedException();
@@ -35,7 +35,7 @@ public class LoanController {
     @Operation(method = HTTP_GET, tags = "Loan", summary = "账单查询")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.BillsResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.BillsRespOk)))
     @GetMapping("/customer/loan/{iouNum}/bills")
     public ResponseEntity<?> bills(@PathVariable String iouNum) {
         throw new NotImplementedException();
@@ -44,7 +44,7 @@ public class LoanController {
     @Operation(method = HTTP_PUT, tags = "Loan", summary = "偿还账单")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PaymentResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PaymentRespOk)))
     @PutMapping("/customer/loan/bill/{billId}/payment")
     public ResponseEntity<?> payment(@PathVariable String billId, @RequestBody AccountRequest request) {
         throw new NotImplementedException();
@@ -54,7 +54,7 @@ public class LoanController {
     @Operation(method = HTTP_POST, tags = "Loan", summary = "自动还款")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.AutoPaymentResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.AutoPaymentRespOk)))
     @PostMapping("/loans/bills/auto-payment")
     public ResponseEntity<?> autoPayment() {
         throw new NotImplementedException();

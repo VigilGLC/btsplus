@@ -1,5 +1,6 @@
 package fd.se.btsplus.model.entity.financial.fund;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import fd.se.btsplus.model.entity.bts.Customer;
 import fd.se.btsplus.model.entity.financial.IPurchase;
 import lombok.Data;
@@ -21,8 +22,11 @@ public class FundPurchase implements IPurchase {
     private Double initAmount;
 
     private Double currAmount;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date currDate;
 
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date beginDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date endDate;
 }

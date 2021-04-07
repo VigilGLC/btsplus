@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Profile("!prod")
 @Component
@@ -42,8 +40,8 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public Set<User> findAll() {
-        return this.users;
+    public List<User> findAll() {
+        return new ArrayList<>(this.users);
     }
 
     //<editor-fold desc="useless">

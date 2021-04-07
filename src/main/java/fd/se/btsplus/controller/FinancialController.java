@@ -30,9 +30,9 @@ public class FinancialController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = {
-                    @ExampleObject(value = OpenApiExamples.StocksResponseOk),
-                    @ExampleObject(value = OpenApiExamples.FundsResponseOk),
-                    @ExampleObject(value = OpenApiExamples.TermsResponseOk)
+                    @ExampleObject(value = OpenApiExamples.StocksRespOk),
+                    @ExampleObject(value = OpenApiExamples.FundsRespOk),
+                    @ExampleObject(value = OpenApiExamples.TermsRespOk)
             }))
     @GetMapping("/financial/{prodType}")
     public ResponseEntity<?> allProducts(@PathVariable(required = false) String prodType) {
@@ -44,7 +44,7 @@ public class FinancialController {
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买基金")
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PurchaseResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/fund/{fundId}/purchase")
     public ResponseEntity<?> purchaseFund(@PathVariable String fundId, @RequestBody FundPurchaseRequest request) {
         throw new NotImplementedException();
@@ -53,7 +53,7 @@ public class FinancialController {
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看基金")
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.FundPurchasesResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.FundPurchasesRespOk)))
     @PostMapping("/customer/financial/funds/purchases")
     public ResponseEntity<?> fundPurchases() {
         throw new NotImplementedException();
@@ -66,7 +66,7 @@ public class FinancialController {
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买股票")
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PurchaseResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @GetMapping("/financial/stock/{stockId}/purchase")
     public ResponseEntity<?> purchaseStock(@PathVariable String stockId, @RequestBody StockPurchaseRequest request) {
         throw new NotImplementedException();
@@ -75,7 +75,7 @@ public class FinancialController {
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看股票")
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.StockPurchasesResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.StockPurchasesRespOk)))
     @GetMapping("/customer/financial/stocks/purchases")
     public ResponseEntity<?> stockPurchases() {
         throw new NotImplementedException();
@@ -88,7 +88,7 @@ public class FinancialController {
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买定期理财")
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PurchaseResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/term/{termId}/purchase")
     public ResponseEntity<?> purchaseTerm(@PathVariable String termId, @RequestBody TermPurchaseRequest request) {
         throw new NotImplementedException();
@@ -97,7 +97,7 @@ public class FinancialController {
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看定期理财")
     @Parameter(in = ParameterIn.HEADER, required = true, name = "login-token", schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.TermPurchasesResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.TermPurchasesRespOk)))
     @GetMapping("/customer/financial/terms/purchases")
     public ResponseEntity<?> termPurchases() {
         throw new NotImplementedException();

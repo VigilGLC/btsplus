@@ -28,7 +28,7 @@ public class TransactionController {
     @Operation(method = HTTP_POST, tags = "Transactions", summary = "流水查询")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.TransactionsResponseOk)))
+            examples = @ExampleObject(value = OpenApiExamples.TransactionsRespOk)))
     @GetMapping("/transactions")
     public ResponseEntity<?> transactions(
             @RequestParam(required = false) Integer pageNum,
