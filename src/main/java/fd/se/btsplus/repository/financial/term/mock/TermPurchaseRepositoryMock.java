@@ -2,7 +2,7 @@ package fd.se.btsplus.repository.financial.term.mock;
 
 import fd.se.btsplus.model.entity.financial.term.TermPurchase;
 import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
-import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,7 +18,7 @@ import java.util.*;
 public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
     private static final String path = "json/financial/term/termPurchase's.json";
     private final ResourceUtils resourceUtils;
-    private final JSONUtils jsonUtils;
+    private final JsonUtils jsonUtils;
     private Set<TermPurchase> termPurchases;
 
     @SneakyThrows

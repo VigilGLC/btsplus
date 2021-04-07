@@ -3,7 +3,7 @@ package fd.se.btsplus.auth;
 import fd.se.btsplus.model.consts.Constant;
 import fd.se.btsplus.model.entity.bts.User;
 import fd.se.btsplus.model.response.ResponseWrapper;
-import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.TokenUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 public class AuthenticationInterceptor implements HandlerInterceptor {
     private static final String PREFIX = "Bear";
     private final TokenUtils tokenUtils;
-    private final JSONUtils jsonUtils;
+    private final JsonUtils jsonUtils;
     private final Subject subject;
 
     @Override

@@ -2,7 +2,7 @@ package fd.se.btsplus.repository.financial.stock.mock;
 
 import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
 import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
-import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,7 +18,7 @@ import java.util.*;
 public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
     private static final String path = "json/financial/stock/stockPurchase's.json";
     private final ResourceUtils resourceUtils;
-    private final JSONUtils jsonUtils;
+    private final JsonUtils jsonUtils;
     private Set<StockPurchase> stockPurchases;
 
     @SneakyThrows

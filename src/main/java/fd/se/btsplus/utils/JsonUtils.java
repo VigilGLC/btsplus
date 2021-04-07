@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class JSONUtils {
+public class JsonUtils {
     private final ObjectMapper mapper = new ObjectMapper();
 
     {

@@ -6,29 +6,25 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import fd.se.btsplus.model.entity.bts.User;
 import fd.se.btsplus.repository.bts.UserRepository;
+import fd.se.btsplus.service.IDateService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
 @Component
 @AllArgsConstructor
 public class TokenUtils {
+    private final IDateService dateService;
     private final UserRepository userRepository;
     private final Algorithm algorithm = Algorithm.HMAC256("二刺螈");
 
-    public static Date dateAfter(int hours) {
-        return java.sql.Date.from(LocalDateTime.now().plusHours(hours).
-                atZone(ZoneId.systemDefault()).toInstant());
-    }
 
     public String generateToken(User user) {
         return JWT.create().
                 withClaim("username", user.getUsername()).
                 withClaim("password", user.getPassword()).
-                withExpiresAt(dateAfter(12)).
+                withExpiresAt(dateService.dateAfter(12)).
                 sign(algorithm);
     }
 
@@ -49,6 +45,6 @@ public class TokenUtils {
     }
 
     private boolean expired(String token) {
-        return getExpireAt(token).before(new java.util.Date());
+        return getExpireAt(token).before(dateService.currDate());
     }
 }

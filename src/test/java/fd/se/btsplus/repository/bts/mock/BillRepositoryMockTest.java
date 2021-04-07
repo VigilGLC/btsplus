@@ -2,7 +2,7 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Bill;
 import fd.se.btsplus.repository.bts.BillRepository;
-import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.JsonUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ class BillRepositoryMockTest {
     @Autowired
     private BillRepository billRepository;
     @Autowired
-    private JSONUtils jsonUtils;
+    private JsonUtils jsonUtils;
 
     @Test
     void test() {

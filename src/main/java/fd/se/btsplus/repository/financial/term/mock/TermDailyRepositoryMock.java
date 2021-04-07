@@ -2,7 +2,7 @@ package fd.se.btsplus.repository.financial.term.mock;
 
 import fd.se.btsplus.model.entity.financial.term.TermDaily;
 import fd.se.btsplus.repository.financial.term.TermDailyRepository;
-import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,7 +19,7 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
 
     private static final String path = "json/financial/term/termDaily's.json";
     private final ResourceUtils resourceUtils;
-    private final JSONUtils jsonUtils;
+    private final JsonUtils jsonUtils;
     private Set<TermDaily> termDailies;
 
     @SneakyThrows

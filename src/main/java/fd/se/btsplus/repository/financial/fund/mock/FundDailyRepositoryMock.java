@@ -2,7 +2,7 @@ package fd.se.btsplus.repository.financial.fund.mock;
 
 import fd.se.btsplus.model.entity.financial.fund.FundDaily;
 import fd.se.btsplus.repository.financial.fund.FundDailyRepository;
-import fd.se.btsplus.utils.JSONUtils;
+import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,7 +18,7 @@ import java.util.*;
 public class FundDailyRepositoryMock implements FundDailyRepository {
     private static final String path = "json/financial/fund/fundDaily's.json";
     private final ResourceUtils resourceUtils;
-    private final JSONUtils jsonUtils;
+    private final JsonUtils jsonUtils;
     private Set<FundDaily> fundDailies;
 
     @SneakyThrows

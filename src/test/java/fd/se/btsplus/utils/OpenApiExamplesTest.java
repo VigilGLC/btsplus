@@ -30,17 +30,46 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeJava;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class OpenApiExamplesTest {
+    static Map<String, String> resultRecord;
     @Autowired
     RepositoryUtils repositoryUtils;
     @Autowired
-    JSONUtils jsonUtils;
+    JsonUtils jsonUtils;
+
+    //<editor-fold desc="generate">
+    @BeforeAll
+    static void setUp() {
+        resultRecord = new HashMap<>();
+    }
+
+    @SneakyThrows
+    @AfterAll
+    static void tearDown() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> entry : resultRecord.entrySet()) {
+            final String line = MessageFormat.format("\tpublic static final String {0} = \"{1}\";\n",
+                    entry.getKey(), escapeJava(entry.getValue()));
+            sb.append(line).append('\n');
+        }
+        final PrintWriter writer = new PrintWriter("./OpenApiExamples.java");
+        writer.write("package fd.se.btsplus.utils;\n" +
+                "\n" +
+                "import lombok.AccessLevel;\n" +
+                "import lombok.Data;\n" +
+                "import lombok.NoArgsConstructor;\n" +
+                "\n" +
+                "@Data\n" +
+                "@NoArgsConstructor(access = AccessLevel.PRIVATE)\n" +
+                "public class OpenApiExamples {\n");
+        writer.write(sb.toString());
+        writer.write("}\n");
+        writer.close();
+    }
 
     @Test
     void testRepository() {
         Assertions.assertNotNull(repositoryUtils);
     }
-
-    static Map<String, String> resultRecord;
 
     @Test
     void recordLoginRespOk() {
@@ -174,38 +203,6 @@ class OpenApiExamplesTest {
                                 tp)).
                         collect(Collectors.toList())
         )));
-    }
-
-
-    //<editor-fold desc="generate">
-    @BeforeAll
-    static void setUp() {
-        resultRecord = new HashMap<>();
-    }
-
-
-    @SneakyThrows
-    @AfterAll
-    static void tearDown() {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> entry : resultRecord.entrySet()) {
-            final String line = MessageFormat.format("\tpublic static final String {0} = \"{1}\";\n",
-                    entry.getKey(), escapeJava(entry.getValue()));
-            sb.append(line).append('\n');
-        }
-        final PrintWriter writer = new PrintWriter("./OpenApiExamples.java");
-        writer.write("package fd.se.btsplus.utils;\n" +
-                "\n" +
-                "import lombok.AccessLevel;\n" +
-                "import lombok.Data;\n" +
-                "import lombok.NoArgsConstructor;\n" +
-                "\n" +
-                "@Data\n" +
-                "@NoArgsConstructor(access = AccessLevel.PRIVATE)\n" +
-                "public class OpenApiExamples {\n");
-        writer.write(sb.toString());
-        writer.write("}\n");
-        writer.close();
     }
     //</editor-fold>
 
