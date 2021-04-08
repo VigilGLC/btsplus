@@ -28,8 +28,9 @@
       "createdTime": "2021-04-03 20:14:07"
     },
     "count": 100,
-    "price": 120,
+    "initPrice": 120,
     "currDate": "2021-04-03",
+    "currPrice": 120,
     "beginDate": "2021-04-03"
   }
 ]

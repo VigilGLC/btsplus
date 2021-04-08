@@ -20,9 +20,10 @@ public class StockPurchase implements IPurchase {
     @ManyToOne
     private Stock stock;
     private Integer count;
-    private Double price;
+    private Double initPrice;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date currDate;
+    private Double currPrice;
 
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date beginDate;
