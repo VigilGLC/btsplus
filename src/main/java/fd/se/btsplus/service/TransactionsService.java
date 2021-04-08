@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static fd.se.btsplus.model.consts.Constant.ASC;
+import static fd.se.btsplus.model.consts.Constant.DESC;
+
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -23,15 +26,15 @@ public class TransactionsService {
                                    String accountNum, String transactionNum, String transactionCode,
                                    String orderBy, Date beginDate, Date endDate) {
         if (orderBy == null) {
-            orderBy = "asc";
+            orderBy = ASC;
         }
         orderBy = orderBy.toLowerCase();
         switch (orderBy) {
-            case "asc":
-            case "desc":
+            case ASC:
+            case DESC:
                 break;
             default:
-                orderBy = "asc";
+                orderBy = ASC;
         }
 
         String finalOrderBy = orderBy;
@@ -87,7 +90,7 @@ public class TransactionsService {
             } else {
                 result = tx1.getOperatedTime().compareTo(tx2.getOperatedTime());
             }
-            if (!finalOrderBy.equals("asc")) {
+            if (!finalOrderBy.equals(ASC)) {
                 result = -result;
             }
             return result;

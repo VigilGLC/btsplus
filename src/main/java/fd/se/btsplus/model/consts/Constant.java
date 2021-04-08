@@ -18,4 +18,7 @@ public class Constant {
     public static final String STOCK = "stock";
     public static final String TERM = "term";
 
+    public static final String ASC = "asc";
+    public static final String DESC = "desc";
+
 }
