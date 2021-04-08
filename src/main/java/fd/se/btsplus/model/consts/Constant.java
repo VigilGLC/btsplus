@@ -1,5 +1,6 @@
 package fd.se.btsplus.model.consts;
 
+import fd.se.btsplus.model.entity.bts.Account;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -20,5 +21,9 @@ public class Constant {
 
     public static final String ASC = "asc";
     public static final String DESC = "desc";
+
+    public static final Account BANK_ACCOUNT = new Account(1L, "77774396",
+            null, "储蓄账户", null, null, null,
+            129890000.0000);
 
 }
