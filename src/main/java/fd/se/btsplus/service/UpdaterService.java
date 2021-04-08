@@ -41,6 +41,7 @@ public class UpdaterService implements ApplicationListener<DateEvent> {
     private final StockDailyRepository stockDailyRepository;
     private final TermDailyRepository termDailyRepository;
 
+
     public void update(Date lastDate, Date newDate) {
         updateFundDaily(lastDate, newDate);
         updateStockDaily(lastDate, newDate);
@@ -50,16 +51,12 @@ public class UpdaterService implements ApplicationListener<DateEvent> {
     private void updateFundDaily(Date lastDate, Date newDate) {
         List<FundDaily> toSave = new ArrayList<>();
         fundRepository.findAll().forEach(
-                Fund -> {
-                    if (fundDailyRepository.findByFundAndDate(Fund, newDate) == null) {
+                fund -> {
+                    if (fundDailyRepository.findByFundAndDate(fund, newDate) == null) {
                         FundDaily newDaily = new FundDaily();
-                        newDaily.setFund(Fund);
+                        newDaily.setFund(fund);
                         newDaily.setDate(newDate);
-                        FundDaily lastDaily = fundDailyRepository.findByFundAndDate(Fund, lastDate);
-                        if (lastDaily == null) {
-                            lastDaily = new FundDaily();
-                        }
-                        newDaily.setRate(financialService.predict(Fund, lastDaily));
+                        newDaily.setRate(financialService.predict(fund, null));
                         toSave.add(newDaily);
                     }
                 }
@@ -90,16 +87,12 @@ public class UpdaterService implements ApplicationListener<DateEvent> {
     private void updateTermDaily(Date lastDate, Date newDate) {
         List<TermDaily> toSave = new ArrayList<>();
         termRepository.findAll().forEach(
-                Term -> {
-                    if (termDailyRepository.findByTermAndDate(Term, newDate) == null) {
+                term -> {
+                    if (termDailyRepository.findByTermAndDate(term, newDate) == null) {
                         TermDaily newDaily = new TermDaily();
-                        newDaily.setTerm(Term);
+                        newDaily.setTerm(term);
                         newDaily.setDate(newDate);
-                        TermDaily lastDaily = termDailyRepository.findByTermAndDate(Term, lastDate);
-                        if (lastDaily == null) {
-                            lastDaily = new TermDaily();
-                        }
-                        newDaily.setRate(financialService.predict(Term, lastDaily));
+                        newDaily.setRate(financialService.predict(term,null));
                         toSave.add(newDaily);
                     }
                 }
