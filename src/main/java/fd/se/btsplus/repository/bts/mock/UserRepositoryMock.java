@@ -31,7 +31,9 @@ public class UserRepositoryMock implements UserRepository {
 
     @Override
     public User findByUsernameAndPassword(String username, String password) {
-        return null;
+        return this.users.stream().
+                filter(usr -> usr.getUsername().equals(username) && usr.getPassword().equals(password)).
+                findFirst().orElse(null);
     }
 
     @Override
