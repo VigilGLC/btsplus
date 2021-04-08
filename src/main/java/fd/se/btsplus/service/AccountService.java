@@ -18,4 +18,8 @@ public class AccountService {
         throw new NotImplementedException();
     }
 
+    public OperationResult withDraw(Account account, double amount) {
+        throw new NotImplementedException();
+    }
+
 }

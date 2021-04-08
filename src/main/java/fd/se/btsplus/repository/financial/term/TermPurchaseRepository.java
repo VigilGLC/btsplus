@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface TermPurchaseRepository extends CrudRepository<TermPurchase, Long> {
     List<TermPurchase> findAll();
+
+    List<TermPurchase> findByCustomerCode(String customerCode);
 }

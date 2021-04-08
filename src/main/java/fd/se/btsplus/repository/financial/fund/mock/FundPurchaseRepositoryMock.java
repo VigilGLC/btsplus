@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Profile("!prod")
 @Component
@@ -31,6 +32,13 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
     @Override
     public List<FundPurchase> findAll() {
         return new ArrayList<>(this.fundPurchases);
+    }
+
+    @Override
+    public List<FundPurchase> findByCustomerCode(String customerCode) {
+        return this.fundPurchases.stream().
+                filter(fp -> fp.getCustomer().getCode().equals(customerCode)).
+                collect(Collectors.toList());
     }
 
     //<editor-fold desc="useless">

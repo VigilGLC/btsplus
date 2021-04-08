@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface StockPurchaseRepository extends CrudRepository<StockPurchase, Long> {
     List<StockPurchase> findAll();
+
+    List<StockPurchase> findByCustomerCode(String customerCode);
 }

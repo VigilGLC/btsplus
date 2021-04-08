@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Profile("!prod")
 @Component
@@ -31,6 +32,13 @@ public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
     @Override
     public List<StockPurchase> findAll() {
         return new ArrayList<>(this.stockPurchases);
+    }
+
+    @Override
+    public List<StockPurchase> findByCustomerCode(String customerCode) {
+        return this.stockPurchases.stream().
+                filter(sp -> sp.getCustomer().getCode().equals(customerCode)).
+                collect(Collectors.toList());
     }
 
     //<editor-fold desc="useless">

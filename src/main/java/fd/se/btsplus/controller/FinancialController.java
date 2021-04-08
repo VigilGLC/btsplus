@@ -5,6 +5,7 @@ import fd.se.btsplus.model.consts.Role;
 import fd.se.btsplus.model.request.FundPurchaseRequest;
 import fd.se.btsplus.model.request.StockPurchaseRequest;
 import fd.se.btsplus.model.request.TermPurchaseRequest;
+import fd.se.btsplus.service.FinancialService;
 import fd.se.btsplus.utils.OpenApiExamples;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +25,7 @@ import static fd.se.btsplus.model.consts.Constant.*;
 @AllArgsConstructor
 @RestController
 public class FinancialController {
+    private final FinancialService financialService;
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "理财产品")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
