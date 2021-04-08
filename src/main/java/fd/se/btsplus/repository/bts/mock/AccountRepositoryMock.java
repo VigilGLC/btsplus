@@ -56,17 +56,22 @@ public class AccountRepositoryMock implements AccountRepository {
                 collect(Collectors.toList());
     }
 
-    //<editor-fold desc="useless">
-
     @Override
     public <S extends Account> S save(S entity) {
-        return null;
+        this.accounts.remove(entity);
+        this.accounts.add(entity);
+        return entity;
     }
 
     @Override
     public <S extends Account> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity : entities) {
+            save(entity);
+        }
+        return entities;
     }
+
+    //<editor-fold desc="useless">
 
     @Override
     public Optional<Account> findById(Long aLong) {
