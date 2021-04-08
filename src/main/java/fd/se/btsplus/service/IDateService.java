@@ -2,7 +2,6 @@ package fd.se.btsplus.service;
 
 import fd.se.btsplus.model.domain.DateEvent;
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 

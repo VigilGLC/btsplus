@@ -27,10 +27,40 @@ public class CustomerService {
     private final AccountRepository accountRepository;
     private final BillRepository billRepository;
 
+    /**
+     * @return if paid off.
+     */
+    private static boolean shave(Bill bill, double toPay) {
+        final Double interest = bill.getRemainInterest();
+        final Double amount = bill.getRemainAmount();
+        if (interest > 0) {
+            if (toPay < interest) {
+                bill.setRemainInterest(interest - toPay);
+                return false;
+            } else {
+                toPay -= interest;
+                bill.setRemainInterest(0d);
+            }
+        }
+        if (amount > 0) {
+            if (toPay < amount) {
+                bill.setRemainAmount(amount - toPay);
+                return false;
+            } else {
+                toPay -= amount;
+                bill.setRemainAmount(0d);
+            }
+        }
+        return bill.getRemainInterest() + bill.getRemainAmount() == 0;
+    }
+
+    private static double penaltyInterest(Bill bill) {
+        return (bill.getPlanAmount() + bill.getPlanInterest()) * PENALTY_RATE;
+    }
+
     public CreditLevel creditLevel(Customer customer) {
         throw new NotImplementedException();
     }
-
 
     public OperationResult payBill(Long billId, Account account, double amount) {
         int code = HTTP_NOT_ACCEPTABLE;
@@ -129,36 +159,5 @@ public class CustomerService {
                 "Total bills: {1}, Penalty Paid: {2}, Full Paid: {3}",
                 total, penaltyPaid, fullPaid);
         return OperationResult.of(HTTP_OK, message);
-    }
-
-    /**
-     * @return if paid off.
-     */
-    private static boolean shave(Bill bill, double toPay) {
-        final Double interest = bill.getRemainInterest();
-        final Double amount = bill.getRemainAmount();
-        if (interest > 0) {
-            if (toPay < interest) {
-                bill.setRemainInterest(interest - toPay);
-                return false;
-            } else {
-                toPay -= interest;
-                bill.setRemainInterest(0d);
-            }
-        }
-        if (amount > 0) {
-            if (toPay < amount) {
-                bill.setRemainAmount(amount - toPay);
-                return false;
-            } else {
-                toPay -= amount;
-                bill.setRemainAmount(0d);
-            }
-        }
-        return bill.getRemainInterest() + bill.getRemainAmount() == 0;
-    }
-
-    private static double penaltyInterest(Bill bill) {
-        return (bill.getPlanAmount() + bill.getPlanInterest()) * PENALTY_RATE;
     }
 }

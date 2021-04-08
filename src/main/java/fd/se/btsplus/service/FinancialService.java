@@ -65,10 +65,11 @@ public class FinancialService {
         throw new NotImplementedException();
     }
 
-    public OperationResult purchaseFund(Long fundId, Account account, double amount, Period period){
+    public OperationResult purchaseFund(Long fundId, Account account, double amount, Period period) {
         throw new NotImplementedException();
     }
-    public OperationResult purchaseStock(Long stockId, Account account, int count){
+
+    public OperationResult purchaseStock(Long stockId, Account account, int count) {
         throw new NotImplementedException();
     }
 

@@ -52,7 +52,7 @@ public class BillRepositoryMock implements BillRepository {
     @Override
     public List<Bill> findByStatus(BillStatus status) {
         return this.bills.stream().
-                filter(b->status.equals(b.getStatus())).
+                filter(b -> status.equals(b.getStatus())).
                 collect(Collectors.toList());
     }
 

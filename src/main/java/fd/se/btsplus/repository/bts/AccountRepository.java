@@ -16,6 +16,7 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     Account findByAccountNumAndPassword(String accountNum, String password);
 
     List<Account> findByCustomer(Customer customer);
+
     List<Account> findByCustomerCode(String customerCode);
 
 }
