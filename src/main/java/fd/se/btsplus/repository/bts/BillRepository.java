@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface BillRepository extends CrudRepository<Bill, Long> {
     List<Bill> findAll();
+
+    List<Bill> findByLoanIouNum(String iouNum);
 }

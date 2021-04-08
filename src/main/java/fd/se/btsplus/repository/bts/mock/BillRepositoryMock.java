@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Profile("!prod")
 @Component
@@ -31,6 +32,13 @@ public class BillRepositoryMock implements BillRepository {
     @Override
     public List<Bill> findAll() {
         return new ArrayList<>(this.bills);
+    }
+
+    @Override
+    public List<Bill> findByLoanIouNum(String iouNum) {
+        return this.bills.stream().
+                filter(b -> b.getLoan().getIouNum().equals(iouNum)).
+                collect(Collectors.toList());
     }
     //<editor-fold desc="useless">
 
