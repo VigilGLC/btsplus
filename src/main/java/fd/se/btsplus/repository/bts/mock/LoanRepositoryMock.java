@@ -1,5 +1,6 @@
 package fd.se.btsplus.repository.bts.mock;
 
+import fd.se.btsplus.model.entity.bts.Customer;
 import fd.se.btsplus.model.entity.bts.Loan;
 import fd.se.btsplus.repository.bts.LoanRepository;
 import fd.se.btsplus.utils.JsonUtils;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Profile("!prod")
 @Component
@@ -31,6 +33,18 @@ public class LoanRepositoryMock implements LoanRepository {
     @Override
     public List<Loan> findAll() {
         return new ArrayList<>(this.loans);
+    }
+
+    @Override
+    public List<Loan> findByCustomer(Customer customer) {
+        return findByCustomerCode(customer.getCode());
+    }
+
+    @Override
+    public List<Loan> findByCustomerCode(String customerCode) {
+        return this.loans.stream().
+                filter(ln -> ln.getCustomer().getCode().equals(customerCode)).
+                collect(Collectors.toList());
     }
     //<editor-fold desc="useless">
 
