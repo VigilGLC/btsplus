@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Date;
 
-import static fd.se.btsplus.model.consts.Constant.LOGIN_TOKEN_HEADER;
+import static fd.se.btsplus.model.consts.Constant.*;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 
@@ -35,7 +35,7 @@ public class UserController {
     private final TokenUtils tokenUtils;
     private final UserRepository userRepository;
 
-    @Operation(method = "POST", tags = "User", summary = "用户登录")
+    @Operation(method = HTTP_POST, tags = "User", summary = "用户登录")
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.LoginRespOk)))
     @PostMapping("/login")
@@ -51,7 +51,7 @@ public class UserController {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, new LoginData(token, expireAt)));
     }
 
-    @Operation(method = "GET", tags = "User", summary = "当前用户")
+    @Operation(method = HTTP_GET, tags = "User", summary = "当前用户")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.CurrUserRespOk)))

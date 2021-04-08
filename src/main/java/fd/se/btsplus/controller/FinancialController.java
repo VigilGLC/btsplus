@@ -34,7 +34,7 @@ public class FinancialController {
                     @ExampleObject(value = OpenApiExamples.TermsRespOk)
             }))
     @GetMapping("/financial/{prodType}")
-    public ResponseEntity<?> allProducts(@PathVariable String prodType) {
+    public ResponseEntity<?> products(@PathVariable String prodType) {
         throw new NotImplementedException();
     }
 
@@ -45,7 +45,7 @@ public class FinancialController {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/fund/{fundId}/purchase")
-    public ResponseEntity<?> purchaseFund(@PathVariable String fundId, @RequestBody FundPurchaseRequest request) {
+    public ResponseEntity<?> purchaseFund(@PathVariable Long fundId, @RequestBody FundPurchaseRequest request) {
         throw new NotImplementedException();
     }
 
@@ -53,8 +53,8 @@ public class FinancialController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.FundPurchasesRespOk)))
-    @GetMapping("/customer/financial/funds/purchases")
-    public ResponseEntity<?> fundPurchases() {
+    @GetMapping("/customer/{customerCode}/financial/funds/purchases")
+    public ResponseEntity<?> fundPurchases(@PathVariable String customerCode) {
         throw new NotImplementedException();
     }
 
@@ -67,7 +67,7 @@ public class FinancialController {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/stock/{stockId}/purchase")
-    public ResponseEntity<?> purchaseStock(@PathVariable String stockId, @RequestBody StockPurchaseRequest request) {
+    public ResponseEntity<?> purchaseStock(@PathVariable Long stockId, @RequestBody StockPurchaseRequest request) {
         throw new NotImplementedException();
     }
 
@@ -75,8 +75,8 @@ public class FinancialController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.StockPurchasesRespOk)))
-    @GetMapping("/customer/financial/stocks/purchases")
-    public ResponseEntity<?> stockPurchases() {
+    @GetMapping("/customer/{customerCode}/financial/stocks/purchases")
+    public ResponseEntity<?> stockPurchases(@PathVariable String customerCode) {
         throw new NotImplementedException();
     }
 
@@ -89,7 +89,7 @@ public class FinancialController {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/term/{termId}/purchase")
-    public ResponseEntity<?> purchaseTerm(@PathVariable String termId, @RequestBody TermPurchaseRequest request) {
+    public ResponseEntity<?> purchaseTerm(@PathVariable Long termId, @RequestBody TermPurchaseRequest request) {
         throw new NotImplementedException();
     }
 
@@ -97,8 +97,8 @@ public class FinancialController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.TermPurchasesRespOk)))
-    @GetMapping("/customer/financial/terms/purchases")
-    public ResponseEntity<?> termPurchases() {
+    @GetMapping("/customer/{customerCode}/financial/terms/purchases")
+    public ResponseEntity<?> termPurchases(@PathVariable String customerCode) {
         throw new NotImplementedException();
     }
     //</editor-fold>

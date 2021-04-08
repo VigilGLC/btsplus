@@ -46,7 +46,7 @@ public class LoanController {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PaymentRespOk)))
     @PutMapping("/customer/loan/bill/{billId}/payment")
-    public ResponseEntity<?> payment(@PathVariable String billId, @RequestBody AccountRequest request) {
+    public ResponseEntity<?> payment(@PathVariable Long billId, @RequestBody AccountRequest request) {
         throw new NotImplementedException();
     }
 
