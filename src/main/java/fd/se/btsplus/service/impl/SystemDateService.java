@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class SystemDateService implements IDateService {
 
     @Override
     public DateEvent emit() {
-        final Date newDate = currDate();
+        final Date newDate = DateUtils.truncate(currDate(), Calendar.DAY_OF_MONTH);
         final Date lastDate = DateUtils.addDays(newDate, -1);
         final DateEvent event = new DateEvent(this, lastDate, newDate);
         publisher.publishEvent(event);
