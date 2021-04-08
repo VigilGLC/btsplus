@@ -1,8 +1,12 @@
 package fd.se.btsplus.controller;
 
 import fd.se.btsplus.interceptor.annotations.Authorized;
+import fd.se.btsplus.interceptor.subject.Subject;
 import fd.se.btsplus.model.consts.Role;
+import fd.se.btsplus.model.domain.OperationResult;
 import fd.se.btsplus.model.request.AccountRequest;
+import fd.se.btsplus.model.response.ResponseWrapper;
+import fd.se.btsplus.service.CustomerService;
 import fd.se.btsplus.utils.OpenApiExamples;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,11 +21,14 @@ import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import static fd.se.btsplus.model.consts.Constant.*;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 @Authorized(required = Role.TELLER)
 @AllArgsConstructor
 @RestController
 public class LoanController {
+    private final Subject subject;
+    private final CustomerService customerService;
 
     @Operation(method = HTTP_GET, tags = "Loan", summary = "贷款查询")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
@@ -47,7 +54,12 @@ public class LoanController {
             examples = @ExampleObject(value = OpenApiExamples.PaymentRespOk)))
     @PutMapping("/customer/loan/bill/{billId}/payment")
     public ResponseEntity<?> payment(@PathVariable Long billId, @RequestBody AccountRequest request) {
-        throw new NotImplementedException();
+        final OperationResult result = customerService.payBill(billId,
+                subject.getAccount(), request.getAmount());
+        final int code = result.getCode();
+        final String message = result.getMessage();
+        Boolean data = code == HTTP_OK;
+        return ResponseEntity.status(code).body(ResponseWrapper.wrap(code, message, data));
     }
 
     @Authorized(required = Role.ADMIN)
@@ -57,7 +69,11 @@ public class LoanController {
             examples = @ExampleObject(value = OpenApiExamples.AutoPaymentRespOk)))
     @PostMapping("/loans/bills/auto-payment")
     public ResponseEntity<?> autoPayment() {
-        throw new NotImplementedException();
+        final OperationResult result = customerService.autoPayBill();
+        final int code = result.getCode();
+        final String message = result.getMessage();
+        Boolean data = code == HTTP_OK;
+        return ResponseEntity.status(code).body(ResponseWrapper.wrap(code, message, data));
     }
 
 }

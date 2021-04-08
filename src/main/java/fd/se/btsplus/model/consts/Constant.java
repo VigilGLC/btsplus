@@ -26,4 +26,6 @@ public class Constant {
             null, "储蓄账户", null, null, null,
             129890000.0000);
 
+    public static final double PENALTY_RATE = 0.05;
+
 }

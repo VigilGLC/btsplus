@@ -1,5 +1,6 @@
 package fd.se.btsplus.repository.bts;
 
+import fd.se.btsplus.model.consts.BillStatus;
 import fd.se.btsplus.model.entity.bts.Bill;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.repository.CrudRepository;
@@ -12,5 +13,9 @@ import java.util.List;
 public interface BillRepository extends CrudRepository<Bill, Long> {
     List<Bill> findAll();
 
+    Bill findById(long id);
+
     List<Bill> findByLoanIouNum(String iouNum);
+
+    List<Bill> findByStatus(BillStatus status);
 }
