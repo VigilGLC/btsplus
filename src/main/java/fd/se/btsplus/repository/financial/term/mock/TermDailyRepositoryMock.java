@@ -1,5 +1,6 @@
 package fd.se.btsplus.repository.financial.term.mock;
 
+import fd.se.btsplus.model.entity.financial.term.Term;
 import fd.se.btsplus.model.entity.financial.term.TermDaily;
 import fd.se.btsplus.repository.financial.term.TermDailyRepository;
 import fd.se.btsplus.utils.JsonUtils;
@@ -34,16 +35,28 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
         return new ArrayList<>(this.termDailies);
     }
 
-    //<editor-fold desc="useless">
+    @Override
+    public TermDaily findByTermAndDate(Term term, Date date) {
+        return this.termDailies.stream().
+                filter(td -> td.getTerm().equals(term) && td.getDate().equals(date)).
+                findFirst().orElse(null);
+    }
+
     @Override
     public <S extends TermDaily> S save(S entity) {
-        return null;
+        this.termDailies.remove(entity);
+        this.termDailies.add(entity);
+        return entity;
     }
 
     @Override
     public <S extends TermDaily> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity : entities) {
+            save(entity);
+        }
+        return entities;
     }
+    //<editor-fold desc="useless">
 
     @Override
     public Optional<TermDaily> findById(Long aLong) {

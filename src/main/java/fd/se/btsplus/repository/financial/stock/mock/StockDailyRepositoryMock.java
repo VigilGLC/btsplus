@@ -1,5 +1,6 @@
 package fd.se.btsplus.repository.financial.stock.mock;
 
+import fd.se.btsplus.model.entity.financial.stock.Stock;
 import fd.se.btsplus.model.entity.financial.stock.StockDaily;
 import fd.se.btsplus.repository.financial.stock.StockDailyRepository;
 import fd.se.btsplus.utils.JsonUtils;
@@ -34,17 +35,28 @@ public class StockDailyRepositoryMock implements StockDailyRepository {
         return new ArrayList<>(this.stockDailies);
     }
 
-    //<editor-fold desc="useless">
+    @Override
+    public StockDaily findByStockAndDate(Stock stock, Date date) {
+        return this.stockDailies.stream().
+                filter(sd -> sd.getStock().equals(stock) && sd.getDate().equals(date)).
+                findFirst().orElse(null);
+    }
 
     @Override
     public <S extends StockDaily> S save(S entity) {
-        return null;
+        this.stockDailies.remove(entity);
+        this.stockDailies.add(entity);
+        return entity;
     }
 
     @Override
     public <S extends StockDaily> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity : entities) {
+            save(entity);
+        }
+        return entities;
     }
+    //<editor-fold desc="useless">
 
     @Override
     public Optional<StockDaily> findById(Long aLong) {
