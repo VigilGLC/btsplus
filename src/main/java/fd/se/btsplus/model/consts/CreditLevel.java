@@ -14,8 +14,8 @@ public enum CreditLevel {
     LEVEL_2(2, Arrays.asList(FUND, TERM)),
     LEVEL_3(3, Collections.singletonList(TERM));
 
-    private final int value;
     public final List<String> affordable;
+    private final int value;
 
     CreditLevel(int value, List<String> affordable) {
         this.value = value;
@@ -30,11 +30,6 @@ public enum CreditLevel {
             }
         }
         return null;
-    }
-
-    @JsonValue
-    public int value() {
-        return value;
     }
 
     public static CreditLevel evaluate(Double balance, Double loan) {
@@ -52,6 +47,11 @@ public enum CreditLevel {
             return LEVEL_2;
         }
         return LEVEL_3;
+    }
+
+    @JsonValue
+    public int value() {
+        return value;
     }
 
 }

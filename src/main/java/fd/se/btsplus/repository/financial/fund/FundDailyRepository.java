@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public interface FundDailyRepository extends CrudRepository<FundDaily, Long> {
     List<FundDaily> findAll();
+
     FundDaily findByFundAndDate(Fund fund, Date date);
 
 }

@@ -13,5 +13,6 @@ import java.util.List;
 @Repository
 public interface TermDailyRepository extends CrudRepository<TermDaily, Long> {
     List<TermDaily> findAll();
+
     TermDaily findByTermAndDate(Term term, Date date);
 }

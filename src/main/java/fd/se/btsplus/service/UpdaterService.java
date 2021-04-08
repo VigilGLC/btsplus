@@ -23,24 +23,20 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class UpdaterService implements ApplicationListener<DateEvent> {
+    private final FinancialService financialService;
+    private final FundRepository fundRepository;
+    private final StockRepository stockRepository;
+    private final TermRepository termRepository;
+    private final FundDailyRepository fundDailyRepository;
+    private final StockDailyRepository stockDailyRepository;
+    private final TermDailyRepository termDailyRepository;
+
     @Override
     public final void onApplicationEvent(DateEvent event) {
         Date lastDate = event.getLastDate();
         Date newDate = event.getNewDate();
         update(lastDate, newDate);
     }
-
-    private final FinancialService financialService;
-
-    private final FundRepository fundRepository;
-    private final StockRepository stockRepository;
-    private final TermRepository termRepository;
-
-
-    private final FundDailyRepository fundDailyRepository;
-    private final StockDailyRepository stockDailyRepository;
-    private final TermDailyRepository termDailyRepository;
-
 
     public void update(Date lastDate, Date newDate) {
         updateFundDaily(lastDate, newDate);
@@ -92,7 +88,7 @@ public class UpdaterService implements ApplicationListener<DateEvent> {
                         TermDaily newDaily = new TermDaily();
                         newDaily.setTerm(term);
                         newDaily.setDate(newDate);
-                        newDaily.setRate(financialService.predict(term,null));
+                        newDaily.setRate(financialService.predict(term, null));
                         toSave.add(newDaily);
                     }
                 }

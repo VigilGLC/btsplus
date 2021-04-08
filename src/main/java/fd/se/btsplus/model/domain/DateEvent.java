@@ -9,6 +9,7 @@ import java.util.Date;
 public class DateEvent extends ApplicationEvent implements Cloneable {
     private final Date lastDate;
     private final Date newDate;
+
     public DateEvent(Object source, Date lastDate, Date newDate) {
         super(source);
         this.lastDate = lastDate;

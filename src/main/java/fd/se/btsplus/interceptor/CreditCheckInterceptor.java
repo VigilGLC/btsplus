@@ -25,6 +25,19 @@ public class CreditCheckInterceptor implements HandlerInterceptor {
     private final CustomerService customerService;
     private final HttpUtils httpUtils;
 
+    private static String extractProduct(String url) {
+        if (url == null) {
+            return null;
+        }
+        final List<String> choices = Arrays.asList(FUND, STOCK, TERM);
+        for (String part : choices) {
+            if (url.contains(part)) {
+                return part;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         final Customer customer = subject.getCustomer();
@@ -55,18 +68,5 @@ public class CreditCheckInterceptor implements HandlerInterceptor {
                         ResponseWrapper.wrap(HTTP_NOT_ACCEPTABLE, message, null));
             }
         }
-    }
-
-    private static String extractProduct(String url) {
-        if (url == null) {
-            return null;
-        }
-        final List<String> choices = Arrays.asList(FUND, STOCK, TERM);
-        for (String part : choices) {
-            if (url.contains(part)) {
-                return part;
-            }
-        }
-        return null;
     }
 }
