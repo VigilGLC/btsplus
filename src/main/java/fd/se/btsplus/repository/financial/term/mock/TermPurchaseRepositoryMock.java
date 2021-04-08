@@ -1,5 +1,6 @@
 package fd.se.btsplus.repository.financial.term.mock;
 
+import fd.se.btsplus.model.entity.financial.term.Term;
 import fd.se.btsplus.model.entity.financial.term.TermPurchase;
 import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
 import fd.se.btsplus.utils.JsonUtils;
@@ -41,16 +42,30 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
                 collect(Collectors.toList());
     }
 
-    //<editor-fold desc="useless">
     @Override
     public <S extends TermPurchase> S save(S entity) {
-        return null;
+        this.termPurchases.remove(entity);
+        this.termPurchases.add(entity);
+        return entity;
     }
 
     @Override
     public <S extends TermPurchase> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity : entities) {
+            save(entity);
+        }
+        return entities;
     }
+
+    @Override
+    public List<TermPurchase> findByTermAndCurrDateAndEndDateAfter(Term term, Date currDate, Date nextDate) {
+        return this.termPurchases.stream().
+                filter(fp -> fp.getTerm().equals(term) && fp.getCurrDate().equals(currDate)
+                        && fp.getEndDate().after(nextDate)).
+                collect(Collectors.toList());
+    }
+
+    //<editor-fold desc="useless">
 
     @Override
     public Optional<TermPurchase> findById(Long aLong) {

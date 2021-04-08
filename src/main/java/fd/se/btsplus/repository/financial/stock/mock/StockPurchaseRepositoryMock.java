@@ -1,5 +1,6 @@
 package fd.se.btsplus.repository.financial.stock.mock;
 
+import fd.se.btsplus.model.entity.financial.stock.Stock;
 import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
 import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
 import fd.se.btsplus.utils.JsonUtils;
@@ -41,16 +42,28 @@ public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
                 collect(Collectors.toList());
     }
 
-    //<editor-fold desc="useless">
+    @Override
+    public List<StockPurchase> findByStockAndCurrDate(Stock stock, Date lastDate) {
+        return this.stockPurchases.stream().
+                filter(sp -> sp.getStock().equals(stock) && sp.getCurrDate().equals(lastDate)).
+                collect(Collectors.toList());
+    }
+
     @Override
     public <S extends StockPurchase> S save(S entity) {
-        return null;
+        this.stockPurchases.remove(entity);
+        this.stockPurchases.add(entity);
+        return entity;
     }
 
     @Override
     public <S extends StockPurchase> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity : entities) {
+            save(entity);
+        }
+        return entities;
     }
+    //<editor-fold desc="useless">
 
     @Override
     public Optional<StockPurchase> findById(Long aLong) {

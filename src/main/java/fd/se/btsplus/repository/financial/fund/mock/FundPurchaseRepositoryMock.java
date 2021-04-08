@@ -1,5 +1,6 @@
 package fd.se.btsplus.repository.financial.fund.mock;
 
+import fd.se.btsplus.model.entity.financial.fund.Fund;
 import fd.se.btsplus.model.entity.financial.fund.FundPurchase;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.utils.JsonUtils;
@@ -41,17 +42,30 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
                 collect(Collectors.toList());
     }
 
-    //<editor-fold desc="useless">
+    @Override
+    public List<FundPurchase> findByFundAndCurrDateAndEndDateAfter(Fund fund, Date currDate, Date nextDate) {
+        return this.fundPurchases.stream().
+                filter(fp -> fp.getFund().equals(fund) && fp.getCurrDate().equals(currDate)
+                        && fp.getEndDate().after(nextDate)).
+                collect(Collectors.toList());
+    }
 
     @Override
     public <S extends FundPurchase> S save(S entity) {
-        return null;
+        this.fundPurchases.remove(entity);
+        this.fundPurchases.add(entity);
+        return entity;
     }
 
     @Override
     public <S extends FundPurchase> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity : entities) {
+            save(entity);
+        }
+        return entities;
     }
+
+    //<editor-fold desc="useless">
 
     @Override
     public Optional<FundPurchase> findById(Long aLong) {

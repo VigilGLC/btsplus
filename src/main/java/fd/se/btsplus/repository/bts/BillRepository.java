@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Profile("prod")
@@ -18,4 +19,6 @@ public interface BillRepository extends CrudRepository<Bill, Long> {
     List<Bill> findByLoanIouNum(String iouNum);
 
     List<Bill> findByStatus(BillStatus status);
+
+    List<Bill> findByEndDateAndStatus(Date endDate, BillStatus status);
 }

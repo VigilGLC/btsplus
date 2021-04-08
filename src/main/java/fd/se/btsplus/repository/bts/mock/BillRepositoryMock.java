@@ -57,18 +57,28 @@ public class BillRepositoryMock implements BillRepository {
     }
 
     @Override
+    public List<Bill> findByEndDateAndStatus(Date endDate, BillStatus status) {
+        return this.bills.stream().
+                filter(b -> b.getEndDate().equals(endDate) && status.equals(b.getStatus())).
+                collect(Collectors.toList());
+    }
+
+    @Override
     public <S extends Bill> S save(S entity) {
         this.bills.remove(entity);
         this.bills.add(entity);
         return entity;
     }
 
-    //<editor-fold desc="useless">
-
     @Override
     public <S extends Bill> Iterable<S> saveAll(Iterable<S> entities) {
-        return null;
+        for (S entity : entities) {
+            save(entity);
+        }
+        return entities;
     }
+
+    //<editor-fold desc="useless">
 
     @Override
     public Optional<Bill> findById(Long aLong) {
