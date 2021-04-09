@@ -11,7 +11,8 @@ import java.util.List;
 @Service
 public class BillService {
     private final BillRepository billRepository;
-    public List<Bill> query(String iouNum){
+
+    public List<Bill> query(String iouNum) {
         return billRepository.findByLoanIouNum(iouNum);
     }
 }

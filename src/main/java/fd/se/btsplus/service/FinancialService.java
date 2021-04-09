@@ -54,6 +54,13 @@ public class FinancialService {
     private final AccountService accountService;
     private final IDateService dateService;
 
+    private static Date addDate(Date base, Period period) {
+        base = DateUtils.addDays(base, period.getDays());
+        base = DateUtils.addMonths(base, period.getMonths());
+        base = DateUtils.addYears(base, period.getYears());
+        return base;
+    }
+
     /**
      * @return new price for stock; new rate for fund and term.
      */
@@ -103,7 +110,6 @@ public class FinancialService {
         return Collections.emptyList();
     }
 
-
     public List<ProductDatum> queryFundPurchases(String customerCode) {
         return fundPurchaseRepository.findByCustomerCode(customerCode).
                 stream().map(fp -> new ProductDatum(fp.getFund(),
@@ -124,7 +130,6 @@ public class FinancialService {
                 termDailyRepository.findByTermAndDate(fp.getTerm(), fp.getCurrDate()), fp)).
                 collect(Collectors.toList());
     }
-
 
     public OperationResult purchaseFund(Long fundId, Account account, double amount, Period period) {
         Fund fund = fundRepository.findById(fundId.longValue());
@@ -155,7 +160,6 @@ public class FinancialService {
         return OperationResult.of(HTTP_OK, "success");
     }
 
-
     public OperationResult purchaseStock(Long stockId, Account account, int count) {
         Stock stock = stockRepository.findById(stockId.longValue());
         if (stock == null) {
@@ -185,7 +189,6 @@ public class FinancialService {
         //success
         return OperationResult.of(HTTP_OK, "success");
     }
-
 
     public OperationResult purchaseTerm(Long termId, Account account, double amount, Period period) {
         Term term = termRepository.findById(termId.longValue());
@@ -218,12 +221,5 @@ public class FinancialService {
 
     private OperationResult pay(Account account, double amount) {
         return accountService.transfer(account, null, amount);
-    }
-
-    private static Date addDate(Date base, Period period) {
-        base = DateUtils.addDays(base, period.getDays());
-        base = DateUtils.addMonths(base, period.getMonths());
-        base = DateUtils.addYears(base, period.getYears());
-        return base;
     }
 }

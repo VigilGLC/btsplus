@@ -11,7 +11,8 @@ import java.util.List;
 @Service
 public class LoanService {
     private final LoanRepository loanRepository;
-    public List<Loan> query(String customerCode){
+
+    public List<Loan> query(String customerCode) {
         return loanRepository.findByCustomerCode(customerCode);
     }
 }
