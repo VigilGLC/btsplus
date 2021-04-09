@@ -1,20 +1,21 @@
 package fd.se.btsplus.service;
 
 import fd.se.btsplus.model.domain.OperationResult;
+import fd.se.btsplus.model.domain.ProductDatum;
 import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.financial.IDaily;
 import fd.se.btsplus.model.entity.financial.IProduct;
 import fd.se.btsplus.model.entity.financial.fund.Fund;
-import fd.se.btsplus.model.entity.financial.fund.FundPurchase;
 import fd.se.btsplus.model.entity.financial.stock.Stock;
 import fd.se.btsplus.model.entity.financial.stock.StockDaily;
-import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
 import fd.se.btsplus.model.entity.financial.term.Term;
-import fd.se.btsplus.model.entity.financial.term.TermPurchase;
+import fd.se.btsplus.repository.financial.fund.FundDailyRepository;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.repository.financial.fund.FundRepository;
+import fd.se.btsplus.repository.financial.stock.StockDailyRepository;
 import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
 import fd.se.btsplus.repository.financial.stock.StockRepository;
+import fd.se.btsplus.repository.financial.term.TermDailyRepository;
 import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
 import fd.se.btsplus.repository.financial.term.TermRepository;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -33,6 +35,10 @@ public class FinancialService {
     private final FundRepository fundRepository;
     private final StockRepository stockRepository;
     private final TermRepository termRepository;
+
+    private final FundDailyRepository fundDailyRepository;
+    private final StockDailyRepository stockDailyRepository;
+    private final TermDailyRepository termDailyRepository;
 
     private final FundPurchaseRepository fundPurchaseRepository;
     private final StockPurchaseRepository stockPurchaseRepository;
@@ -75,14 +81,25 @@ public class FinancialService {
         throw new NotImplementedException();
     }
 
-    public List<FundPurchase> queryFundPurchases(String customerCode){
-        return fundPurchaseRepository.findByCustomerCode(customerCode);
+    public List<ProductDatum> queryFundPurchases(String customerCode) {
+        return fundPurchaseRepository.findByCustomerCode(customerCode).
+                stream().map(fp -> new ProductDatum(fp.getFund(),
+                fundDailyRepository.findByFundAndDate(fp.getFund(), fp.getCurrDate()), fp)).
+                collect(Collectors.toList());
     }
-    public List<StockPurchase> queryStockPurchases(String customerCode){
-        return stockPurchaseRepository.findByCustomerCode(customerCode);
+
+    public List<ProductDatum> queryStockPurchases(String customerCode) {
+        return stockPurchaseRepository.findByCustomerCode(customerCode).
+                stream().map(fp -> new ProductDatum(fp.getStock(),
+                stockDailyRepository.findByStockAndDate(fp.getStock(), fp.getCurrDate()), fp)).
+                collect(Collectors.toList());
     }
-    public List<TermPurchase> queryTermPurchases(String customerCode){
-        return termPurchaseRepository.findByCustomerCode(customerCode);
+
+    public List<ProductDatum> queryTermPurchases(String customerCode) {
+        return termPurchaseRepository.findByCustomerCode(customerCode).
+                stream().map(fp -> new ProductDatum(fp.getTerm(),
+                termDailyRepository.findByTermAndDate(fp.getTerm(), fp.getCurrDate()), fp)).
+                collect(Collectors.toList());
     }
 
     public OperationResult purchaseFund(Long fundId, Account account, double amount, Period period) {
