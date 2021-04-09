@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Profile("!prod")
 @Component
@@ -40,6 +41,13 @@ public class StockDailyRepositoryMock implements StockDailyRepository {
         return this.stockDailies.stream().
                 filter(sd -> sd.getStock().equals(stock) && sd.getDate().equals(date)).
                 findFirst().orElse(null);
+    }
+
+    @Override
+    public List<StockDaily> findByDate(Date date) {
+        return this.stockDailies.stream().
+                filter(sd -> sd.getDate().equals(date)).
+                collect(Collectors.toList());
     }
 
     @Override

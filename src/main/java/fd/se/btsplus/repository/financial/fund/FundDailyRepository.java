@@ -16,4 +16,6 @@ public interface FundDailyRepository extends CrudRepository<FundDaily, Long> {
 
     FundDaily findByFundAndDate(Fund fund, Date date);
 
+    List<FundDaily> findByDate(Date date);
+
 }

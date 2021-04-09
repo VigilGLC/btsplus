@@ -15,4 +15,6 @@ public interface StockDailyRepository extends CrudRepository<StockDaily, Long> {
     List<StockDaily> findAll();
 
     StockDaily findByStockAndDate(Stock stock, Date date);
+
+    List<StockDaily> findByDate(Date date);
 }

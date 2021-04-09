@@ -1,6 +1,8 @@
 package fd.se.btsplus.service;
 
+import fd.se.btsplus.model.consts.Constant;
 import fd.se.btsplus.model.domain.OperationResult;
+import fd.se.btsplus.model.domain.ProductDatum;
 import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.financial.IDaily;
 import fd.se.btsplus.model.entity.financial.IProduct;
@@ -11,11 +13,13 @@ import fd.se.btsplus.model.entity.financial.stock.StockDaily;
 import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
 import fd.se.btsplus.model.entity.financial.term.Term;
 import fd.se.btsplus.model.entity.financial.term.TermPurchase;
+import fd.se.btsplus.repository.financial.fund.FundDailyRepository;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.repository.financial.fund.FundRepository;
 import fd.se.btsplus.repository.financial.stock.StockDailyRepository;
 import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
 import fd.se.btsplus.repository.financial.stock.StockRepository;
+import fd.se.btsplus.repository.financial.term.TermDailyRepository;
 import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
 import fd.se.btsplus.repository.financial.term.TermRepository;
 import lombok.AllArgsConstructor;
@@ -23,10 +27,11 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.net.HttpURLConnection.*;
 
@@ -37,14 +42,16 @@ public class FinancialService {
     private final StockRepository stockRepository;
     private final TermRepository termRepository;
 
+    private final FundDailyRepository fundDailyRepository;
+    private final StockDailyRepository stockDailyRepository;
+    private final TermDailyRepository termDailyRepository;
+
     private final FundPurchaseRepository fundPurchaseRepository;
     private final StockPurchaseRepository stockPurchaseRepository;
     private final TermPurchaseRepository termPurchaseRepository;
 
     private final AccountService accountService;
     private final IDateService dateService;
-    private final IDateService iDateService;
-    private final StockDailyRepository stockDailyRepository;
 
     /**
      * @return new price for stock; new rate for fund and term.
@@ -76,16 +83,23 @@ public class FinancialService {
         return 0d;
     }
 
-    public List<?> queryProducts(String prodType) {
+    public List<ProductDatum> queryProducts(String prodType) {
+        final Date date = DateUtils.truncate(dateService.currDate(), Calendar.DAY_OF_MONTH);
         switch (prodType) {
-            case "fund":
-                return fundRepository.findAll();
-            case "stock":
-                return stockRepository.findAll();
-            case "term":
-                return termRepository.findAll();
+            case Constant.FUND:
+                return fundDailyRepository.findByDate(date).stream().
+                        map(fd -> new ProductDatum(fd.getFund(), fd, null)).
+                        collect(Collectors.toList());
+            case Constant.STOCK:
+                return stockDailyRepository.findByDate(date).stream().
+                        map(sd -> new ProductDatum(sd.getStock(), sd, null)).
+                        collect(Collectors.toList());
+            case Constant.TERM:
+                return termDailyRepository.findByDate(date).stream().
+                        map(td -> new ProductDatum(td.getTerm(), td, null)).
+                        collect(Collectors.toList());
         }
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     public List<FundPurchase> queryFundPurchases(String customerCode) {
@@ -105,32 +119,29 @@ public class FinancialService {
         Fund fund = fundRepository.findById(fundId.longValue());
         if (fund == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
-        } else {
-            if (account.getBalance() < amount)
-                return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
-            else {
-                OperationResult result = pay(account, amount);
-                if (result.getCode() != HTTP_OK) return result;
-
-                //save fund purchase record
-                FundPurchase fundPurchase = new FundPurchase();
-                Date date = iDateService.currDate();
-                fundPurchase.setCustomer(account.getCustomer());
-                fundPurchase.setFund(fund);
-                fundPurchase.setInitAmount(amount);
-                fundPurchase.setCurrAmount(amount);
-                fundPurchase.setCurrDate(date);
-                fundPurchase.setBeginDate(date);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                calendar.add(Calendar.DATE, period.getDays());
-                Date endDate = calendar.getTime();
-                fundPurchase.setEndDate(endDate);
-                fundPurchaseRepository.save(fundPurchase);
-                //success
-                return OperationResult.of(HTTP_OK, "success");
-            }
         }
+        if (account.getBalance() < amount) {
+            return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
+        }
+        OperationResult result = pay(account, amount);
+        if (result.getCode() != HTTP_OK) return result;
+
+        //save fund purchase record
+        FundPurchase fundPurchase = new FundPurchase();
+        Date date = dateService.currDate();
+        Date endDate = addDate(date, period);
+
+        fundPurchase.setCustomer(account.getCustomer());
+        fundPurchase.setFund(fund);
+        fundPurchase.setInitAmount(amount);
+        fundPurchase.setCurrAmount(amount);
+        fundPurchase.setCurrDate(date);
+        fundPurchase.setBeginDate(date);
+        fundPurchase.setEndDate(endDate);
+
+        fundPurchaseRepository.save(fundPurchase);
+        //success
+        return OperationResult.of(HTTP_OK, "success");
     }
 
 
@@ -138,31 +149,30 @@ public class FinancialService {
         Stock stock = stockRepository.findById(stockId.longValue());
         if (stock == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
-        } else {
-            Date date = iDateService.currDate();
-            StockDaily stockDaily = stockDailyRepository.findByStockAndDate(stock, date);
-            double price = stockDaily.getPrice();
-            if (account.getBalance() < count * price)
-                return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
-            else {
-                OperationResult result = pay(account, count * price);
-                if (result.getCode() != HTTP_OK) return result;
-
-                //save stock purchase record
-                StockPurchase stockPurchase = new StockPurchase();
-                stockPurchase.setCustomer(account.getCustomer());
-                stockPurchase.setStock(stock);
-                stockPurchase.setCount(count);
-                stockPurchase.setInitPrice(price);
-                stockPurchase.setCurrDate(date);
-                stockPurchase.setCurrPrice(price);
-                stockPurchase.setBeginDate(date);
-                stockPurchaseRepository.save(stockPurchase);
-
-                //success
-                return OperationResult.of(HTTP_OK, "success");
-            }
         }
+        Date date = dateService.currDate();
+        StockDaily stockDaily = stockDailyRepository.findByStockAndDate(stock, date);
+        double price = stockDaily.getPrice();
+        if (account.getBalance() < count * price) {
+            return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
+        }
+        OperationResult result = pay(account, count * price);
+        if (result.getCode() != HTTP_OK) return result;
+
+        //save stock purchase record
+        StockPurchase stockPurchase = new StockPurchase();
+
+        stockPurchase.setCustomer(account.getCustomer());
+        stockPurchase.setStock(stock);
+        stockPurchase.setCount(count);
+        stockPurchase.setInitPrice(price);
+        stockPurchase.setCurrDate(date);
+        stockPurchase.setCurrPrice(price);
+        stockPurchase.setBeginDate(date);
+
+        stockPurchaseRepository.save(stockPurchase);
+        //success
+        return OperationResult.of(HTTP_OK, "success");
     }
 
 
@@ -170,35 +180,39 @@ public class FinancialService {
         Term term = termRepository.findById(termId.longValue());
         if (term == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
-        } else {
-            if (account.getBalance() < amount)
-                return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
-            else {
-                OperationResult result = pay(account, amount);
-                if (result.getCode() != HTTP_OK) return result;
-
-                //save term purchase record
-                TermPurchase termPurchase = new TermPurchase();
-                Date date = iDateService.currDate();
-                termPurchase.setCustomer(account.getCustomer());
-                termPurchase.setTerm(term);
-                termPurchase.setInitAmount(amount);
-                termPurchase.setCurrDate(date);
-                termPurchase.setBeginDate(date);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                calendar.add(Calendar.DATE, period.getDays());
-                Date endDate = calendar.getTime();
-                termPurchase.setEndDate(endDate);
-                termPurchaseRepository.save(termPurchase);
-
-                //success
-                return OperationResult.of(HTTP_OK, "success");
-            }
         }
+        if (account.getBalance() < amount) {
+            return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
+        }
+        OperationResult result = pay(account, amount);
+        if (result.getCode() != HTTP_OK) return result;
+
+        //save term purchase record
+        TermPurchase termPurchase = new TermPurchase();
+        Date date = dateService.currDate();
+        Date endDate = addDate(date, period);
+
+        termPurchase.setCustomer(account.getCustomer());
+        termPurchase.setTerm(term);
+        termPurchase.setInitAmount(amount);
+        termPurchase.setCurrAmount(amount);
+        termPurchase.setCurrDate(date);
+        termPurchase.setBeginDate(date);
+        termPurchase.setEndDate(endDate);
+
+        termPurchaseRepository.save(termPurchase);
+        //success
+        return OperationResult.of(HTTP_OK, "success");
     }
 
-    public OperationResult pay(Account account, double amount) {
+    private OperationResult pay(Account account, double amount) {
         return accountService.transfer(account, null, amount);
+    }
+
+    private static Date addDate(Date base, Period period) {
+        base = DateUtils.addDays(base, period.getDays());
+        base = DateUtils.addMonths(base, period.getMonths());
+        base = DateUtils.addYears(base, period.getYears());
+        return base;
     }
 }

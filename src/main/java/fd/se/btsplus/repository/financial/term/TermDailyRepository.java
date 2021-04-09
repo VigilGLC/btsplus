@@ -15,4 +15,6 @@ public interface TermDailyRepository extends CrudRepository<TermDaily, Long> {
     List<TermDaily> findAll();
 
     TermDaily findByTermAndDate(Term term, Date date);
+
+    List<TermDaily> findByDate(Date date);
 }

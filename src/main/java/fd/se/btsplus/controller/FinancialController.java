@@ -1,6 +1,7 @@
 package fd.se.btsplus.controller;
 
 import fd.se.btsplus.interceptor.annotations.Authorized;
+import fd.se.btsplus.interceptor.subject.Subject;
 import fd.se.btsplus.model.consts.Role;
 import fd.se.btsplus.model.domain.OperationResult;
 import fd.se.btsplus.model.entity.bts.Account;
@@ -8,9 +9,7 @@ import fd.se.btsplus.model.request.FundPurchaseRequest;
 import fd.se.btsplus.model.request.StockPurchaseRequest;
 import fd.se.btsplus.model.request.TermPurchaseRequest;
 import fd.se.btsplus.model.response.ResponseWrapper;
-
 import fd.se.btsplus.repository.bts.AccountRepository;
-
 import fd.se.btsplus.service.FinancialService;
 import fd.se.btsplus.utils.OpenApiExamples;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +22,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import static fd.se.btsplus.model.consts.Constant.*;
 import static java.net.HttpURLConnection.HTTP_OK;
@@ -32,6 +30,8 @@ import static java.net.HttpURLConnection.HTTP_OK;
 @AllArgsConstructor
 @RestController
 public class FinancialController {
+    private final Subject subject;
+
     private final FinancialService financialService;
     private final AccountRepository accountRepository;
 
@@ -56,10 +56,12 @@ public class FinancialController {
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/fund/{fundId}/purchase")
     public ResponseEntity<?> purchaseFund(@PathVariable long fundId, @RequestBody FundPurchaseRequest request) {
-        Account account = accountRepository.
-                findByAccountNumAndPassword(request.getAccountNum(), request.getPassword());
-        OperationResult result = financialService.purchaseFund(fundId, account, request.getAmount(), request.getPeriod());
-        return ResponseEntity.ok(result);
+        Account account = subject.getAccount();
+        OperationResult result = financialService.purchaseFund(fundId, account, request.getAmount(),
+                request.getPeriod());
+        final int code = result.getCode();
+        Boolean data = code == HTTP_OK;
+        return ResponseEntity.status(code).body(data);
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看基金")
@@ -81,10 +83,11 @@ public class FinancialController {
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/stock/{stockId}/purchase")
     public ResponseEntity<?> purchaseStock(@PathVariable long stockId, @RequestBody StockPurchaseRequest request) {
-        Account account = accountRepository.
-                findByAccountNumAndPassword(request.getAccountNum(), request.getPassword());
+        Account account = subject.getAccount();
         OperationResult result = financialService.purchaseStock(stockId, account, request.getCount());
-        return ResponseEntity.ok(result);
+        final int code = result.getCode();
+        Boolean data = code == HTTP_OK;
+        return ResponseEntity.status(code).body(data);
 
     }
 
@@ -107,10 +110,12 @@ public class FinancialController {
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/term/{termId}/purchase")
     public ResponseEntity<?> purchaseTerm(@PathVariable long termId, @RequestBody TermPurchaseRequest request) {
-        Account account = accountRepository.
-                findByAccountNumAndPassword(request.getAccountNum(), request.getPassword());
-        OperationResult result = financialService.purchaseTerm(termId, account, request.getAmount(), request.getPeriod());
-        return ResponseEntity.ok(result);
+        Account account = subject.getAccount();
+        OperationResult result = financialService.purchaseTerm(termId, account, request.getAmount(),
+                request.getPeriod());
+        final int code = result.getCode();
+        Boolean data = code == HTTP_OK;
+        return ResponseEntity.status(code).body(data);
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看定期理财")

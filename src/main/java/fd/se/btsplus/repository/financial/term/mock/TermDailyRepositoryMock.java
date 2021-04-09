@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Profile("!prod")
 @Component
@@ -40,6 +41,13 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
         return this.termDailies.stream().
                 filter(td -> td.getTerm().equals(term) && td.getDate().equals(date)).
                 findFirst().orElse(null);
+    }
+
+    @Override
+    public List<TermDaily> findByDate(Date date) {
+        return this.termDailies.stream().
+                filter(td -> td.getDate().equals(date)).
+                collect(Collectors.toList());
     }
 
     @Override
