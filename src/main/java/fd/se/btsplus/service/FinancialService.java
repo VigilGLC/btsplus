@@ -11,19 +11,16 @@ import fd.se.btsplus.model.entity.financial.stock.StockDaily;
 import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
 import fd.se.btsplus.model.entity.financial.term.Term;
 import fd.se.btsplus.model.entity.financial.term.TermPurchase;
-import fd.se.btsplus.model.response.ResponseWrapper;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.repository.financial.fund.FundRepository;
+import fd.se.btsplus.repository.financial.stock.StockDailyRepository;
 import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
 import fd.se.btsplus.repository.financial.stock.StockRepository;
 import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
 import fd.se.btsplus.repository.financial.term.TermRepository;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.time.Period;
 import java.util.ArrayList;
@@ -46,6 +43,8 @@ public class FinancialService {
 
     private final AccountService accountService;
     private final IDateService dateService;
+    private final IDateService iDateService;
+    private final StockDailyRepository stockDailyRepository;
 
     /**
      * @return new price for stock; new rate for fund and term.
@@ -89,75 +88,117 @@ public class FinancialService {
         return new ArrayList<>();
     }
 
-    public List<FundPurchase> queryFundPurchases(String customerCode){
+    public List<FundPurchase> queryFundPurchases(String customerCode) {
         return fundPurchaseRepository.findByCustomerCode(customerCode);
     }
-    public List<StockPurchase> queryStockPurchases(String customerCode){
+
+    public List<StockPurchase> queryStockPurchases(String customerCode) {
         return stockPurchaseRepository.findByCustomerCode(customerCode);
     }
-    public List<TermPurchase> queryTermPurchases(String customerCode){
+
+    public List<TermPurchase> queryTermPurchases(String customerCode) {
         return termPurchaseRepository.findByCustomerCode(customerCode);
     }
 
-    public OperationResult purchaseFund(long fundId, Account account, double amount, Period period) {
-        Fund fund = fundRepository.findById(fundId);
+
+    public OperationResult purchaseFund(Long fundId, Account account, double amount, Period period) {
+        Fund fund = fundRepository.findById(fundId.longValue());
         if (fund == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
         } else {
             if (account.getBalance() < amount)
                 return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
             else {
-                pay();
+                OperationResult result = pay(account, amount);
+                if (result.getCode() != HTTP_OK) return result;
+
+                //save fund purchase record
                 FundPurchase fundPurchase = new FundPurchase();
+                Date date = iDateService.currDate();
+                fundPurchase.setCustomer(account.getCustomer());
+                fundPurchase.setFund(fund);
+                fundPurchase.setInitAmount(amount);
+                fundPurchase.setCurrAmount(amount);
+                fundPurchase.setCurrDate(date);
+                fundPurchase.setBeginDate(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.DATE, period.getDays());
+                Date endDate = calendar.getTime();
+                fundPurchase.setEndDate(endDate);
                 fundPurchaseRepository.save(fundPurchase);
+                //success
                 return OperationResult.of(HTTP_OK, "success");
             }
         }
     }
 
 
-    public OperationResult purchaseStock(long stockId, Account account, int count) {
-        Stock stock = stockRepository.findById(stockId);
+    public OperationResult purchaseStock(Long stockId, Account account, int count) {
+        Stock stock = stockRepository.findById(stockId.longValue());
         if (stock == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
         } else {
-            if (account.getBalance() < count)
+            Date date = iDateService.currDate();
+            StockDaily stockDaily = stockDailyRepository.findByStockAndDate(stock, date);
+            double price = stockDaily.getPrice();
+            if (account.getBalance() < count * price)
                 return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
             else {
-                pay();
+                OperationResult result = pay(account, count * price);
+                if (result.getCode() != HTTP_OK) return result;
+
+                //save stock purchase record
                 StockPurchase stockPurchase = new StockPurchase();
+                stockPurchase.setCustomer(account.getCustomer());
+                stockPurchase.setStock(stock);
+                stockPurchase.setCount(count);
+                stockPurchase.setInitPrice(price);
+                stockPurchase.setCurrDate(date);
+                stockPurchase.setCurrPrice(price);
+                stockPurchase.setBeginDate(date);
                 stockPurchaseRepository.save(stockPurchase);
+
+                //success
                 return OperationResult.of(HTTP_OK, "success");
             }
         }
     }
 
 
-
-    public OperationResult purchaseTerm(long termId, Account account, double amount, Period period) {
-        Term term = termRepository.findById(termId);
+    public OperationResult purchaseTerm(Long termId, Account account, double amount, Period period) {
+        Term term = termRepository.findById(termId.longValue());
         if (term == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
         } else {
             if (account.getBalance() < amount)
                 return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
             else {
-                pay();
+                OperationResult result = pay(account, amount);
+                if (result.getCode() != HTTP_OK) return result;
+
+                //save term purchase record
                 TermPurchase termPurchase = new TermPurchase();
+                Date date = iDateService.currDate();
+                termPurchase.setCustomer(account.getCustomer());
+                termPurchase.setTerm(term);
+                termPurchase.setInitAmount(amount);
+                termPurchase.setCurrDate(date);
+                termPurchase.setBeginDate(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                calendar.add(Calendar.DATE, period.getDays());
+                Date endDate = calendar.getTime();
+                termPurchase.setEndDate(endDate);
                 termPurchaseRepository.save(termPurchase);
+
+                //success
                 return OperationResult.of(HTTP_OK, "success");
             }
         }
     }
 
-    public void pay() {
-
-
+    public OperationResult pay(Account account, double amount) {
+        return accountService.transfer(account, null, amount);
     }
-
-
-
-
-
-
 }
