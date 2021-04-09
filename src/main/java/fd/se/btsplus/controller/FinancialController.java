@@ -8,7 +8,9 @@ import fd.se.btsplus.model.request.FundPurchaseRequest;
 import fd.se.btsplus.model.request.StockPurchaseRequest;
 import fd.se.btsplus.model.request.TermPurchaseRequest;
 import fd.se.btsplus.model.response.ResponseWrapper;
+
 import fd.se.btsplus.repository.bts.AccountRepository;
+
 import fd.se.btsplus.service.FinancialService;
 import fd.se.btsplus.utils.OpenApiExamples;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,7 +68,7 @@ public class FinancialController {
             examples = @ExampleObject(value = OpenApiExamples.FundPurchasesRespOk)))
     @GetMapping("/customer/{customerCode}/financial/funds/purchases")
     public ResponseEntity<?> fundPurchases(@PathVariable String customerCode) {
-        throw new NotImplementedException();
+        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, financialService.queryFundPurchases(customerCode)));
     }
 
     //</editor-fold>
@@ -92,7 +94,7 @@ public class FinancialController {
             examples = @ExampleObject(value = OpenApiExamples.StockPurchasesRespOk)))
     @GetMapping("/customer/{customerCode}/financial/stocks/purchases")
     public ResponseEntity<?> stockPurchases(@PathVariable String customerCode) {
-        throw new NotImplementedException();
+        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, financialService.queryStockPurchases(customerCode)));
     }
 
     //</editor-fold>
@@ -117,7 +119,7 @@ public class FinancialController {
             examples = @ExampleObject(value = OpenApiExamples.TermPurchasesRespOk)))
     @GetMapping("/customer/{customerCode}/financial/terms/purchases")
     public ResponseEntity<?> termPurchases(@PathVariable String customerCode) {
-        throw new NotImplementedException();
+        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, financialService.queryTermPurchases(customerCode)));
     }
     //</editor-fold>
 }

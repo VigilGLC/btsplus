@@ -89,6 +89,16 @@ public class FinancialService {
         return new ArrayList<>();
     }
 
+    public List<FundPurchase> queryFundPurchases(String customerCode){
+        return fundPurchaseRepository.findByCustomerCode(customerCode);
+    }
+    public List<StockPurchase> queryStockPurchases(String customerCode){
+        return stockPurchaseRepository.findByCustomerCode(customerCode);
+    }
+    public List<TermPurchase> queryTermPurchases(String customerCode){
+        return termPurchaseRepository.findByCustomerCode(customerCode);
+    }
+
     public OperationResult purchaseFund(long fundId, Account account, double amount, Period period) {
         Fund fund = fundRepository.findById(fundId);
         if (fund == null) {
@@ -122,6 +132,8 @@ public class FinancialService {
         }
     }
 
+
+
     public OperationResult purchaseTerm(long termId, Account account, double amount, Period period) {
         Term term = termRepository.findById(termId);
         if (term == null) {
@@ -142,5 +154,10 @@ public class FinancialService {
 
 
     }
+
+
+
+
+
 
 }
