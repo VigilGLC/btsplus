@@ -2,9 +2,13 @@ package fd.se.btsplus.controller;
 
 import fd.se.btsplus.interceptor.annotations.Authorized;
 import fd.se.btsplus.model.consts.Role;
+import fd.se.btsplus.model.domain.OperationResult;
+import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.request.FundPurchaseRequest;
 import fd.se.btsplus.model.request.StockPurchaseRequest;
 import fd.se.btsplus.model.request.TermPurchaseRequest;
+import fd.se.btsplus.model.response.ResponseWrapper;
+import fd.se.btsplus.repository.bts.AccountRepository;
 import fd.se.btsplus.service.FinancialService;
 import fd.se.btsplus.utils.OpenApiExamples;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,12 +24,14 @@ import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import static fd.se.btsplus.model.consts.Constant.*;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 @Authorized(required = Role.TELLER)
 @AllArgsConstructor
 @RestController
 public class FinancialController {
     private final FinancialService financialService;
+    private final AccountRepository accountRepository;
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "理财产品")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
@@ -37,7 +43,7 @@ public class FinancialController {
             }))
     @GetMapping("/financial/{prodType}")
     public ResponseEntity<?> products(@PathVariable String prodType) {
-        throw new NotImplementedException();
+        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, financialService.queryProducts(prodType)));
     }
 
     //<editor-fold desc="Fund">
@@ -47,8 +53,11 @@ public class FinancialController {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/fund/{fundId}/purchase")
-    public ResponseEntity<?> purchaseFund(@PathVariable Long fundId, @RequestBody FundPurchaseRequest request) {
-        throw new NotImplementedException();
+    public ResponseEntity<?> purchaseFund(@PathVariable long fundId, @RequestBody FundPurchaseRequest request) {
+        Account account = accountRepository.
+                findByAccountNumAndPassword(request.getAccountNum(), request.getPassword());
+        OperationResult result = financialService.purchaseFund(fundId, account, request.getAmount(), request.getPeriod());
+        return ResponseEntity.ok(result);
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看基金")
@@ -69,8 +78,12 @@ public class FinancialController {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/stock/{stockId}/purchase")
-    public ResponseEntity<?> purchaseStock(@PathVariable Long stockId, @RequestBody StockPurchaseRequest request) {
-        throw new NotImplementedException();
+    public ResponseEntity<?> purchaseStock(@PathVariable long stockId, @RequestBody StockPurchaseRequest request) {
+        Account account = accountRepository.
+                findByAccountNumAndPassword(request.getAccountNum(), request.getPassword());
+        OperationResult result = financialService.purchaseStock(stockId, account, request.getCount());
+        return ResponseEntity.ok(result);
+
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看股票")
@@ -91,8 +104,11 @@ public class FinancialController {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
     @PostMapping("/financial/term/{termId}/purchase")
-    public ResponseEntity<?> purchaseTerm(@PathVariable Long termId, @RequestBody TermPurchaseRequest request) {
-        throw new NotImplementedException();
+    public ResponseEntity<?> purchaseTerm(@PathVariable long termId, @RequestBody TermPurchaseRequest request) {
+        Account account = accountRepository.
+                findByAccountNumAndPassword(request.getAccountNum(), request.getPassword());
+        OperationResult result = financialService.purchaseTerm(termId, account, request.getAmount(), request.getPeriod());
+        return ResponseEntity.ok(result);
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看定期理财")

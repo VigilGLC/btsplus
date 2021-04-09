@@ -27,6 +27,7 @@ public class FundPurchase implements IPurchase {
 
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date beginDate;
+
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date endDate;
 }

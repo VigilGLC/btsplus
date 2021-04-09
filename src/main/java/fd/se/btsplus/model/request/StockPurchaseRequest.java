@@ -8,5 +8,5 @@ import lombok.Data;
 public class StockPurchaseRequest {
     private String accountNum;
     private String password;
-    private Long count;
+    private int count;
 }

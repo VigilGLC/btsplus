@@ -17,4 +17,6 @@ public interface FundPurchaseRepository extends CrudRepository<FundPurchase, Lon
     List<FundPurchase> findByCustomerCode(String customerCode);
 
     List<FundPurchase> findByFundAndCurrDateAndEndDateAfter(Fund fund, Date currDate, Date nextDate);
+
+
 }
