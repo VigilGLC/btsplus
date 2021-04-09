@@ -6,7 +6,9 @@ import fd.se.btsplus.model.consts.Role;
 import fd.se.btsplus.model.domain.OperationResult;
 import fd.se.btsplus.model.request.AccountRequest;
 import fd.se.btsplus.model.response.ResponseWrapper;
+import fd.se.btsplus.service.BillService;
 import fd.se.btsplus.service.CustomerService;
+import fd.se.btsplus.service.LoanService;
 import fd.se.btsplus.utils.OpenApiExamples;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,6 +31,8 @@ import static java.net.HttpURLConnection.HTTP_OK;
 public class LoanController {
     private final Subject subject;
     private final CustomerService customerService;
+    private final LoanService loanService;
+    private final BillService billService;
 
     @Operation(method = HTTP_GET, tags = "Loan", summary = "贷款查询")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
@@ -36,7 +40,7 @@ public class LoanController {
             examples = @ExampleObject(value = OpenApiExamples.LoansRespOk)))
     @GetMapping("/customer/{customerCode}/loans")
     public ResponseEntity<?> loans(@PathVariable String customerCode) {
-        throw new NotImplementedException();
+        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, loanService.query(customerCode)));
     }
 
     @Operation(method = HTTP_GET, tags = "Loan", summary = "账单查询")
@@ -45,7 +49,7 @@ public class LoanController {
             examples = @ExampleObject(value = OpenApiExamples.BillsRespOk)))
     @GetMapping("/customer/loan/{iouNum}/bills")
     public ResponseEntity<?> bills(@PathVariable String iouNum) {
-        throw new NotImplementedException();
+        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, billService.query(iouNum)));
     }
 
     @Operation(method = HTTP_PUT, tags = "Loan", summary = "偿还账单")

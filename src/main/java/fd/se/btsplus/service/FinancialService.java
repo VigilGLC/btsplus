@@ -5,11 +5,17 @@ import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.financial.IDaily;
 import fd.se.btsplus.model.entity.financial.IProduct;
 import fd.se.btsplus.model.entity.financial.fund.Fund;
+import fd.se.btsplus.model.entity.financial.fund.FundPurchase;
 import fd.se.btsplus.model.entity.financial.stock.Stock;
 import fd.se.btsplus.model.entity.financial.stock.StockDaily;
+import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
 import fd.se.btsplus.model.entity.financial.term.Term;
+import fd.se.btsplus.model.entity.financial.term.TermPurchase;
+import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.repository.financial.fund.FundRepository;
+import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
 import fd.se.btsplus.repository.financial.stock.StockRepository;
+import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
 import fd.se.btsplus.repository.financial.term.TermRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.time.DateUtils;
@@ -27,6 +33,10 @@ public class FinancialService {
     private final FundRepository fundRepository;
     private final StockRepository stockRepository;
     private final TermRepository termRepository;
+
+    private final FundPurchaseRepository fundPurchaseRepository;
+    private final StockPurchaseRepository stockPurchaseRepository;
+    private final TermPurchaseRepository termPurchaseRepository;
 
     private final AccountService accountService;
     private final IDateService dateService;
@@ -63,6 +73,16 @@ public class FinancialService {
 
     public List<IProduct> queryProducts(String prodType) {
         throw new NotImplementedException();
+    }
+
+    public List<FundPurchase> queryFundPurchases(String customerCode){
+        return fundPurchaseRepository.findByCustomerCode(customerCode);
+    }
+    public List<StockPurchase> queryStockPurchases(String customerCode){
+        return stockPurchaseRepository.findByCustomerCode(customerCode);
+    }
+    public List<TermPurchase> queryTermPurchases(String customerCode){
+        return termPurchaseRepository.findByCustomerCode(customerCode);
     }
 
     public OperationResult purchaseFund(Long fundId, Account account, double amount, Period period) {

@@ -5,8 +5,10 @@ import fd.se.btsplus.model.domain.OperationResult;
 import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.bts.Bill;
 import fd.se.btsplus.model.entity.bts.Customer;
+import fd.se.btsplus.model.entity.bts.Loan;
 import fd.se.btsplus.repository.bts.AccountRepository;
 import fd.se.btsplus.repository.bts.BillRepository;
+import fd.se.btsplus.repository.bts.LoanRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -24,7 +26,9 @@ import static java.net.HttpURLConnection.*;
 public class CustomerService {
     private final IDateService dateService;
     private final AccountService accountService;
+
     private final AccountRepository accountRepository;
+    private final LoanRepository loanRepository;
     private final BillRepository billRepository;
 
     /**
@@ -59,7 +63,11 @@ public class CustomerService {
     }
 
     public CreditLevel creditLevel(Customer customer) {
-        throw new NotImplementedException();
+        List<Account> accounts = accountRepository.findByCustomer(customer);
+        List<Loan> loans = loanRepository.findByCustomer(customer);
+        Double balanceSum = accounts.isEmpty() ? null : accounts.stream().mapToDouble(Account::getBalance).sum();
+        Double loanSum = loans.isEmpty() ? null : loans.stream().mapToDouble(Loan::getAmount).sum();
+        return CreditLevel.evaluate(balanceSum, loanSum);
     }
 
     public OperationResult payBill(Long billId, Account account, double amount) {
