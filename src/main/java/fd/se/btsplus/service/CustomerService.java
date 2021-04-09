@@ -65,8 +65,8 @@ public class CustomerService {
     public CreditLevel creditLevel(Customer customer) {
         List<Account> accounts = accountRepository.findByCustomer(customer);
         List<Loan> loans = loanRepository.findByCustomer(customer);
-        Double balanceSum = accounts.isEmpty() ? null : accounts.stream().mapToDouble(Account::getBalance).sum();
-        Double loanSum = loans.isEmpty() ? null : loans.stream().mapToDouble(Loan::getAmount).sum();
+        Double balanceSum = accounts.stream().mapToDouble(Account::getBalance).sum();
+        Double loanSum = loans.stream().mapToDouble(Loan::getAmount).sum();
         return CreditLevel.evaluate(balanceSum, loanSum);
     }
 

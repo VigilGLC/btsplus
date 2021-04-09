@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 import static java.net.HttpURLConnection.*;
 
+
 @AllArgsConstructor
 @Service
 public class FinancialService {
@@ -102,16 +103,26 @@ public class FinancialService {
         return Collections.emptyList();
     }
 
-    public List<FundPurchase> queryFundPurchases(String customerCode) {
-        return fundPurchaseRepository.findByCustomerCode(customerCode);
+
+    public List<ProductDatum> queryFundPurchases(String customerCode) {
+        return fundPurchaseRepository.findByCustomerCode(customerCode).
+                stream().map(fp -> new ProductDatum(fp.getFund(),
+                fundDailyRepository.findByFundAndDate(fp.getFund(), fp.getCurrDate()), fp)).
+                collect(Collectors.toList());
     }
 
-    public List<StockPurchase> queryStockPurchases(String customerCode) {
-        return stockPurchaseRepository.findByCustomerCode(customerCode);
+    public List<ProductDatum> queryStockPurchases(String customerCode) {
+        return stockPurchaseRepository.findByCustomerCode(customerCode).
+                stream().map(fp -> new ProductDatum(fp.getStock(),
+                stockDailyRepository.findByStockAndDate(fp.getStock(), fp.getCurrDate()), fp)).
+                collect(Collectors.toList());
     }
 
-    public List<TermPurchase> queryTermPurchases(String customerCode) {
-        return termPurchaseRepository.findByCustomerCode(customerCode);
+    public List<ProductDatum> queryTermPurchases(String customerCode) {
+        return termPurchaseRepository.findByCustomerCode(customerCode).
+                stream().map(fp -> new ProductDatum(fp.getTerm(),
+                termDailyRepository.findByTermAndDate(fp.getTerm(), fp.getCurrDate()), fp)).
+                collect(Collectors.toList());
     }
 
 
