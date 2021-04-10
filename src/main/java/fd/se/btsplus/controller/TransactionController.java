@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,8 +42,8 @@ public class TransactionController {
             @RequestParam(required = false) String transactionNum,
             @RequestParam(required = false) String transactionCode,
             @RequestParam(required = false) String orderBy,
-            @RequestParam(required = false) Date beginDate,
-            @RequestParam(required = false) Date endDate
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date beginDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
 
     ) {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK,
