@@ -12,7 +12,7 @@ import java.util.List;
 public class LoanService {
     private final LoanRepository loanRepository;
 
-    public List<Loan> query(String customerCode) {
-        return loanRepository.findByCustomerCode(customerCode);
+    public List<Loan> queryByIdNum(String idNum) {
+        return loanRepository.findByCustomerCode(idNum);
     }
 }

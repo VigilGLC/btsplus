@@ -46,6 +46,13 @@ public class LoanRepositoryMock implements LoanRepository {
                 filter(ln -> ln.getCustomer().getCode().equals(customerCode)).
                 collect(Collectors.toList());
     }
+
+    @Override
+    public List<Loan> findByCustomerIdNum(String idNum) {
+        return this.loans.stream().
+                filter(ln -> ln.getCustomer().getIdNum().equals(idNum)).
+                collect(Collectors.toList());
+    }
     //<editor-fold desc="useless">
 
     @Override

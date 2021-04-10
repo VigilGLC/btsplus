@@ -16,4 +16,6 @@ public interface LoanRepository extends CrudRepository<Loan, Long> {
     List<Loan> findByCustomer(Customer customer);
 
     List<Loan> findByCustomerCode(String customerCode);
+
+    List<Loan> findByCustomerIdNum(String idNum);
 }

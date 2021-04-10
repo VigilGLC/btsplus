@@ -37,9 +37,9 @@ public class LoanController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = OpenApiExamples.LoansRespOk)))
-    @GetMapping("/customer/{customerCode}/loans")
-    public ResponseEntity<?> loans(@PathVariable String customerCode) {
-        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, loanService.query(customerCode)));
+    @GetMapping("/customer/{idNum}/loans")
+    public ResponseEntity<?> loans(@PathVariable String idNum) {
+        return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, loanService.queryByIdNum(idNum)));
     }
 
     @Operation(method = HTTP_GET, tags = "Loan", summary = "账单查询")
