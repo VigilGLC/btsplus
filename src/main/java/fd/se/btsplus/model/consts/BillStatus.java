@@ -11,8 +11,8 @@ public enum BillStatus {
 
     private final int value;
 
-    BillStatus(int roleType) {
-        this.value = roleType;
+    BillStatus(int value) {
+        this.value = value;
     }
 
     @JsonCreator
