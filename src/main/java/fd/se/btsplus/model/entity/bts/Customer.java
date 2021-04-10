@@ -15,6 +15,7 @@ public class Customer {
     private Long id;
     private String code;
     private String name;
+    private String idNum;
     @ManyToOne
     private User creator;
     private Date createdTime;
