@@ -37,9 +37,9 @@ public class FinancialController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = {
-                    @ExampleObject(value = OpenApiExamples.StocksRespOk),
-                    @ExampleObject(value = OpenApiExamples.FundsRespOk),
-                    @ExampleObject(value = OpenApiExamples.TermsRespOk)
+                    @ExampleObject(name = "for stocks", value = OpenApiExamples.StocksRespOk),
+                    @ExampleObject(name = "for funds", value = OpenApiExamples.FundsRespOk),
+                    @ExampleObject(name = "for terms", value = OpenApiExamples.TermsRespOk)
             }))
     @GetMapping("/financial/{prodType}")
     public ResponseEntity<?> products(@PathVariable String prodType) {
