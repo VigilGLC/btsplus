@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 
 import static fd.se.btsplus.model.consts.Constant.ASC;
 import static fd.se.btsplus.model.consts.Constant.DESC;
+import static fd.se.btsplus.service.IDateService.dayAfter;
+import static fd.se.btsplus.service.IDateService.dayBefore;
 
 @Slf4j
 @AllArgsConstructor
@@ -69,7 +71,7 @@ public class TransactionsService {
                 if ((txDate = tx.getOperatedTime()) == null) {
                     return false;
                 }
-                if (txDate.before(beginDate)) {
+                if (dayBefore(txDate, beginDate)) {
                     return false;
                 }
             }
@@ -77,7 +79,7 @@ public class TransactionsService {
                 if ((txDate = tx.getOperatedTime()) == null) {
                     return false;
                 }
-                return !txDate.before(endDate);
+                return !dayAfter(txDate, endDate);
             }
             return true;
         });
