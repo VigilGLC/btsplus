@@ -100,7 +100,7 @@ public class TransactionsService {
 
         if (pageNum == null && pageSize == null) {
             return stream.collect(Collectors.toList());
-        } else if (pageNum == null || pageSize == null) {
+        } else if (pageNum == null || pageSize == null || pageNum < 0 || pageSize < 0) {
             return Collections.emptyList();
         }
 
