@@ -95,16 +95,16 @@ public class FinancialService {
         final Date date = DateUtils.truncate(dateService.currDate(), Calendar.DAY_OF_MONTH);
         switch (prodType) {
             case Constant.FUND:
-                return fundDailyRepository.findByDate(date).stream().
-                        map(fd -> new ProductDatum(fd.getFund(), fd, null)).
+                return fundRepository.findAll().stream().map(fund -> new ProductDatum(fund,
+                        fundDailyRepository.findByFundAndDate(fund, date), null)).
                         collect(Collectors.toList());
             case Constant.STOCK:
-                return stockDailyRepository.findByDate(date).stream().
-                        map(sd -> new ProductDatum(sd.getStock(), sd, null)).
+                return stockRepository.findAll().stream().map(stock -> new ProductDatum(stock,
+                        stockDailyRepository.findByStockAndDate(stock, date), null)).
                         collect(Collectors.toList());
             case Constant.TERM:
-                return termDailyRepository.findByDate(date).stream().
-                        map(td -> new ProductDatum(td.getTerm(), td, null)).
+                return termRepository.findAll().stream().map(term -> new ProductDatum(term,
+                        termDailyRepository.findByTermAndDate(term, date), null)).
                         collect(Collectors.toList());
         }
         return Collections.emptyList();
