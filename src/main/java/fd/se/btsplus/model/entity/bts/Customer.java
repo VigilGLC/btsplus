@@ -3,6 +3,9 @@ package fd.se.btsplus.model.entity.bts;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,10 +15,14 @@ import java.util.Objects;
 
 @Data
 @Entity
+@RequiredArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Customer {
+    @NonNull
     @Id
     private Long id;
+    @NonNull
     private String code;
     private String name;
     private String idNum;
