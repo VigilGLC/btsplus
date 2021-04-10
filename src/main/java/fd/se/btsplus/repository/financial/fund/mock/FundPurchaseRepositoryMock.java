@@ -5,7 +5,8 @@ import fd.se.btsplus.model.entity.financial.fund.FundPurchase;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -19,18 +20,24 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 
 @Profile("!prod")
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
     private static final String path = "json/financial/fund/fundPurchase's.json";
+    @NonNull
     private final ResourceUtils resourceUtils;
+    @NonNull
     private final JsonUtils jsonUtils;
     private Set<FundPurchase> fundPurchases;
+
+    private volatile long nextId;
+
 
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.fundPurchases = new HashSet<>(jsonUtils.readList(jsonStr, FundPurchase.class));
+        this.nextId = fundPurchases.stream().mapToLong(FundPurchase::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -54,8 +61,11 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
     }
 
     @Override
-    public <S extends FundPurchase> S save(S entity) {
-        this.fundPurchases.remove(entity);
+    public synchronized <S extends FundPurchase> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.fundPurchases.add(entity);
         return entity;
     }

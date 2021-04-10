@@ -23,7 +23,7 @@ public class Constant {
     public static final String ASC = "asc";
     public static final String DESC = "desc";
 
-    public static final Customer BANK_CUSTOMER = new Customer(0L,"Why Man?");
+    public static final Customer BANK_CUSTOMER = new Customer(0L, "Why Man?");
     public static final Account BANK_ACCOUNT = new Account(1L, "77774396",
             null, "储蓄账户", null, BANK_CUSTOMER, null,
             129890000.0000);

@@ -5,7 +5,8 @@ import fd.se.btsplus.model.entity.financial.term.TermDaily;
 import fd.se.btsplus.repository.financial.term.TermDailyRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -18,19 +19,23 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 
 @Profile("!prod")
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TermDailyRepositoryMock implements TermDailyRepository {
-
     private static final String path = "json/financial/term/termDaily's.json";
+    @NonNull
     private final ResourceUtils resourceUtils;
+    @NonNull
     private final JsonUtils jsonUtils;
     private Set<TermDaily> termDailies;
+
+    private volatile long nextId;
 
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.termDailies = new HashSet<>(jsonUtils.readList(jsonStr, TermDaily.class));
+        this.nextId = this.termDailies.stream().mapToLong(TermDaily::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -53,8 +58,11 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
     }
 
     @Override
-    public <S extends TermDaily> S save(S entity) {
-        this.termDailies.remove(entity);
+    public synchronized <S extends TermDaily> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.termDailies.add(entity);
         return entity;
     }

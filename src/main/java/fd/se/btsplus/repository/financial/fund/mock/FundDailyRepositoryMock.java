@@ -5,7 +5,8 @@ import fd.se.btsplus.model.entity.financial.fund.FundDaily;
 import fd.se.btsplus.repository.financial.fund.FundDailyRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -18,18 +19,23 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 
 @Profile("!prod")
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FundDailyRepositoryMock implements FundDailyRepository {
     private static final String path = "json/financial/fund/fundDaily's.json";
+    @NonNull
     private final ResourceUtils resourceUtils;
+    @NonNull
     private final JsonUtils jsonUtils;
     private Set<FundDaily> fundDailies;
+
+    private volatile long nextId;
 
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.fundDailies = new HashSet<>(jsonUtils.readList(jsonStr, FundDaily.class));
+        this.nextId = fundDailies.stream().mapToLong(FundDaily::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -52,8 +58,11 @@ public class FundDailyRepositoryMock implements FundDailyRepository {
     }
 
     @Override
-    public <S extends FundDaily> S save(S entity) {
-        this.fundDailies.remove(entity);
+    public synchronized <S extends FundDaily> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.fundDailies.add(entity);
         return entity;
     }
