@@ -1,5 +1,6 @@
 package fd.se.btsplus.model.entity.financial.stock;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fd.se.btsplus.model.entity.financial.IProduct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Data
 @Entity
 @RequiredArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Stock implements IProduct {
     @Id
     private Long id;
