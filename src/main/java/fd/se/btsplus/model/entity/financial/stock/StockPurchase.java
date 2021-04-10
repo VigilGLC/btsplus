@@ -24,11 +24,11 @@ public class StockPurchase implements IPurchase {
     private Stock stock;
     private Integer count;
     private Double initPrice;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date currDate;
     private Double currPrice;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date beginDate;
 
     @Override

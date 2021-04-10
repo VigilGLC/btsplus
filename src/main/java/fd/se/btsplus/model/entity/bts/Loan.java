@@ -22,7 +22,7 @@ public class Loan {
     @ManyToOne
     private User creator;
     private Date createdTime;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date loanDate;
 
     private String productCode;

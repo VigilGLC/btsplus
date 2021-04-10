@@ -21,7 +21,7 @@ public class TermDaily implements IDaily {
     private Long id;
     @ManyToOne
     private Term term;
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
     private Double rate;
 
