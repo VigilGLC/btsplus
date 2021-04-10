@@ -14,6 +14,9 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fd.se.btsplus.service.IDateService.dayAfter;
+import static fd.se.btsplus.service.IDateService.dayEqual;
+
 @Profile("!prod")
 @Component
 @AllArgsConstructor
@@ -60,8 +63,8 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
     @Override
     public List<TermPurchase> findByTermAndCurrDateAndEndDateAfter(Term term, Date currDate, Date nextDate) {
         return this.termPurchases.stream().
-                filter(fp -> fp.getTerm().equals(term) && fp.getCurrDate().equals(currDate)
-                        && fp.getEndDate().after(nextDate)).
+                filter(fp -> fp.getTerm().equals(term) && dayEqual(fp.getCurrDate(), currDate)
+                        && dayAfter(fp.getEndDate(), nextDate)).
                 collect(Collectors.toList());
     }
 

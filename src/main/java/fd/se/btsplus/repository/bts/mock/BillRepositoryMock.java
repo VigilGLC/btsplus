@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fd.se.btsplus.service.IDateService.dayEqual;
+
 @Profile("!prod")
 @Component
 @AllArgsConstructor
@@ -59,7 +61,7 @@ public class BillRepositoryMock implements BillRepository {
     @Override
     public List<Bill> findByEndDateAndStatus(Date endDate, BillStatus status) {
         return this.bills.stream().
-                filter(b -> b.getEndDate().equals(endDate) && status.equals(b.getStatus())).
+                filter(b -> dayEqual(b.getEndDate(), endDate) && status.equals(b.getStatus())).
                 collect(Collectors.toList());
     }
 

@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fd.se.btsplus.service.IDateService.dayEqual;
+
 @Profile("!prod")
 @Component
 @AllArgsConstructor
@@ -38,14 +40,14 @@ public class FundDailyRepositoryMock implements FundDailyRepository {
     @Override
     public FundDaily findByFundAndDate(Fund fund, Date date) {
         return this.fundDailies.stream().
-                filter(fd -> fd.getFund().equals(fund) && fd.getDate().equals(date)).
+                filter(fd -> fd.getFund().equals(fund) && dayEqual(fd.getDate(), date)).
                 findFirst().orElse(null);
     }
 
     @Override
     public List<FundDaily> findByDate(Date date) {
         return this.fundDailies.stream().
-                filter(fd -> fd.getDate().equals(date)).
+                filter(fd -> dayEqual(fd.getDate(), date)).
                 collect(Collectors.toList());
     }
 

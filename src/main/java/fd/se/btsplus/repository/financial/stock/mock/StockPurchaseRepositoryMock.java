@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fd.se.btsplus.service.IDateService.dayEqual;
+
 @Profile("!prod")
 @Component
 @AllArgsConstructor
@@ -45,7 +47,7 @@ public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
     @Override
     public List<StockPurchase> findByStockAndCurrDate(Stock stock, Date lastDate) {
         return this.stockPurchases.stream().
-                filter(sp -> sp.getStock().equals(stock) && sp.getCurrDate().equals(lastDate)).
+                filter(sp -> sp.getStock().equals(stock) && dayEqual(sp.getCurrDate(), lastDate)).
                 collect(Collectors.toList());
     }
 

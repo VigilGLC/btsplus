@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fd.se.btsplus.service.IDateService.dayEqual;
+
 @Profile("!prod")
 @Component
 @AllArgsConstructor
@@ -39,14 +41,14 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
     @Override
     public TermDaily findByTermAndDate(Term term, Date date) {
         return this.termDailies.stream().
-                filter(td -> td.getTerm().equals(term) && td.getDate().equals(date)).
+                filter(td -> td.getTerm().equals(term) && dayEqual(td.getDate(), date)).
                 findFirst().orElse(null);
     }
 
     @Override
     public List<TermDaily> findByDate(Date date) {
         return this.termDailies.stream().
-                filter(td -> td.getDate().equals(date)).
+                filter(td -> dayEqual(td.getDate(), date)).
                 collect(Collectors.toList());
     }
 
