@@ -26,11 +26,15 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
     private final JsonUtils jsonUtils;
     private Set<FundPurchase> fundPurchases;
 
+    private volatile long nextId;
+
+
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.fundPurchases = new HashSet<>(jsonUtils.readList(jsonStr, FundPurchase.class));
+        this.nextId = fundPurchases.stream().mapToLong(FundPurchase::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -54,8 +58,11 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
     }
 
     @Override
-    public <S extends FundPurchase> S save(S entity) {
-        this.fundPurchases.remove(entity);
+    public synchronized <S extends FundPurchase> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.fundPurchases.add(entity);
         return entity;
     }

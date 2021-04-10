@@ -25,11 +25,14 @@ public class FundDailyRepositoryMock implements FundDailyRepository {
     private final JsonUtils jsonUtils;
     private Set<FundDaily> fundDailies;
 
+    private volatile long nextId;
+
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.fundDailies = new HashSet<>(jsonUtils.readList(jsonStr, FundDaily.class));
+        this.nextId = fundDailies.stream().mapToLong(FundDaily::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -52,8 +55,11 @@ public class FundDailyRepositoryMock implements FundDailyRepository {
     }
 
     @Override
-    public <S extends FundDaily> S save(S entity) {
-        this.fundDailies.remove(entity);
+    public synchronized <S extends FundDaily> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.fundDailies.add(entity);
         return entity;
     }

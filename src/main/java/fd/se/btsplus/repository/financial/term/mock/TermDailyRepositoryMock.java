@@ -26,11 +26,14 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
     private final JsonUtils jsonUtils;
     private Set<TermDaily> termDailies;
 
+    private volatile long nextId;
+
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.termDailies = new HashSet<>(jsonUtils.readList(jsonStr, TermDaily.class));
+        this.nextId = this.termDailies.stream().mapToLong(TermDaily::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -53,8 +56,11 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
     }
 
     @Override
-    public <S extends TermDaily> S save(S entity) {
-        this.termDailies.remove(entity);
+    public synchronized <S extends TermDaily> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.termDailies.add(entity);
         return entity;
     }

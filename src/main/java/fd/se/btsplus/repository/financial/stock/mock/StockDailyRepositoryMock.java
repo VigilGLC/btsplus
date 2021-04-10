@@ -26,11 +26,14 @@ public class StockDailyRepositoryMock implements StockDailyRepository {
     private final JsonUtils jsonUtils;
     private Set<StockDaily> stockDailies;
 
+    private volatile long nextId;
+
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.stockDailies = new HashSet<>(jsonUtils.readList(jsonStr, StockDaily.class));
+        this.nextId = stockDailies.stream().mapToLong(StockDaily::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -53,8 +56,11 @@ public class StockDailyRepositoryMock implements StockDailyRepository {
     }
 
     @Override
-    public <S extends StockDaily> S save(S entity) {
-        this.stockDailies.remove(entity);
+    public synchronized <S extends StockDaily> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.stockDailies.add(entity);
         return entity;
     }

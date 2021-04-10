@@ -26,11 +26,14 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
     private final JsonUtils jsonUtils;
     private Set<TermPurchase> termPurchases;
 
+    private volatile long nextId;
+
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.termPurchases = new HashSet<>(jsonUtils.readList(jsonStr, TermPurchase.class));
+        this.nextId = this.termPurchases.stream().mapToLong(TermPurchase::getId).max().orElse(0L);
     }
 
     @Override
@@ -46,8 +49,11 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
     }
 
     @Override
-    public <S extends TermPurchase> S save(S entity) {
-        this.termPurchases.remove(entity);
+    public synchronized <S extends TermPurchase> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.termPurchases.add(entity);
         return entity;
     }

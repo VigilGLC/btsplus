@@ -25,11 +25,14 @@ public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
     private final JsonUtils jsonUtils;
     private Set<StockPurchase> stockPurchases;
 
+    private volatile long nextId;
+
     @SneakyThrows
     @PostConstruct
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.stockPurchases = new HashSet<>(jsonUtils.readList(jsonStr, StockPurchase.class));
+        this.nextId = this.stockPurchases.stream().mapToLong(StockPurchase::getId).max().orElse(0L) + 1;
     }
 
     @Override
@@ -52,8 +55,11 @@ public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
     }
 
     @Override
-    public <S extends StockPurchase> S save(S entity) {
-        this.stockPurchases.remove(entity);
+    public synchronized <S extends StockPurchase> S save(S entity) {
+        if (entity.getId() != null) {
+            return entity;
+        }
+        entity.setId(nextId++);
         this.stockPurchases.add(entity);
         return entity;
     }
