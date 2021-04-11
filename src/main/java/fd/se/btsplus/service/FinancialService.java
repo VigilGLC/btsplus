@@ -162,6 +162,9 @@ public class FinancialService {
         }
         Date date = dateService.currDate();
         StockDaily stockDaily = stockDailyRepository.findByStockAndDate(stock, date);
+        if (stockDaily == null) {
+            return OperationResult.of(HTTP_NOT_FOUND, "StockDaily not exists.");
+        }
         double price = stockDaily.getPrice();
         if (account.getBalance() < count * price) {
             return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
