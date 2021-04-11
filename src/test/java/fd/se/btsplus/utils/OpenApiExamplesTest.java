@@ -204,6 +204,13 @@ class OpenApiExamplesTest {
                         collect(Collectors.toList())
         )));
     }
+
+    @Test
+    void recordSystemTimeRes() {
+        final String key = "SystemTimeRes";
+        resultRecord.put(key, jsonUtils.write(ResponseWrapper.wrap(HTTP_OK, new Date())));
+    }
+
     //</editor-fold>
 
 
