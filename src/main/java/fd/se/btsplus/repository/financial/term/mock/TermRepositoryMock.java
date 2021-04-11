@@ -16,7 +16,7 @@ import java.util.*;
 @Component
 @AllArgsConstructor
 public class TermRepositoryMock implements TermRepository {
-    private static final String path = "json/financial/stock/stocks.json";
+    private static final String path = "json/financial/term/terms.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
     private Set<Term> stocks;
