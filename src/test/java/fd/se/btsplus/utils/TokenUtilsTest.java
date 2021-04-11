@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TokenUtilsTest {
     private final Algorithm algorithm = Algorithm.HMAC256("二刺螈");
-    private final IDateService dateService = new SystemDateService(null);
+    private final IDateService dateService = new SystemDateService(null, null);
 
     @Test
     void test() {

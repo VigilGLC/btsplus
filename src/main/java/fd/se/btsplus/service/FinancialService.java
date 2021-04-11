@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static fd.se.btsplus.service.IDateService.addDate;
 import static java.net.HttpURLConnection.*;
 
 
@@ -54,12 +55,6 @@ public class FinancialService {
     private final AccountService accountService;
     private final IDateService dateService;
 
-    private static Date addDate(Date base, Period period) {
-        base = DateUtils.addDays(base, period.getDays());
-        base = DateUtils.addMonths(base, period.getMonths());
-        base = DateUtils.addYears(base, period.getYears());
-        return base;
-    }
 
     /**
      * @return new price for stock; new rate for fund and term.
