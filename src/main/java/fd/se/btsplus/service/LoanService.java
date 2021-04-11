@@ -13,6 +13,6 @@ public class LoanService {
     private final LoanRepository loanRepository;
 
     public List<Loan> queryByIdNum(String idNum) {
-        return loanRepository.findByCustomerCode(idNum);
+        return loanRepository.findByCustomerIdNum(idNum);
     }
 }

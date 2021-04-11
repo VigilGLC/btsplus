@@ -38,6 +38,7 @@ public class SystemDateService implements IDateService {
         String dateStr = btsProperties.getLaunchDate();
         if (dateStr == null || (dateStr = dateStr.trim()).isEmpty()) {
             offset = Period.of(0, 0, 0);
+            return;
         }
         final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         final Date launchDate = format.parse(dateStr);
