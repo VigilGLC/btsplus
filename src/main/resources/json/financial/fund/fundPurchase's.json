@@ -32,5 +32,29 @@
     "currDate": "2021-04-03",
     "beginDate": "2021-04-03",
     "endDate": "2021-05-03"
+  },
+  {
+    "id": 11,
+    "customer": {
+      "id": 17,
+      "code": "AB2121202104043",
+      "name": "柔弱的富婆",
+      "creator": null,
+      "createdTime": "2021-04-04 21:44:14",
+      "sex": 0,
+      "phone": "13030559075",
+      "email": "18302@fudan.edu.cn",
+      "address": "上海市复旦大学杨浦区"
+    },
+    "fund": {
+      "id": 11,
+      "name": "tangtang 基金",
+      "createdTime": "2021-04-02 19:14:07"
+    },
+    "initAmount": 2000.0,
+    "currAmount": 2000.0,
+    "currDate": "2021-04-11",
+    "beginDate": "2021-04-05",
+    "endDate": "2021-05-11"
   }
 ]

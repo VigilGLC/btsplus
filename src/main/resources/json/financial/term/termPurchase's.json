@@ -32,5 +32,39 @@
     "currDate": "2021-04-03",
     "beginDate": "2021-04-03",
     "endDate": "2021-05-03"
+  },
+  {
+    "id": 11,
+    "customer": {
+      "id": 6,
+      "code": "AB2121202103281",
+      "name": "harry",
+      "creator": {
+        "id": 207,
+        "username": "JT2103258079",
+        "password": "imbus123",
+        "role": 1,
+        "nickname": "赵宇飞",
+        "sex": 1,
+        "phone": "15298626406",
+        "email": "237037@fudan.edu.cn",
+        "address": "上海市杨浦区邯郸2500号"
+      },
+      "createdTime": "2021-04-03 20:40:00",
+      "sex": 0,
+      "phone": "13568746983",
+      "email": "13564@fudan.edu.cn",
+      "address": "上海市复旦大学虹口区"
+    },
+    "term": {
+      "id": 11,
+      "name": "huawei 定期",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "initAmount": 2000.0,
+    "currAmount": 2000.0,
+    "currDate": "2021-04-11",
+    "beginDate": "2021-04-05",
+    "endDate": "2021-05-03"
   }
 ]

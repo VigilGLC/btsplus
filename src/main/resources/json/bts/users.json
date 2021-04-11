@@ -11,6 +11,28 @@
     "address": "上海市杨浦区邯郸2500号"
   },
   {
+    "id": 207,
+    "username": "JT2103258079",
+    "password": "imbus123",
+    "role": 1,
+    "nickname": "赵宇飞",
+    "sex": 1,
+    "phone": "15298626406",
+    "email": "237037@fudan.edu.cn",
+    "address": "上海市杨浦区邯郸2500号"
+  },
+  {
+    "id": 210,
+    "username": "JT2103254965",
+    "password": "imbus123",
+    "role": 1,
+    "nickname": "罗宏亮",
+    "sex": 1,
+    "phone": "13832789992",
+    "email": "4545@fudan.edu.cn",
+    "address": "上海市杨浦区邯郸2500号"
+  },
+  {
     "id": 200,
     "username": "BA2103154781",
     "password": "imbus123",

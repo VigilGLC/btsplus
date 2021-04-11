@@ -29,8 +29,42 @@
     },
     "count": 100,
     "initPrice": 120,
-    "currDate": "2021-04-03",
+    "currDate": "2021-04-11",
     "currPrice": 120,
     "beginDate": "2021-04-03"
+  },
+  {
+    "id": 11,
+    "customer": {
+      "id": 6,
+      "code": "AB2121202103281",
+      "name": "harry",
+      "creator": {
+        "id": 207,
+        "username": "JT2103258079",
+        "password": "imbus123",
+        "role": 1,
+        "nickname": "赵宇飞",
+        "sex": 1,
+        "phone": "15298626406",
+        "email": "237037@fudan.edu.cn",
+        "address": "上海市杨浦区邯郸2500号"
+      },
+      "createdTime": "2021-04-03 20:40:00",
+      "sex": 0,
+      "phone": "13568746983",
+      "email": "13564@fudan.edu.cn",
+      "address": "上海市复旦大学虹口区"
+    },
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "count": 200,
+    "initPrice": 100,
+    "currDate": "2021-04-11",
+    "currPrice": 120,
+    "beginDate": "2021-04-05"
   }
 ]
