@@ -24,6 +24,6 @@ public class PeriodDeserializer extends StdDeserializer<Period> {
         final int years = Integer.parseInt(parts[0]);
         final int months = Integer.parseInt(parts[1]);
         final int days = Integer.parseInt(parts[2]);
-        return Period.of(years, months, years);
+        return Period.of(years, months, days);
     }
 }
