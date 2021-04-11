@@ -3,6 +3,7 @@ package fd.se.btsplus.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import fd.se.btsplus.model.entity.bts.User;
 import fd.se.btsplus.repository.bts.UserRepository;
@@ -29,9 +30,14 @@ public class TokenUtils {
     }
 
     public User getUser(String token) {
-        final DecodedJWT decodedJWT;
+        DecodedJWT decodedJWT;
         try {
             decodedJWT = JWT.require(algorithm).build().verify(token);
+        } catch (TokenExpiredException e) {
+            if (expired(token)) {
+                return null;
+            }
+            decodedJWT = JWT.decode(token);
         } catch (JWTVerificationException e) {
             return null;
         }
