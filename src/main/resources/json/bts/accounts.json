@@ -19,6 +19,7 @@
       "id": 13,
       "code": "AB2121202104031",
       "name": "请不要侮辱二次元",
+      "idNum": "331355200005085616",
       "creator": null,
       "createdTime": "2021-04-03 19:33:41",
       "sex": 0,
@@ -105,7 +106,10 @@
     "password": null,
     "accountType": "储蓄账户",
     "creator": null,
-    "customer": null,
+    "customer": {
+      "id": 0,
+      "code": "Why man?"
+    },
     "createdTime": null,
     "balance": 129890000.0000
   }
