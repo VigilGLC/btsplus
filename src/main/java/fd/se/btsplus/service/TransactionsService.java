@@ -58,7 +58,7 @@ public class TransactionsService {
                 }
             }
             if (transactionNum != null) {
-                if (!transactionNum.equals(tx.getTransactionCode())) {
+                if (!transactionNum.equals(tx.getTransactionNum())) {
                     return false;
                 }
             }
