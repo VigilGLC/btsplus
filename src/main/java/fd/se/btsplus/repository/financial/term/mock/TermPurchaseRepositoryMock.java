@@ -36,7 +36,7 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
     private void init() {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.termPurchases = new HashSet<>(jsonUtils.readList(jsonStr, TermPurchase.class));
-        this.nextId = this.termPurchases.stream().mapToLong(TermPurchase::getId).max().orElse(0L);
+        this.nextId = this.termPurchases.stream().mapToLong(TermPurchase::getId).max().orElse(0L) + 1;
     }
 
     @Override
