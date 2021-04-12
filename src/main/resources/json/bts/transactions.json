@@ -6,10 +6,40 @@
     "transactionCode": "1621",
     "transactionNum": "AB212116210202103251717531",
     "transactionType": "一本通开户",
-    "account": {},
+    "account": {
+      "id": 32,
+      "accountNum": "6161710619136431439",
+      "password": "123456",
+      "accountType": "储蓄账户",
+      "creator": {
+        "id": 208,
+        "username": "JT2103253794",
+        "password": "imbus123",
+        "role": 1,
+        "nickname": "高龙超",
+        "sex": 1,
+        "phone": "13832789992",
+        "email": "31937@fudan.edu.cn",
+        "address": "上海市杨浦区邯郸2500号"
+      },
+      "customer": {
+        "id": 13,
+        "code": "AB2121202104031",
+        "name": "请不要侮辱二次元",
+        "idNum": "331355200005085616",
+        "creator": null,
+        "createdTime": "2021-04-03 19:33:41",
+        "sex": 0,
+        "phone": "13333333333",
+        "email": "3333333@fudan.edu.cn",
+        "address": "上海市杨浦区键盘侠只能出门右转2500号"
+      },
+      "createdTime": "2021-04-03 20:08:58",
+      "balance": 100.0000
+    },
     "reciprocalAccount": {},
     "amount": null,
-    "balance": 20000.0
+    "balance": 100.0000
   },
   {
     "id": 71,
@@ -18,10 +48,39 @@
     "transactionCode": "0001",
     "transactionNum": "AB21210001206202103251803061",
     "transactionType": "营业单位开机作业",
-    "account": {},
+    "account":  {
+      "id": 34,
+      "accountNum": "6671710619136431438",
+      "password": "123456",
+      "accountType": "储蓄账户",
+      "creator": {
+        "id": 210,
+        "username": "JT2103254965",
+        "password": "imbus123",
+        "role": 1,
+        "nickname": "罗宏亮",
+        "sex": 1,
+        "phone": "13832789992",
+        "email": "4545@fudan.edu.cn",
+        "address": "上海市杨浦区邯郸2500号"
+      },
+      "customer": {
+        "id": 17,
+        "code": "AB2121202104043",
+        "name": "柔弱的富婆",
+        "creator": null,
+        "createdTime": "2021-04-04 21:44:14",
+        "sex": 0,
+        "phone": "13030559075",
+        "email": "18302@fudan.edu.cn",
+        "address": "上海市复旦大学杨浦区"
+      },
+      "createdTime": "2021-04-05 20:08:58",
+      "balance": 890000.0000
+    },
     "reciprocalAccount": null,
     "amount": 0.0000,
-    "balance": 5000.0
+    "balance": 890000.0000
   },
   {
     "id": 72,
@@ -30,9 +89,48 @@
     "transactionCode": "0001",
     "transactionNum": "AB21210001206202103251803271",
     "transactionType": "营业单位开机作业",
-    "account": {},
+    "account": {
+      "id": 35,
+      "accountNum": "6687910619136431437",
+      "password": "123456",
+      "accountType": "储蓄账户",
+      "creator": {
+        "id": 207,
+        "username": "JT2103258079",
+        "password": "imbus123",
+        "role": 1,
+        "nickname": "赵宇飞",
+        "sex": 1,
+        "phone": "15298626406",
+        "email": "237037@fudan.edu.cn",
+        "address": "上海市杨浦区邯郸2500号"
+      },
+      "customer": {
+        "id": 6,
+        "code": "AB2121202103281",
+        "name": "harry",
+        "creator": {
+          "id": 207,
+          "username": "JT2103258079",
+          "password": "imbus123",
+          "role": 1,
+          "nickname": "赵宇飞",
+          "sex": 1,
+          "phone": "15298626406",
+          "email": "237037@fudan.edu.cn",
+          "address": "上海市杨浦区邯郸2500号"
+        },
+        "createdTime": "2021-04-03 20:40:00",
+        "sex": 0,
+        "phone": "13568746983",
+        "email": "13564@fudan.edu.cn",
+        "address": "上海市复旦大学虹口区"
+      },
+      "createdTime": "2021-04-03 21:00:00",
+      "balance": 450000.0000
+    },
     "reciprocalAccount": null,
     "amount": 100.0000,
-    "balance": 100.0000
+    "balance": 450000.0000
   }
 ]

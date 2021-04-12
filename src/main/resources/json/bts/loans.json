@@ -46,5 +46,28 @@
     "amount": 20000.0000,
     "interest": 66.6600,
     "total": 20066.6600
+  },
+  {
+    "id": 231,
+    "iouNum": "L2104031952199",
+    "customer": {
+      "id": 17,
+      "code": "AB2121202104043",
+      "name": "柔弱的富婆",
+      "creator": null,
+      "createdTime": "2021-04-04 21:44:14",
+      "sex": 0,
+      "phone": "13030559075",
+      "email": "18302@fudan.edu.cn",
+      "address": "上海市复旦大学杨浦区"
+    },
+    "creator": null,
+    "createdTime": "2021-04-03 19:52:20",
+    "loanDate": "2021-04-03",
+    "productCode": "20001",
+    "productName": "买房贷款",
+    "amount": 20000.0000,
+    "interest": 66.6600,
+    "total": 20066.6600
   }
 ]
