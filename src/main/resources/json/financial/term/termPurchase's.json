@@ -29,8 +29,8 @@
       "createdTime": "2021-04-03 20:14:07"
     },
     "initAmount": 2000.0,
-    "currAmount": 2000.0,
-    "currDate": "2021-04-03",
+    "currAmount": 2390.2,
+    "currDate": "2021-04-11",
     "beginDate": "2021-04-03",
     "endDate": "2021-05-03"
   },
@@ -63,7 +63,7 @@
       "createdTime": "2021-04-03 20:14:07"
     },
     "initAmount": 2000.0,
-    "currAmount": 2000.0,
+    "currAmount": 2144.3,
     "currDate": "2021-04-11",
     "beginDate": "2021-04-05",
     "endDate": "2021-05-03"

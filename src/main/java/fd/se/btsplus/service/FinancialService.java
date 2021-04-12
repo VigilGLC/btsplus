@@ -171,7 +171,6 @@ public class FinancialService {
         }
         OperationResult result = pay(account, count * price);
         if (result.getCode() != HTTP_OK) return result;
-
         //save stock purchase record
         StockPurchase stockPurchase = new StockPurchase();
 
