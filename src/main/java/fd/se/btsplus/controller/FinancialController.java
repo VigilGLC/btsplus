@@ -57,9 +57,10 @@ public class FinancialController {
         Account account = subject.getAccount();
         OperationResult result = financialService.purchaseFund(fundId, account, request.getAmount(),
                 request.getPeriod());
+        String message = result.getMessage();
         final int code = result.getCode();
         Boolean data = code == HTTP_OK;
-        return ResponseEntity.status(code).body(data);
+        return ResponseEntity.status(code).body(ResponseWrapper.wrap(code, message, data));
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看基金")
@@ -83,10 +84,10 @@ public class FinancialController {
     public ResponseEntity<?> purchaseStock(@PathVariable long stockId, @RequestBody StockPurchaseRequest request) {
         Account account = subject.getAccount();
         OperationResult result = financialService.purchaseStock(stockId, account, request.getCount());
+        String message = result.getMessage();
         final int code = result.getCode();
         Boolean data = code == HTTP_OK;
-        return ResponseEntity.status(code).body(data);
-
+        return ResponseEntity.status(code).body(ResponseWrapper.wrap(code, message, data));
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看股票")
@@ -111,9 +112,10 @@ public class FinancialController {
         Account account = subject.getAccount();
         OperationResult result = financialService.purchaseTerm(termId, account, request.getAmount(),
                 request.getPeriod());
+        String message = result.getMessage();
         final int code = result.getCode();
         Boolean data = code == HTTP_OK;
-        return ResponseEntity.status(code).body(data);
+        return ResponseEntity.status(code).body(ResponseWrapper.wrap(code, message, data));
     }
 
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看定期理财")
