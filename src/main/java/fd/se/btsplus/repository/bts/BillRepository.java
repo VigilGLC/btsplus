@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.bts;
 
 import fd.se.btsplus.model.consts.BillStatus;
 import fd.se.btsplus.model.entity.bts.Bill;
+import fd.se.btsplus.model.entity.bts.Customer;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,8 @@ public interface BillRepository extends CrudRepository<Bill, Long> {
     Bill findById(long id);
 
     List<Bill> findByLoanIouNum(String iouNum);
+
+    List<Bill> findByLoanCustomer(Customer customer);
 
     List<Bill> findByStatus(BillStatus status);
 

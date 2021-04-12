@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.consts.BillStatus;
 import fd.se.btsplus.model.entity.bts.Bill;
+import fd.se.btsplus.model.entity.bts.Customer;
 import fd.se.btsplus.repository.bts.BillRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -48,6 +49,13 @@ public class BillRepositoryMock implements BillRepository {
     public List<Bill> findByLoanIouNum(String iouNum) {
         return this.bills.stream().
                 filter(b -> b.getLoan().getIouNum().equals(iouNum)).
+                collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Bill> findByLoanCustomer(Customer customer) {
+        return this.bills.stream().
+                filter(b -> b.getLoan().getCustomer().equals(customer)).
                 collect(Collectors.toList());
     }
 

@@ -5,15 +5,14 @@ import fd.se.btsplus.model.domain.OperationResult;
 import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.bts.Bill;
 import fd.se.btsplus.model.entity.bts.Customer;
-import fd.se.btsplus.model.entity.bts.Loan;
 import fd.se.btsplus.repository.bts.AccountRepository;
 import fd.se.btsplus.repository.bts.BillRepository;
-import fd.se.btsplus.repository.bts.LoanRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static fd.se.btsplus.model.consts.BillStatus.*;
 import static fd.se.btsplus.model.consts.Constant.BANK_ACCOUNT;
@@ -27,7 +26,6 @@ public class CustomerService {
     private final AccountService accountService;
 
     private final AccountRepository accountRepository;
-    private final LoanRepository loanRepository;
     private final BillRepository billRepository;
 
     /**
@@ -63,10 +61,13 @@ public class CustomerService {
 
     public CreditLevel creditLevel(Customer customer) {
         List<Account> accounts = accountRepository.findByCustomer(customer);
-        List<Loan> loans = loanRepository.findByCustomer(customer);
+        List<Bill> bills = billRepository.findByLoanCustomer(customer).stream().
+                filter(b -> b.getStatus() != PAID).collect(Collectors.toList());
         Double balanceSum = accounts.stream().mapToDouble(Account::getBalance).sum();
-        Double loanSum = loans.stream().mapToDouble(Loan::getAmount).sum();
-        return CreditLevel.evaluate(balanceSum, loanSum);
+        Double billSum = bills.stream().
+                mapToDouble(b -> b.getRemainAmount() + b.getRemainInterest()).
+                sum();
+        return CreditLevel.evaluate(balanceSum, billSum);
     }
 
     public OperationResult payBill(Long billId, Account account, double amount) {
