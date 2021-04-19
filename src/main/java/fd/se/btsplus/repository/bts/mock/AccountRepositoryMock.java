@@ -22,7 +22,7 @@ public class AccountRepositoryMock implements AccountRepository, IRepositoryMock
     private static final String PATH = "json/bts/accounts.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<Account> accounts;
+    private Set<Account> set;
 
     @SneakyThrows
     @PostConstruct
@@ -35,17 +35,17 @@ public class AccountRepositoryMock implements AccountRepository, IRepositoryMock
     @Override
     public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.accounts = new HashSet<>(jsonUtils.readList(jsonStr, Account.class));
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, Account.class));
     }
 
     @Override
     public List<Account> findAll() {
-        return new ArrayList<>(accounts);
+        return new ArrayList<>(set);
     }
 
     @Override
     public Account findByAccountNumAndPassword(String accountNum, String password) {
-        return accounts.stream().filter(ac -> {
+        return set.stream().filter(ac -> {
             final String acNum = ac.getAccountNum();
             final String acPass = ac.getPassword();
             return acNum != null && acPass != null && acNum.equals(accountNum) && acPass.equals(password);
@@ -59,15 +59,15 @@ public class AccountRepositoryMock implements AccountRepository, IRepositoryMock
 
     @Override
     public List<Account> findByCustomerCode(String customerCode) {
-        return this.accounts.stream().
+        return this.set.stream().
                 filter(ac -> ac.getCustomer().getCode().equals(customerCode)).
                 collect(Collectors.toList());
     }
 
     @Override
     public <S extends Account> S save(S entity) {
-        this.accounts.remove(entity);
-        this.accounts.add(entity);
+        this.set.remove(entity);
+        this.set.add(entity);
         return entity;
     }
 

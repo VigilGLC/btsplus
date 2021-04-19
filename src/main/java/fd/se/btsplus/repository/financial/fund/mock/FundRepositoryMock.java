@@ -1,6 +1,7 @@
 package fd.se.btsplus.repository.financial.fund.mock;
 
 import fd.se.btsplus.model.entity.financial.fund.Fund;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.financial.fund.FundRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -15,27 +16,34 @@ import java.util.*;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class FundRepositoryMock implements FundRepository {
-    private static final String path = "json/financial/fund/funds.json";
+public class FundRepositoryMock implements FundRepository, IRepositoryMock {
+    private static final String PATH = "json/financial/fund/funds.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<Fund> funds;
+    private Set<Fund> set;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.funds = new HashSet<>(jsonUtils.readList(jsonStr, Fund.class));
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, Fund.class));
     }
 
     @Override
     public List<Fund> findAll() {
-        return new ArrayList<>(this.funds);
+        return new ArrayList<>(this.set);
     }
 
     @Override
     public Fund findById(long id) {
-        return this.funds.stream().filter(f -> Long.valueOf(id).equals(f.getId())).
+        return this.set.stream().filter(f -> Long.valueOf(id).equals(f.getId())).
                 findFirst().orElse(null);
     }
 

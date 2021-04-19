@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.financial.fund.mock;
 
 import fd.se.btsplus.model.entity.financial.fund.Fund;
 import fd.se.btsplus.model.entity.financial.fund.FundPurchase;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -21,40 +22,46 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 @Profile("!prod")
 @Component
 @RequiredArgsConstructor
-public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
-    private static final String path = "json/financial/fund/fundPurchase's.json";
+public class FundPurchaseRepositoryMock implements FundPurchaseRepository, IRepositoryMock {
+    private static final String PATH = "json/financial/fund/fundPurchase's.json";
     @NonNull
     private final ResourceUtils resourceUtils;
     @NonNull
     private final JsonUtils jsonUtils;
-    private Set<FundPurchase> fundPurchases;
+    private Set<FundPurchase> set;
 
     private volatile long nextId;
 
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.fundPurchases = new HashSet<>(jsonUtils.readList(jsonStr, FundPurchase.class));
-        this.nextId = fundPurchases.stream().mapToLong(FundPurchase::getId).max().orElse(0L) + 1;
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, FundPurchase.class));
     }
 
     @Override
     public List<FundPurchase> findAll() {
-        return new ArrayList<>(this.fundPurchases);
+        return new ArrayList<>(this.set);
     }
 
     @Override
     public List<FundPurchase> findByCustomerCode(String customerCode) {
-        return this.fundPurchases.stream().
+        return this.set.stream().
                 filter(fp -> fp.getCustomer().getCode().equals(customerCode)).
                 collect(Collectors.toList());
     }
 
     @Override
     public List<FundPurchase> findByFundAndCurrDateAndEndDateAfter(Fund fund, Date currDate, Date nextDate) {
-        return this.fundPurchases.stream().
+        return this.set.stream().
                 filter(fp -> fp.getFund().equals(fund) && dayEqual(fp.getCurrDate(), currDate)
                         && dayAfter(fp.getEndDate(), nextDate)).
                 collect(Collectors.toList());
@@ -66,7 +73,7 @@ public class FundPurchaseRepositoryMock implements FundPurchaseRepository {
             return entity;
         }
         entity.setId(nextId++);
-        this.fundPurchases.add(entity);
+        this.set.add(entity);
         return entity;
     }
 
