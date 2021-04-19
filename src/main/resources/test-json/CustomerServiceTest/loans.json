@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "iouNum": "num1",
+    "customer":   {
+      "id": 1,
+      "code": "code1",
+      "name": "name1",
+      "idNum": "num1"
+    },
+    "loanDate": "2021-04-03",
+    "amount": 100000,
+    "interest": 666,
+    "total": 100666
+  }
+]

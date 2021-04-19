@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "code": "code1",
+    "name": "name1",
+    "idNum": "num1"
+  },
+  {
+    "id": 2,
+    "code": "code2",
+    "name": "name2",
+    "idNum": "num2"
+  },
+  {
+    "id": 3,
+    "code": "code3",
+    "name": "name3",
+    "idNum": "num3"
+  }
+]
