@@ -1,6 +1,7 @@
 package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Customer;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.bts.CustomerRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -15,22 +16,29 @@ import java.util.*;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class CustomerRepositoryMock implements CustomerRepository {
-    private static final String path = "json/bts/customers.json";
+public class CustomerRepositoryMock implements CustomerRepository, IRepositoryMock {
+    private static final String PATH = "json/bts/customers.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<Customer> customers;
+    private Set<Customer> set;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.customers = new HashSet<>(jsonUtils.readList(jsonStr, Customer.class));
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, Customer.class));
     }
 
     @Override
     public List<Customer> findAll() {
-        return new ArrayList<>(this.customers);
+        return new ArrayList<>(this.set);
     }
 
     //<editor-fold desc="useless">

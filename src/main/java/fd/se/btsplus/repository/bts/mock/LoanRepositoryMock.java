@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Customer;
 import fd.se.btsplus.model.entity.bts.Loan;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.bts.LoanRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -17,22 +18,28 @@ import java.util.stream.Collectors;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class LoanRepositoryMock implements LoanRepository {
-    private static final String path = "json/bts/loans.json";
+public class LoanRepositoryMock implements LoanRepository, IRepositoryMock {
+    private static final String PATH = "json/bts/loans.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<Loan> loans;
+    private Set<Loan> set;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.loans = new HashSet<>(jsonUtils.readList(jsonStr, Loan.class));
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, Loan.class));
     }
 
     @Override
     public List<Loan> findAll() {
-        return new ArrayList<>(this.loans);
+        return new ArrayList<>(this.set);
     }
 
     @Override
@@ -42,14 +49,14 @@ public class LoanRepositoryMock implements LoanRepository {
 
     @Override
     public List<Loan> findByCustomerCode(String customerCode) {
-        return this.loans.stream().
+        return this.set.stream().
                 filter(ln -> ln.getCustomer().getCode().equals(customerCode)).
                 collect(Collectors.toList());
     }
 
     @Override
     public List<Loan> findByCustomerIdNum(String idNum) {
-        return this.loans.stream().
+        return this.set.stream().
                 filter(ln -> ln.getCustomer().getIdNum().equals(idNum)).
                 collect(Collectors.toList());
     }
