@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.bts.Customer;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.bts.AccountRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -17,15 +18,22 @@ import java.util.stream.Collectors;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class AccountRepositoryMock implements AccountRepository {
-    private static final String path = "json/bts/accounts.json";
+public class AccountRepositoryMock implements AccountRepository, IRepositoryMock {
+    private static final String PATH = "json/bts/accounts.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
     private Set<Account> accounts;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
         this.accounts = new HashSet<>(jsonUtils.readList(jsonStr, Account.class));
     }
