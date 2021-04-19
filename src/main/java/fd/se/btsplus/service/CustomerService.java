@@ -48,7 +48,6 @@ public class CustomerService {
                 bill.setRemainAmount(amount - toPay);
                 return false;
             } else {
-                toPay -= amount;
                 bill.setRemainAmount(0d);
             }
         }
@@ -102,20 +101,19 @@ public class CustomerService {
 
             if (UNPAID_PENALIZED.equals(bill.getStatus())) {
                 final double penalty = penaltyInterest(bill);
-                if (balance >= penalty) {
-                    backup = accountService.transfer(account, BANK_ACCOUNT, penalty);
-                    if (backup.getCode() != HTTP_OK) {
-                        return backup;
-                    }
-                    code = HTTP_ACCEPTED;
-                    message = "Penalty Paid.";
-                    balance -= penalty;
-                    bill.setStatus(UNPAID_AFTER);
-                    bill = billRepository.save(bill);
-                } else {
+                if (balance < penalty) {
                     message = "Penalty not affordable.";
                     return result;
                 }
+                backup = accountService.transfer(account, BANK_ACCOUNT, penalty);
+                if (backup.getCode() != HTTP_OK) {
+                    return backup;
+                }
+                code = HTTP_ACCEPTED;
+                message = "Penalty Paid.";
+                balance -= penalty;
+                bill.setStatus(UNPAID_AFTER);
+                bill = billRepository.save(bill);
             }
 
             if (balance < toPay) {
@@ -126,7 +124,7 @@ public class CustomerService {
             if (paidOff) {
                 bill.setStatus(PAID);
             }
-            bill = billRepository.save(bill);
+            billRepository.save(bill);
             backup = accountService.transfer(account, BANK_ACCOUNT, toPay);
             if (backup.getCode() != HTTP_OK) {
                 return backup;
@@ -164,7 +162,7 @@ public class CustomerService {
             }
         }
         final String message = MessageFormat.format(
-                "Total bills: {1}, Penalty Paid: {2}, Full Paid: {3}",
+                "Total bills: {0}, Penalty Paid: {1}, Full Paid: {2}",
                 total, penaltyPaid, fullPaid);
         return OperationResult.of(HTTP_OK, message);
     }
