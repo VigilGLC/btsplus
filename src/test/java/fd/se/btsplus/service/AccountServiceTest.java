@@ -16,6 +16,12 @@ import static java.net.HttpURLConnection.HTTP_NOT_ACCEPTABLE;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 class AccountServiceTest {
+    private static final double PRECISE_EPSILON = 1e-8;
+
+    private static boolean epsilonEqual(double v1, double v2) {
+        return Math.abs(v1 - v2) < PRECISE_EPSILON;
+    }
+
     private AccountService accountService;
     private List<Account> received;
 
@@ -91,6 +97,23 @@ class AccountServiceTest {
     }
 
     @Test
+    void testTransferBalance() {
+        final Account from = new Account();
+        final double fromBalance = 10086d;
+        from.setBalance(fromBalance);
+        final Account to = new Account();
+        final double toBalance = 258d;
+        to.setBalance(toBalance);
+        final double amount = 4356.7d;
+        final OperationResult res = accountService.transfer(from, to, amount);
+        Assertions.assertEquals(HTTP_OK, res.getCode());
+        Assertions.assertEquals(2, received.size());
+        Assertions.assertTrue(epsilonEqual(fromBalance + toBalance, from.getBalance() + to.getBalance()));
+        Assertions.assertTrue(epsilonEqual(fromBalance - amount, from.getBalance()));
+        Assertions.assertTrue(epsilonEqual(toBalance + amount, to.getBalance()));
+    }
+
+    @Test
     void testWithdraw() {
         final Account from = new Account();
         from.setBalance(100d);
@@ -98,5 +121,16 @@ class AccountServiceTest {
         Assertions.assertEquals(HTTP_OK, res.getCode());
         Assertions.assertTrue(res.getMessage().toLowerCase().contains("success"));
         Assertions.assertEquals(1, received.size());
+    }
+
+    @Test
+    void testWithdrawBalance(){
+        final Account from = new Account();
+        final double fromBalance = 186.256d;
+        from.setBalance(fromBalance);
+        final double amount = 125.368d;
+        final OperationResult res = accountService.withDraw(from,  amount);
+        Assertions.assertEquals(HTTP_OK, res.getCode());
+        Assertions.assertTrue(epsilonEqual(fromBalance-amount, from.getBalance()));
     }
 }
