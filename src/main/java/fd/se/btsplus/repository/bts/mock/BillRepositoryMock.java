@@ -3,6 +3,7 @@ package fd.se.btsplus.repository.bts.mock;
 import fd.se.btsplus.model.consts.BillStatus;
 import fd.se.btsplus.model.entity.bts.Bill;
 import fd.se.btsplus.model.entity.bts.Customer;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.bts.BillRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -20,63 +21,70 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class BillRepositoryMock implements BillRepository {
-    private static final String path = "json/bts/bills.json";
+public class BillRepositoryMock implements BillRepository, IRepositoryMock {
+    private static final String PATH = "json/bts/bills.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<Bill> bills;
+    private Set<Bill> set;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.bills = new HashSet<>(jsonUtils.readList(jsonStr, Bill.class));
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, Bill.class));
     }
 
     @Override
     public List<Bill> findAll() {
-        return new ArrayList<>(this.bills);
+        return new ArrayList<>(this.set);
     }
 
     @Override
     public Bill findById(long id) {
-        return this.bills.stream().
+        return this.set.stream().
                 filter(b -> Long.valueOf(id).equals(b.getId())).
                 findFirst().orElse(null);
     }
 
     @Override
     public List<Bill> findByLoanIouNum(String iouNum) {
-        return this.bills.stream().
+        return this.set.stream().
                 filter(b -> b.getLoan().getIouNum().equals(iouNum)).
                 collect(Collectors.toList());
     }
 
     @Override
     public List<Bill> findByLoanCustomer(Customer customer) {
-        return this.bills.stream().
+        return this.set.stream().
                 filter(b -> b.getLoan().getCustomer().equals(customer)).
                 collect(Collectors.toList());
     }
 
     @Override
     public List<Bill> findByStatus(BillStatus status) {
-        return this.bills.stream().
+        return this.set.stream().
                 filter(b -> status.equals(b.getStatus())).
                 collect(Collectors.toList());
     }
 
     @Override
     public List<Bill> findByEndDateAndStatus(Date endDate, BillStatus status) {
-        return this.bills.stream().
+        return this.set.stream().
                 filter(b -> dayEqual(b.getEndDate(), endDate) && status.equals(b.getStatus())).
                 collect(Collectors.toList());
     }
 
     @Override
     public <S extends Bill> S save(S entity) {
-        this.bills.remove(entity);
-        this.bills.add(entity);
+        this.set.remove(entity);
+        this.set.add(entity);
         return entity;
     }
 

@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.financial.stock.mock;
 
 import fd.se.btsplus.model.entity.financial.stock.Stock;
 import fd.se.btsplus.model.entity.financial.stock.StockPurchase;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.financial.stock.StockPurchaseRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -20,39 +21,45 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 @Profile("!prod")
 @Component
 @RequiredArgsConstructor
-public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
-    private static final String path = "json/financial/stock/stockPurchase's.json";
+public class StockPurchaseRepositoryMock implements StockPurchaseRepository, IRepositoryMock {
+    private static final String PATH = "json/financial/stock/stockPurchase's.json";
     @NonNull
     private final ResourceUtils resourceUtils;
     @NonNull
     private final JsonUtils jsonUtils;
-    private Set<StockPurchase> stockPurchases;
+    private Set<StockPurchase> set;
 
     private volatile long nextId;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.stockPurchases = new HashSet<>(jsonUtils.readList(jsonStr, StockPurchase.class));
-        this.nextId = this.stockPurchases.stream().mapToLong(StockPurchase::getId).max().orElse(0L) + 1;
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, StockPurchase.class));
     }
 
     @Override
     public List<StockPurchase> findAll() {
-        return new ArrayList<>(this.stockPurchases);
+        return new ArrayList<>(this.set);
     }
 
     @Override
     public List<StockPurchase> findByCustomerCode(String customerCode) {
-        return this.stockPurchases.stream().
+        return this.set.stream().
                 filter(sp -> sp.getCustomer().getCode().equals(customerCode)).
                 collect(Collectors.toList());
     }
 
     @Override
     public List<StockPurchase> findByStockAndCurrDate(Stock stock, Date lastDate) {
-        return this.stockPurchases.stream().
+        return this.set.stream().
                 filter(sp -> sp.getStock().equals(stock) && dayEqual(sp.getCurrDate(), lastDate)).
                 collect(Collectors.toList());
     }
@@ -63,7 +70,7 @@ public class StockPurchaseRepositoryMock implements StockPurchaseRepository {
             return entity;
         }
         entity.setId(nextId++);
-        this.stockPurchases.add(entity);
+        this.set.add(entity);
         return entity;
     }
 

@@ -1,6 +1,7 @@
 package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Transaction;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.bts.TransactionRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -15,22 +16,29 @@ import java.util.*;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class TransactionRepositoryMock implements TransactionRepository {
-    private static final String path = "json/bts/transactions.json";
+public class TransactionRepositoryMock implements TransactionRepository, IRepositoryMock {
+    private static final String PATH = "json/bts/transactions.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<Transaction> transactions;
+    private Set<Transaction> set;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.transactions = new HashSet<>(jsonUtils.readList(jsonStr, Transaction.class));
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, Transaction.class));
     }
 
     @Override
     public List<Transaction> findAll() {
-        return new ArrayList<>(this.transactions);
+        return new ArrayList<>(this.set);
     }
 
     //<editor-fold desc="useless">
