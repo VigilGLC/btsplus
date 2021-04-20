@@ -21,7 +21,7 @@
       "name": "name2",
       "idNum": "num2"
     },
-    "balance": 890000.0000
+    "balance": 100000
   },
   {
     "id": 3,
@@ -33,7 +33,7 @@
       "name": "name3",
       "idNum": "num3"
     },
-    "balance": 890000.0000
+    "balance": 50000
   },
   {
     "id": 4,
@@ -45,6 +45,6 @@
       "name": "name3",
       "idNum": "num3"
     },
-    "balance": 890000.0000
+    "balance": 50000
   }
 ]

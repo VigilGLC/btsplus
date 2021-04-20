@@ -12,16 +12,11 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fd.se.btsplus.service.Utils.epsilonEqual;
 import static java.net.HttpURLConnection.HTTP_NOT_ACCEPTABLE;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 class AccountServiceTest {
-    private static final double PRECISE_EPSILON = 1e-8;
-
-    private static boolean epsilonEqual(double v1, double v2) {
-        return Math.abs(v1 - v2) < PRECISE_EPSILON;
-    }
-
     private AccountService accountService;
     private List<Account> received;
 
@@ -124,13 +119,13 @@ class AccountServiceTest {
     }
 
     @Test
-    void testWithdrawBalance(){
+    void testWithdrawBalance() {
         final Account from = new Account();
         final double fromBalance = 186.256d;
         from.setBalance(fromBalance);
         final double amount = 125.368d;
-        final OperationResult res = accountService.withDraw(from,  amount);
+        final OperationResult res = accountService.withDraw(from, amount);
         Assertions.assertEquals(HTTP_OK, res.getCode());
-        Assertions.assertTrue(epsilonEqual(fromBalance-amount, from.getBalance()));
+        Assertions.assertTrue(epsilonEqual(fromBalance - amount, from.getBalance()));
     }
 }

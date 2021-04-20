@@ -73,7 +73,7 @@ public class CustomerService {
         int code = HTTP_NOT_ACCEPTABLE;
         String message = "";
         OperationResult result = OperationResult.of(code, message);
-        OperationResult backup = null;
+        OperationResult backup;
         try {
             Bill bill;
             if (billId == null || (bill = billRepository.findById(billId.longValue())) == null) {
@@ -83,6 +83,11 @@ public class CustomerService {
             }
             if (null == bill.getStatus()) {
                 message = "Bill wrong status.";
+                return result;
+            }
+            if (account == null || account.getBalance() == null) {
+                code = HTTP_NOT_FOUND;
+                message = "Account not found.";
                 return result;
             }
             double balance = account.getBalance();
@@ -133,10 +138,6 @@ public class CustomerService {
             message = "Success.";
             return result;
         } finally {
-            if (backup != null) {
-                code = backup.getCode();
-                message = backup.getMessage();
-            }
             result.setCode(code);
             result.setMessage(message);
         }

@@ -8,9 +8,47 @@
       "name": "name1",
       "idNum": "num1"
     },
-    "loanDate": "2021-04-03",
     "amount": 100000,
     "interest": 666,
     "total": 100666
+  },
+  {
+    "id": 2,
+    "iouNum": "num2",
+    "customer":   {
+      "id": 1,
+      "code": "code2",
+      "name": "name2",
+      "idNum": "num2"
+    },
+    "amount": 100000,
+    "interest": 1000,
+    "total": 101000
+  },
+  {
+    "id": 3,
+    "iouNum": "num2",
+    "customer":   {
+      "id": 2,
+      "code": "code2",
+      "name": "name2",
+      "idNum": "num2"
+    },
+    "amount": 200000,
+    "interest": 0,
+    "total": 200000
+  },
+  {
+    "id": 4,
+    "iouNum": "num2",
+    "customer":   {
+      "id": 3,
+      "code": "code3",
+      "name": "name3",
+      "idNum": "num3"
+    },
+    "amount": 200000,
+    "interest": 0,
+    "total": 200000
   }
 ]
