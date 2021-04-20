@@ -73,7 +73,7 @@ public class CustomerService {
         int code = HTTP_NOT_ACCEPTABLE;
         String message = "";
         OperationResult result = OperationResult.of(code, message);
-        OperationResult backup;
+        OperationResult nested;
         try {
             Bill bill;
             if (billId == null || (bill = billRepository.findById(billId.longValue())) == null) {
@@ -85,18 +85,13 @@ public class CustomerService {
                 message = "Bill wrong status.";
                 return result;
             }
-            if (account == null || account.getBalance() == null) {
+            if (account == null) {
                 code = HTTP_NOT_FOUND;
                 message = "Account not found.";
                 return result;
             }
-            double balance = account.getBalance();
             final double remain = bill.getRemainAmount() + bill.getRemainInterest();
             final double toPay = Math.min(remain, amount);
-            if (balance < toPay) {
-                message = "Balance not sufficient.";
-                return result;
-            }
 
             if (PAID.equals(bill.getStatus())) {
                 code = HTTP_NO_CONTENT;
@@ -106,34 +101,27 @@ public class CustomerService {
 
             if (UNPAID_PENALIZED.equals(bill.getStatus())) {
                 final double penalty = penaltyInterest(bill);
-                if (balance < penalty) {
+                nested = accountService.transfer(account, BANK_ACCOUNT, penalty);
+                if (nested.getCode() != HTTP_OK) {
                     message = "Penalty not affordable.";
                     return result;
                 }
-                backup = accountService.transfer(account, BANK_ACCOUNT, penalty);
-                if (backup.getCode() != HTTP_OK) {
-                    return backup;
-                }
                 code = HTTP_ACCEPTED;
                 message = "Penalty Paid.";
-                balance -= penalty;
                 bill.setStatus(UNPAID_AFTER);
                 bill = billRepository.save(bill);
             }
 
-            if (balance < toPay) {
+            nested = accountService.transfer(account, BANK_ACCOUNT, toPay);
+            if (nested.getCode() != HTTP_OK) {
+                message = nested.getMessage();
                 return result;
             }
-
             final boolean paidOff = shave(bill, toPay);
             if (paidOff) {
                 bill.setStatus(PAID);
             }
             billRepository.save(bill);
-            backup = accountService.transfer(account, BANK_ACCOUNT, toPay);
-            if (backup.getCode() != HTTP_OK) {
-                return backup;
-            }
             code = HTTP_OK;
             message = "Success.";
             return result;

@@ -242,7 +242,6 @@ class CustomerServiceTest {
 
     @Test
     void testPayBill103PenaltyUnaffordable() {
-        testPayBill101();
         final long billId = 103;
         final double amount = 10;
         Account account = accountRepository.
