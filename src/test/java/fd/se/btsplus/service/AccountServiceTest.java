@@ -109,6 +109,19 @@ class AccountServiceTest {
     }
 
     @Test
+    void testInvalidAmount() {
+        final Account from = new Account();
+        final double fromBalance = 10086d;
+        from.setBalance(fromBalance);
+        final Account to = new Account();
+        final double toBalance = 258d;
+        to.setBalance(toBalance);
+        final double amount = -4356.7d;
+        OperationResult res = accountService.transfer(from, to, amount);
+        Assertions.assertEquals(HTTP_NOT_ACCEPTABLE, res.getCode());
+    }
+
+    @Test
     void testWithdraw() {
         final Account from = new Account();
         from.setBalance(100d);

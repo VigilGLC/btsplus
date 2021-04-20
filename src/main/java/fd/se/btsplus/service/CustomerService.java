@@ -22,7 +22,6 @@ import static java.net.HttpURLConnection.*;
 @AllArgsConstructor
 @Service
 public class CustomerService {
-    private final IDateService dateService;
     private final AccountService accountService;
 
     private final AccountRepository accountRepository;

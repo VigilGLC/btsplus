@@ -56,8 +56,7 @@ class CustomerServiceTest {
         accountService = Mockito.mock(AccountService.class);
         initAccountService();
 
-        customerService = new CustomerService(null, accountService,
-                accountRepository, billRepository);
+        customerService = new CustomerService(accountService, accountRepository, billRepository);
     }
 
     @AfterEach
@@ -269,6 +268,15 @@ class CustomerServiceTest {
         Account account = null;
         OperationResult res = customerService.payBill(billId, account, 10);
         Assertions.assertEquals(HTTP_NOT_FOUND, res.getCode());
+    }
+
+    @Test
+    void testInvalidAmount() {
+        final long billId = 2;
+        Account account = accountRepository.
+                findByAccountNumAndPassword("num2", "");
+        OperationResult res = customerService.payBill(billId, account, -1);
+        Assertions.assertEquals(HTTP_NOT_ACCEPTABLE, res.getCode());
     }
 
     @Test
