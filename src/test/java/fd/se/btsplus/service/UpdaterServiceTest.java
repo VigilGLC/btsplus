@@ -1,6 +1,7 @@
 package fd.se.btsplus.service;
 
 import fd.se.btsplus.config.BtsProperties;
+import fd.se.btsplus.model.consts.BillStatus;
 import fd.se.btsplus.model.domain.Available;
 import fd.se.btsplus.model.domain.DateEvent;
 import fd.se.btsplus.repository.bts.AccountRepository;
@@ -159,5 +160,10 @@ class UpdaterServiceTest {
         Date newDate = DateUtils.truncate(new Date(2021 - 1900, Calendar.APRIL, 12), Calendar.DAY_OF_MONTH);
         Date lastDate = DateUtils.addDays(newDate, -1);
         updaterService.update(lastDate, newDate);
+
+        assertNotNull(fundDailyRepository.findByDate(newDate));
+        assertNotNull(stockDailyRepository.findByDate(newDate));
+        assertNotNull(termDailyRepository.findByDate(newDate));
+        assertEquals(0, billRepository.findByEndDateAndStatus(lastDate, BillStatus.UNPAID_BEFORE).size());
     }
 }
