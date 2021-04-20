@@ -90,6 +90,10 @@ public class CustomerService {
                 message = "Account not found.";
                 return result;
             }
+            if (amount < 0) {
+                message = "Amount cannot be negative.";
+                return result;
+            }
             final double remain = bill.getRemainAmount() + bill.getRemainInterest();
             final double toPay = Math.min(remain, amount);
 

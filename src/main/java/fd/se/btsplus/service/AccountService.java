@@ -33,6 +33,10 @@ public class AccountService {
                 message = "Balance not sufficient.";
                 return result;
             }
+            if (amount < 0) {
+                message = "Amount cannot be negative.";
+                return result;
+            }
 
             List<Account> toSave = new ArrayList<>();
             toSave.add(from);
