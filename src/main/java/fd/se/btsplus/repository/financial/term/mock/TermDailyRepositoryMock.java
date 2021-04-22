@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.financial.term.mock;
 
 import fd.se.btsplus.model.entity.financial.term.Term;
 import fd.se.btsplus.model.entity.financial.term.TermDaily;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.financial.term.TermDailyRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -20,39 +21,45 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 @Profile("!prod")
 @Component
 @RequiredArgsConstructor
-public class TermDailyRepositoryMock implements TermDailyRepository {
-    private static final String path = "json/financial/term/termDaily's.json";
+public class TermDailyRepositoryMock implements TermDailyRepository, IRepositoryMock {
+    private static final String PATH = "json/financial/term/termDaily's.json";
     @NonNull
     private final ResourceUtils resourceUtils;
     @NonNull
     private final JsonUtils jsonUtils;
-    private Set<TermDaily> termDailies;
+    private Set<TermDaily> set;
 
     private volatile long nextId;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.termDailies = new HashSet<>(jsonUtils.readList(jsonStr, TermDaily.class));
-        this.nextId = this.termDailies.stream().mapToLong(TermDaily::getId).max().orElse(0L) + 1;
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, TermDaily.class));
     }
 
     @Override
     public List<TermDaily> findAll() {
-        return new ArrayList<>(this.termDailies);
+        return new ArrayList<>(this.set);
     }
 
     @Override
     public TermDaily findByTermAndDate(Term term, Date date) {
-        return this.termDailies.stream().
+        return this.set.stream().
                 filter(td -> td.getTerm().equals(term) && dayEqual(td.getDate(), date)).
                 findFirst().orElse(null);
     }
 
     @Override
     public List<TermDaily> findByDate(Date date) {
-        return this.termDailies.stream().
+        return this.set.stream().
                 filter(td -> dayEqual(td.getDate(), date)).
                 collect(Collectors.toList());
     }
@@ -63,7 +70,7 @@ public class TermDailyRepositoryMock implements TermDailyRepository {
             return entity;
         }
         entity.setId(nextId++);
-        this.termDailies.add(entity);
+        this.set.add(entity);
         return entity;
     }
 
