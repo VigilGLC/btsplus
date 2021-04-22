@@ -37,20 +37,18 @@ public class CustomerService {
             if (toPay < interest) {
                 bill.setRemainInterest(interest - toPay);
                 return false;
-            } else {
-                toPay -= interest;
-                bill.setRemainInterest(0d);
             }
+            toPay -= interest;
+            bill.setRemainInterest(0d);
         }
         if (amount > 0) {
             if (toPay < amount) {
                 bill.setRemainAmount(amount - toPay);
                 return false;
-            } else {
-                bill.setRemainAmount(0d);
             }
+            bill.setRemainAmount(0d);
         }
-        return bill.getRemainInterest() + bill.getRemainAmount() == 0;
+        return true;
     }
 
     private static double penaltyInterest(Bill bill) {

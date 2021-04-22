@@ -174,5 +174,49 @@
     "remainAmount": 2000001,
     "remainInterest": 0,
     "status": 2
+  },
+  {
+    "id": 104,
+    "loan": {
+      "id": 3,
+      "iouNum": "num2",
+      "customer": {
+        "id": 2,
+        "code": "code2",
+        "name": "name2",
+        "idNum": "num2"
+      },
+      "amount": 200000,
+      "interest": 0,
+      "total": 200000
+    },
+    "planNum": 4,
+    "planAmount": 100,
+    "planInterest": 200,
+    "remainAmount": 100,
+    "remainInterest": 200,
+    "status": 1
+  },
+  {
+    "id": 105,
+    "loan": {
+      "id": 3,
+      "iouNum": "num2",
+      "customer": {
+        "id": 2,
+        "code": "code2",
+        "name": "name2",
+        "idNum": "num2"
+      },
+      "amount": 200000,
+      "interest": 0,
+      "total": 200000
+    },
+    "planNum": 2,
+    "planAmount": 100,
+    "planInterest": 200,
+    "remainAmount": 0,
+    "remainInterest": 0,
+    "status": 1
   }
 ]

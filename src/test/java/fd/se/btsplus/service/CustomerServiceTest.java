@@ -251,6 +251,27 @@ class CustomerServiceTest {
     }
 
     @Test
+    void testPayBill104LittleInterest() {
+        final long billId = 104;
+        final double amount = 10;
+        Account account = accountRepository.
+                findByAccountNumAndPassword("num2", "");
+        OperationResult res = customerService.payBill(billId, account, amount);
+        Assertions.assertEquals(HTTP_OK, res.getCode());
+    }
+
+
+    @Test
+    void testPayBill105() {
+        final long billId = 105;
+        final double amount = 10;
+        Account account = accountRepository.
+                findByAccountNumAndPassword("num2", "");
+        OperationResult res = customerService.payBill(billId, account, amount);
+        Assertions.assertEquals(HTTP_OK, res.getCode());
+    }
+
+    @Test
     void testInvalidBill() {
         final long billId = 2;
         Bill bill = billRepository.findById(billId);
