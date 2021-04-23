@@ -38,6 +38,18 @@ class SystemDateServiceTest {
         btsProperties = Mockito.mock(BtsProperties.class);
         Mockito.when(btsProperties.getLaunchDate()).thenReturn(null).thenReturn("").thenReturn(dateStr);
 
+        // test @RequiredArgsConstructor
+        try {
+            serviceWithoutDateStr = new SystemDateService(publisher, null);
+        } catch (Exception e) {
+            System.out.println("@RequiredArgsConstructor testing...");
+        }
+        try {
+            serviceWithoutDateStr = new SystemDateService(null, btsProperties);
+        } catch (Exception e) {
+            System.out.println("@RequiredArgsConstructor testing...");
+        }
+
         // test if branch in init()
         serviceWithoutDateStr = new SystemDateService(publisher, btsProperties);
         Method init = serviceWithoutDateStr.getClass().getDeclaredMethod("init");
