@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SystemDateServiceTest {
     private IDateService serviceWithoutDateStr;
+    private IDateService serviceWithEmptyDateStr;
     private IDateService systemDateService;
 
     private ApplicationEventPublisher publisher;
@@ -35,12 +36,17 @@ class SystemDateServiceTest {
     void setUp() {
         publisher = Mockito.mock(ApplicationContext.class);
         btsProperties = Mockito.mock(BtsProperties.class);
-        Mockito.when(btsProperties.getLaunchDate()).thenReturn("").thenReturn(dateStr);
+        Mockito.when(btsProperties.getLaunchDate()).thenReturn(null).thenReturn("").thenReturn(dateStr);
 
         // test if branch in init()
         serviceWithoutDateStr = new SystemDateService(publisher, btsProperties);
         Method init = serviceWithoutDateStr.getClass().getDeclaredMethod("init");
         init.invoke(serviceWithoutDateStr);
+
+        // test if branch in init()
+        serviceWithEmptyDateStr = new SystemDateService(publisher, btsProperties);
+        init = serviceWithEmptyDateStr.getClass().getDeclaredMethod("init");
+        init.invoke(serviceWithEmptyDateStr);
 
         // create systemDateService for test case
         systemDateService = new SystemDateService(publisher, btsProperties);
@@ -53,6 +59,7 @@ class SystemDateServiceTest {
         publisher = null;
         btsProperties = null;
         serviceWithoutDateStr = null;
+        serviceWithEmptyDateStr = null;
         systemDateService = null;
     }
 

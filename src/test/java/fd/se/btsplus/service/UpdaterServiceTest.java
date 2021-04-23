@@ -149,7 +149,7 @@ class UpdaterServiceTest {
 
     @Test
     void onApplicationEvent() {
-        Date newDate = DateUtils.truncate(new Date(2021 - 1900, Calendar.APRIL, 20), Calendar.DAY_OF_MONTH);
+        Date newDate = DateUtils.truncate(new Date(2021 - 1900, Calendar.APRIL, 4), Calendar.DAY_OF_MONTH);
         Date lastDate = DateUtils.addDays(newDate, -1);
         DateEvent event = new DateEvent(iDateService, lastDate, newDate);
         updaterService.onApplicationEvent(event);

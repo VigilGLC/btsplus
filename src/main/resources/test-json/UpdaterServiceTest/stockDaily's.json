@@ -1,25 +1,5 @@
 [
   {
-    "id": 1,
-    "stock": {
-      "id": 1,
-      "name": "Bilibili 股票",
-      "createdTime": "2021-04-03 20:14:07"
-    },
-    "date": "2021-04-03",
-    "price": 100.0
-  },
-  {
-    "id": 2,
-    "stock": {
-      "id": 1,
-      "name": "Bilibili 股票",
-      "createdTime": "2021-04-03 20:14:07"
-    },
-    "date": "2021-04-04",
-    "price": 105.0
-  },
-  {
     "id": 3,
     "stock": {
       "id": 1,
