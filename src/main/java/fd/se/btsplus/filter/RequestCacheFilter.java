@@ -76,6 +76,7 @@ public class RequestCacheFilter extends OncePerRequestFilter {
 
         @Override
         public void setReadListener(ReadListener listener) {
+            //Do nothing
         }
     }
 }
