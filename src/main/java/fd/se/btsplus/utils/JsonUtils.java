@@ -13,7 +13,6 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class JsonUtils {
-
     private static final ObjectMapper mapper = new ObjectMapper();
 
     static {
