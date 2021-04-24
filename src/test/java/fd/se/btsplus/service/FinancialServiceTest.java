@@ -1,13 +1,14 @@
 package fd.se.btsplus.service;
 
 import fd.se.btsplus.config.BtsProperties;
-import fd.se.btsplus.model.consts.BillStatus;
-import fd.se.btsplus.model.domain.Available;
-import fd.se.btsplus.model.domain.DateEvent;
+import fd.se.btsplus.model.consts.Constant;
+import fd.se.btsplus.model.entity.bts.Account;
+import fd.se.btsplus.model.entity.financial.fund.Fund;
+import fd.se.btsplus.model.entity.financial.stock.Stock;
+import fd.se.btsplus.model.entity.financial.stock.StockDaily;
+import fd.se.btsplus.model.entity.financial.term.Term;
 import fd.se.btsplus.repository.bts.AccountRepository;
-import fd.se.btsplus.repository.bts.BillRepository;
 import fd.se.btsplus.repository.bts.mock.AccountRepositoryMock;
-import fd.se.btsplus.repository.bts.mock.BillRepositoryMock;
 import fd.se.btsplus.repository.financial.fund.FundDailyRepository;
 import fd.se.btsplus.repository.financial.fund.FundPurchaseRepository;
 import fd.se.btsplus.repository.financial.fund.FundRepository;
@@ -29,7 +30,7 @@ import fd.se.btsplus.repository.financial.term.mock.TermRepositoryMock;
 import fd.se.btsplus.service.impl.SystemDateService;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
-import org.apache.commons.lang3.time.DateUtils;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,30 +38,28 @@ import org.mockito.Mockito;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.Calendar;
+import java.lang.reflect.Method;
+import java.time.Period;
 import java.util.Date;
 
+import static java.net.HttpURLConnection.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-class UpdaterServiceTest {
+class FinancialServiceTest {
     private static final JsonUtils JSON_UTILS = new JsonUtils();
     private static final ResourceUtils RESOURCE_UTILS = new ResourceUtils();
 
-    private UpdaterService updaterService;
-
-    private Available available;
-    private FinancialService financialService;
     private FundRepository fundRepository;
     private StockRepository stockRepository;
     private TermRepository termRepository;
+
     private FundDailyRepository fundDailyRepository;
     private StockDailyRepository stockDailyRepository;
     private TermDailyRepository termDailyRepository;
+
     private FundPurchaseRepository fundPurchaseRepository;
     private StockPurchaseRepository stockPurchaseRepository;
     private TermPurchaseRepository termPurchaseRepository;
-    private BillRepository billRepository;
 
     private AccountService accountService;
     private AccountRepository accountRepository;
@@ -68,22 +67,11 @@ class UpdaterServiceTest {
     private ApplicationEventPublisher publisher;
     private BtsProperties btsProperties;
 
+    private FinancialService financialService;
+
+    @SneakyThrows
     @BeforeEach
     void setUp() {
-        available = new Available();
-
-        accountRepository = new AccountRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
-        accountService = new AccountService(accountRepository);
-
-        publisher = Mockito.mock(ApplicationContext.class);
-        btsProperties = new BtsProperties();
-        iDateService = new SystemDateService(publisher, btsProperties);
-
-        financialService = new FinancialService(fundRepository, stockRepository, termRepository,
-                fundDailyRepository, stockDailyRepository, termDailyRepository,
-                fundPurchaseRepository, stockPurchaseRepository, termPurchaseRepository,
-                accountService, iDateService);
-
         fundRepository = new FundRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
         stockRepository = new StockRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
         termRepository = new TermRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
@@ -93,7 +81,15 @@ class UpdaterServiceTest {
         fundPurchaseRepository = new FundPurchaseRepositoryMock(RESOURCE_UTILS, JSON_UTILS);
         stockPurchaseRepository = new StockPurchaseRepositoryMock(RESOURCE_UTILS, JSON_UTILS);
         termPurchaseRepository = new TermPurchaseRepositoryMock(RESOURCE_UTILS, JSON_UTILS);
-        billRepository = new BillRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
+        accountRepository = new AccountRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
+        accountService = new AccountService(accountRepository);
+        publisher = Mockito.mock(ApplicationContext.class);
+        btsProperties = new BtsProperties();
+        iDateService = new SystemDateService(publisher, btsProperties);
+        financialService = new FinancialService(fundRepository, stockRepository, termRepository,
+                fundDailyRepository, stockDailyRepository, termDailyRepository,
+                fundPurchaseRepository, stockPurchaseRepository, termPurchaseRepository,
+                accountService, iDateService);
 
         ((AccountRepositoryMock) accountRepository).
                 init("test-json/UpdaterServiceTest/accounts.json");
@@ -115,22 +111,13 @@ class UpdaterServiceTest {
                 init("test-json/UpdaterServiceTest/stockPurchase's.json");
         ((TermPurchaseRepositoryMock) termPurchaseRepository).
                 init("test-json/UpdaterServiceTest/termPurchase's.json");
-        ((BillRepositoryMock) billRepository).
-                init("test-json/UpdaterServiceTest/bills.json");
 
-        updaterService = new UpdaterService(available, financialService,
-                fundRepository, stockRepository, termRepository,
-                fundDailyRepository, stockDailyRepository, termDailyRepository,
-                fundPurchaseRepository, stockPurchaseRepository, termPurchaseRepository,
-                billRepository);
+        //    CustomerCode: AB2121202103281
+
     }
 
     @AfterEach
     void tearDown() {
-        updaterService = null;
-
-        available = null;
-        financialService = null;
         fundRepository = null;
         stockRepository = null;
         termRepository = null;
@@ -140,7 +127,6 @@ class UpdaterServiceTest {
         fundPurchaseRepository = null;
         stockPurchaseRepository = null;
         termPurchaseRepository = null;
-        billRepository = null;
 
         accountService = null;
         accountRepository = null;
@@ -150,22 +136,89 @@ class UpdaterServiceTest {
     }
 
     @Test
-    void onApplicationEvent() {
-        Date newDate = DateUtils.truncate(new Date(2021 - 1900, Calendar.APRIL, 4), Calendar.DAY_OF_MONTH);
-        Date lastDate = DateUtils.addDays(newDate, -1);
-        DateEvent event = new DateEvent(iDateService, lastDate, newDate);
-        updaterService.onApplicationEvent(event);
+    void predict() {
+        assertEquals(0d,financialService.predict(null,null));
+        Stock stock = stockRepository.findById(1);
+        Fund fund = fundRepository.findById(1);
+        Term term = termRepository.findById(1);
+        financialService.dateService = setDate("2021-04-10");
+        StockDaily stockDaily = stockDailyRepository.findAll().get(0);
+
+        assertEquals(0d,financialService.predict(stock,null));
+        assertEquals(stockDaily.getPrice()*0.98,financialService.predict(stock,stockDaily));
+
+        assertEquals(0.98,financialService.predict(fund,null));
+        assertEquals(0.98,financialService.predict(term,null));
+        financialService.dateService = setDate("2021-04-09");
+        assertEquals(stockDaily.getPrice()*1.06,financialService.predict(stock,stockDaily));
+        assertEquals(1.06,financialService.predict(fund,null));
+        assertEquals(1.06,financialService.predict(term,null));
+
     }
 
     @Test
-    void update() {
-        Date newDate = DateUtils.truncate(new Date(2021 - 1900, Calendar.APRIL, 12), Calendar.DAY_OF_MONTH);
-        Date lastDate = DateUtils.addDays(newDate, -1);
-        updaterService.update(lastDate, newDate);
+    void queryProducts() {
+        assertNotNull(financialService.queryProducts(Constant.FUND));
+        assertNotNull(financialService.queryProducts(Constant.STOCK));
+        assertNotNull(financialService.queryProducts(Constant.TERM));
+        assertNotNull(financialService.queryProducts(Constant.NO_PRODUCT));
+    }
 
-        assertNotNull(fundDailyRepository.findByDate(newDate));
-        assertNotNull(stockDailyRepository.findByDate(newDate));
-        assertNotNull(termDailyRepository.findByDate(newDate));
-        assertEquals(0, billRepository.findByEndDateAndStatus(lastDate, BillStatus.UNPAID_BEFORE).size());
+    @Test
+    void queryFundPurchases() {
+        assertNotNull(financialService.queryFundPurchases("AB2121202104031"));
+    }
+
+    @Test
+    void queryStockPurchases() {
+        assertNotNull(financialService.queryStockPurchases("AB2121202103281"));
+    }
+
+    @Test
+    void queryTermPurchases() {
+        assertNotNull(financialService.queryTermPurchases("AB2121202103281"));
+    }
+
+    @Test
+    void purchaseFund() {
+        Period period = Period.ofDays(5);
+        Account account = accountRepository.findByAccountNumAndPassword("6161710619136431439", "123456");
+        assertEquals(HTTP_NOT_FOUND, financialService.purchaseFund(222L, account, 10, period).getCode());
+        assertEquals(HTTP_NOT_ACCEPTABLE,financialService.purchaseFund(11L,account,20000,period).getCode());
+        assertEquals(HTTP_OK,financialService.purchaseFund(11L,account,1,period).getCode());
+    }
+
+    @SneakyThrows
+    @Test
+    void purchaseStock() {
+        Account account = accountRepository.findByAccountNumAndPassword("6161710619136431439", "123456");
+        assertEquals(HTTP_NOT_FOUND,financialService.purchaseStock(222L,account,10).getCode());
+        assertEquals(HTTP_NOT_FOUND,financialService.purchaseStock(1L,account,10).getCode());
+        IDateService iDateService1 = setDate("2021-04-05");
+        financialService.dateService = iDateService1;
+        assertEquals(HTTP_NOT_ACCEPTABLE,financialService.purchaseStock(1L,account,10000).getCode());
+        assertEquals(HTTP_OK,financialService.purchaseStock(1L,account,1).getCode());
+    }
+
+
+    @Test
+    void purchaseTerm() {
+        Period period = Period.ofDays(5);
+        Account account = accountRepository.findByAccountNumAndPassword("6161710619136431439", "123456");
+        assertEquals(HTTP_NOT_FOUND, financialService.purchaseTerm(222L, account, 10, period).getCode());
+        assertEquals(HTTP_NOT_ACCEPTABLE,financialService.purchaseTerm(11L,account,20000,period).getCode());
+        assertEquals(HTTP_OK,financialService.purchaseTerm(11L,account,10,period).getCode());
+    }
+
+    @SneakyThrows
+    IDateService setDate(String date){
+        ApplicationEventPublisher publisher1 = Mockito.mock(ApplicationContext.class);
+        BtsProperties btsProperties1 = new BtsProperties();
+        btsProperties1.setLaunchDate(date);
+        IDateService iDateService1 = new SystemDateService(publisher1, btsProperties1);
+        Method init = iDateService1.getClass().getDeclaredMethod("init");
+        init.setAccessible(true);
+        init.invoke(iDateService1);
+        return iDateService1;
     }
 }
