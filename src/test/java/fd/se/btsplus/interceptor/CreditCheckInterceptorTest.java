@@ -58,7 +58,7 @@ class CreditCheckInterceptorTest {
     }
 
     @Test
-    void testPreHandlerUrlAffordableFundAndStockAndTerm() {
+    void testPreHandlerUrlAffordable() {
         Customer customer = new Customer();
         when(subject.getCustomer()).thenReturn(customer);
         when(customerService.creditLevel(customer)).thenReturn(CreditLevel.LEVEL_1);
@@ -68,23 +68,6 @@ class CreditCheckInterceptorTest {
         }
     }
 
-//    @Test
-//    void testPreHandlerUrlAffordableStock() {
-//        Customer customer = new Customer();
-//        when(subject.getCustomer()).thenReturn(customer);
-//        when(customerService.creditLevel(customer)).thenReturn(CreditLevel.LEVEL_1);
-//        when(request.getRequestURI()).thenReturn("stock");
-//        Assertions.assertTrue(creditCheckInterceptor.preHandle(request, response, handler));
-//    }
-//
-//    @Test
-//    void testPreHandlerUrlAffordableTerm() {
-//        Customer customer = new Customer();
-//        when(subject.getCustomer()).thenReturn(customer);
-//        when(customerService.creditLevel(customer)).thenReturn(CreditLevel.LEVEL_1);
-//        when(request.getRequestURI()).thenReturn("term");
-//        Assertions.assertTrue(creditCheckInterceptor.preHandle(request, response, handler));
-//    }
 
     @Test
     void testPreHandleUrlUnknownType() {

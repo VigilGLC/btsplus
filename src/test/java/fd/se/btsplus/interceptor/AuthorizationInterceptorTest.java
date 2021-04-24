@@ -43,7 +43,6 @@ class AuthorizationInterceptorTest {
     @Test
     void testMethodAnnotationNull() throws NoSuchMethodException {
         Method method = Authorized.class.getDeclaredMethod("required");
-        System.out.println(method.getAnnotation(Authorized.class));
         handler = new HandlerMethod("handlerMethod", method);
         authorizationInterceptor.preHandle(request, response, handler);
         Assertions.assertTrue(authorizationInterceptor.preHandle(request, response, handler));
@@ -52,7 +51,6 @@ class AuthorizationInterceptorTest {
     @Test
     void testMethodAnnotationNotNull() throws NoSuchMethodException {
         Method method = TestClass.class.getDeclaredMethod("required");
-        System.out.println(method.getAnnotation(Authorized.class));
         handler = new HandlerMethod("handlerMethod", method);
         authorizationInterceptor.preHandle(request, response, handler);
         Assertions.assertFalse(authorizationInterceptor.preHandle(request, response, handler));
@@ -61,7 +59,6 @@ class AuthorizationInterceptorTest {
     @Test
     void testUserNotNull() throws NoSuchMethodException {
         Method method = TestClass.class.getDeclaredMethod("required");
-        System.out.println(method.getAnnotation(Authorized.class));
         handler = new HandlerMethod("handlerMethod", method);
         authorizationInterceptor.preHandle(request, response, handler);
         User user = new User();
