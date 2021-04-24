@@ -1,17 +1,23 @@
 package fd.se.btsplus.filter;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class RequestCacheFilterTest {
 
-    @BeforeEach
-    void setUp() {
+
+    @Test
+    void testIsFinishedTrue() {
+        byte[] param = new byte[0];
+        CachedBodyServletInputStream cachedBodyServletInputStream = new CachedBodyServletInputStream(param);
+        Assertions.assertTrue(cachedBodyServletInputStream.isFinished());
     }
 
-    @AfterEach
-    void tearDown() {
+    @Test
+    void testIsFinishedFalse() {
+        byte[] param = new byte[1];
+        CachedBodyServletInputStream cachedBodyServletInputStream = new CachedBodyServletInputStream(param);
+        Assertions.assertFalse(cachedBodyServletInputStream.isFinished());
     }
+
 }

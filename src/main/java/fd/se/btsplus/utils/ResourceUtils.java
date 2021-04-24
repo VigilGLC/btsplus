@@ -15,7 +15,9 @@ public class ResourceUtils {
     public String readFileAsString(String path) throws IOException {
         final InputStream input = this.getClass().getClassLoader().getResourceAsStream(path);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        assert input != null;
+        if (input == null) {
+            return null;
+        }
         IOUtils.copy(input, output);
         return output.toString();
     }

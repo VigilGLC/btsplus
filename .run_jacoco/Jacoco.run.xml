@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Jacoco" type="JUnit" factoryName="JUnit">
+    <module name="btsplus" />
+    <option name="PACKAGE_NAME" value="fd.se.btsplus.service.impl" />
+    <option name="MAIN_CLASS_NAME" value="fd.se.btsplus.service.impl" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <option name="VM_PARAMETERS" value="-ea -javaagent:$FileDir$\jacocoagent.jar=destfile=$FileDir$\..\target\site\jacoco\jacoco.exec,append=false,includes=fd.se.btsplus.*,excludes=com.*" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

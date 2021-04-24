@@ -20,7 +20,9 @@ public class PeriodDeserializer extends StdDeserializer<Period> {
     public Period deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         final String value = p.getValueAsString();
         final String[] parts = value.split("-");
-        assert parts.length == 3;
+        if (parts.length != 3) {
+            return null;
+        }
         final int years = Integer.parseInt(parts[0]);
         final int months = Integer.parseInt(parts[1]);
         final int days = Integer.parseInt(parts[2]);

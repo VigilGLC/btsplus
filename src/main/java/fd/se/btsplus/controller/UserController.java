@@ -37,7 +37,7 @@ public class UserController {
 
     @Operation(method = HTTP_POST, tags = "User", summary = "用户登录")
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.LoginRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.LOGIN_RESP_OK)))
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         User user = userRepository.
@@ -54,7 +54,7 @@ public class UserController {
     @Operation(method = HTTP_GET, tags = "User", summary = "当前用户")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.CurrUserRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.CURR_USER_RESP_OK)))
     @GetMapping("/curr")
     public ResponseEntity<?> curr() {
         User user = subject.getCurrUser();

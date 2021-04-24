@@ -32,13 +32,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             final Method method = handlerMethod.getMethod();
             Authorized annotation;
-
             if (null == (annotation = (method.getAnnotation(Authorized.class)))) {
                 annotation = method.getDeclaringClass().getAnnotation(Authorized.class);
             }
             if (annotation == null) {
                 return true;
             }
+
             final User user = subject.getCurrUser();
             if (user == null) {
                 succeed = false;

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
 import java.time.Period;
@@ -35,24 +34,7 @@ class PeriodDeserializerTest {
     }
 
     @Test
-    void testDeserializeWithAssertOverflow() {
-        JsonParser jsonParser = mock(JsonParser.class);
-        DeserializationContext deserializationContext = mock(DeserializationContext.class);
-        try {
-            when(jsonParser.getValueAsString()).thenReturn("2011-3-4-5");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Assertions.assertThrows(AssertionError.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                periodDeserializer.deserialize(jsonParser, deserializationContext);
-            }
-        });
-    }
-
-    @Test
-    void testDeserializeWithAssertInsufficient() {
+    void testDeserializeNull() {
         JsonParser jsonParser = mock(JsonParser.class);
         DeserializationContext deserializationContext = mock(DeserializationContext.class);
         try {
@@ -60,11 +42,13 @@ class PeriodDeserializerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Assertions.assertThrows(AssertionError.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                periodDeserializer.deserialize(jsonParser, deserializationContext);
-            }
-        });
+        try {
+            Period period = periodDeserializer.deserialize(jsonParser, deserializationContext);
+            Assertions.assertNull(period);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
 }

@@ -20,7 +20,6 @@ public class TokenUtils {
     private final UserRepository userRepository;
     private final Algorithm algorithm = Algorithm.HMAC256("二刺螈");
 
-
     public String generateToken(User user) {
         return JWT.create().
                 withClaim("username", user.getUsername()).
