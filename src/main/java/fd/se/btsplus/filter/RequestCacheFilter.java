@@ -47,8 +47,6 @@ class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.cachedBody);
         return new BufferedReader(new InputStreamReader(byteArrayInputStream));
     }
-
-
 }
 class CachedBodyServletInputStream extends ServletInputStream {
 
