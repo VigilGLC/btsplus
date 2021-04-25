@@ -22,7 +22,6 @@ import static java.net.HttpURLConnection.*;
 @AllArgsConstructor
 @Service
 public class CustomerService {
-    private final IDateService dateService;
     private final AccountService accountService;
 
     private final AccountRepository accountRepository;
@@ -38,21 +37,18 @@ public class CustomerService {
             if (toPay < interest) {
                 bill.setRemainInterest(interest - toPay);
                 return false;
-            } else {
-                toPay -= interest;
-                bill.setRemainInterest(0d);
             }
+            toPay -= interest;
+            bill.setRemainInterest(0d);
         }
         if (amount > 0) {
             if (toPay < amount) {
                 bill.setRemainAmount(amount - toPay);
                 return false;
-            } else {
-                toPay -= amount;
-                bill.setRemainAmount(0d);
             }
+            bill.setRemainAmount(0d);
         }
-        return bill.getRemainInterest() + bill.getRemainAmount() == 0;
+        return true;
     }
 
     private static double penaltyInterest(Bill bill) {
@@ -74,7 +70,7 @@ public class CustomerService {
         int code = HTTP_NOT_ACCEPTABLE;
         String message = "";
         OperationResult result = OperationResult.of(code, message);
-        OperationResult backup = null;
+        OperationResult nested;
         try {
             Bill bill;
             if (billId == null || (bill = billRepository.findById(billId.longValue())) == null) {
@@ -86,13 +82,17 @@ public class CustomerService {
                 message = "Bill wrong status.";
                 return result;
             }
-            double balance = account.getBalance();
-            final double remain = bill.getRemainAmount() + bill.getRemainInterest();
-            final double toPay = Math.min(remain, amount);
-            if (balance < toPay) {
-                message = "Balance not sufficient.";
+            if (account == null) {
+                code = HTTP_NOT_FOUND;
+                message = "Account not found.";
                 return result;
             }
+            if (amount < 0) {
+                message = "Amount cannot be negative.";
+                return result;
+            }
+            final double remain = bill.getRemainAmount() + bill.getRemainInterest();
+            final double toPay = Math.min(remain, amount);
 
             if (PAID.equals(bill.getStatus())) {
                 code = HTTP_NO_CONTENT;
@@ -102,43 +102,31 @@ public class CustomerService {
 
             if (UNPAID_PENALIZED.equals(bill.getStatus())) {
                 final double penalty = penaltyInterest(bill);
-                if (balance >= penalty) {
-                    backup = accountService.transfer(account, BANK_ACCOUNT, penalty);
-                    if (backup.getCode() != HTTP_OK) {
-                        return backup;
-                    }
-                    code = HTTP_ACCEPTED;
-                    message = "Penalty Paid.";
-                    balance -= penalty;
-                    bill.setStatus(UNPAID_AFTER);
-                    bill = billRepository.save(bill);
-                } else {
+                nested = accountService.transfer(account, BANK_ACCOUNT, penalty);
+                if (nested.getCode() != HTTP_OK) {
                     message = "Penalty not affordable.";
                     return result;
                 }
+                code = HTTP_ACCEPTED;
+                message = "Penalty Paid.";
+                bill.setStatus(UNPAID_AFTER);
+                bill = billRepository.save(bill);
             }
 
-            if (balance < toPay) {
+            nested = accountService.transfer(account, BANK_ACCOUNT, toPay);
+            if (nested.getCode() != HTTP_OK) {
+                message = nested.getMessage();
                 return result;
             }
-
             final boolean paidOff = shave(bill, toPay);
             if (paidOff) {
                 bill.setStatus(PAID);
             }
-            bill = billRepository.save(bill);
-            backup = accountService.transfer(account, BANK_ACCOUNT, toPay);
-            if (backup.getCode() != HTTP_OK) {
-                return backup;
-            }
+            billRepository.save(bill);
             code = HTTP_OK;
             message = "Success.";
             return result;
         } finally {
-            if (backup != null) {
-                code = backup.getCode();
-                message = backup.getMessage();
-            }
             result.setCode(code);
             result.setMessage(message);
         }
@@ -164,7 +152,7 @@ public class CustomerService {
             }
         }
         final String message = MessageFormat.format(
-                "Total bills: {1}, Penalty Paid: {2}, Full Paid: {3}",
+                "Total bills: {0}, Penalty Paid: {1}, Full Paid: {2}",
                 total, penaltyPaid, fullPaid);
         return OperationResult.of(HTTP_OK, message);
     }

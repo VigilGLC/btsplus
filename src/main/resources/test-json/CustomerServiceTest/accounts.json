@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "accountNum": "num1",
+    "password": "",
+    "customer": {
+      "id": 1,
+      "code": "code1",
+      "name": "name1",
+      "idNum": "num1"
+    },
+    "balance": 900000
+  },
+  {
+    "id": 2,
+    "accountNum": "num2",
+    "password": "",
+    "customer": {
+      "id": 2,
+      "code": "code2",
+      "name": "name2",
+      "idNum": "num2"
+    },
+    "balance": 100000
+  },
+  {
+    "id": 3,
+    "accountNum": "num3",
+    "password": "",
+    "customer": {
+      "id": 3,
+      "code": "code3",
+      "name": "name3",
+      "idNum": "num3"
+    },
+    "balance": 50000
+  },
+  {
+    "id": 4,
+    "accountNum": "num3",
+    "password": "",
+    "customer": {
+      "id": 3,
+      "code": "code3",
+      "name": "name3",
+      "idNum": "num3"
+    },
+    "balance": 50000
+  }
+]
