@@ -67,7 +67,7 @@ class UserControllerTest {
         return (ResponseWrapper) (userController.login(loginRequest).getBody());
     }
     boolean loginSuccess(ResponseWrapper loinRes){
-        return responseWrapper != null && responseWrapper.getCode() == HTTP_OK &&
-                responseWrapper.getData() != null;
+        return loinRes != null && loinRes.getCode() == HTTP_OK &&
+                loinRes.getData() != null;
     }
 }
