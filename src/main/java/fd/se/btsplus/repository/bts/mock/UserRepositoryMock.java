@@ -1,6 +1,7 @@
 package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.User;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.bts.UserRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -15,23 +16,29 @@ import java.util.*;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class UserRepositoryMock implements UserRepository {
-    private static final String path = "json/bts/users.json";
+public class UserRepositoryMock implements UserRepository, IRepositoryMock {
+    private static final String PATH = "json/bts/users.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<User> users;
+    private Set<User> set;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
-        final String jsonStr = resourceUtils.readFileAsString(path);
-        this.users = new HashSet<>(jsonUtils.readList(jsonStr, User.class));
+    @Override
+    public void init() {
+        init(PATH);
     }
 
+    @SneakyThrows
+    @Override
+    public void init(String path) {
+        final String jsonStr = resourceUtils.readFileAsString(path);
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, User.class));
+    }
 
     @Override
     public User findByUsernameAndPassword(String username, String password) {
-        return this.users.stream().
+        return this.set.stream().
                 filter(usr -> usr.getUsername().equals(username) && usr.getPassword().equals(password)).
                 findFirst().orElse(null);
     }
@@ -43,7 +50,7 @@ public class UserRepositoryMock implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return new ArrayList<>(this.users);
+        return new ArrayList<>(this.set);
     }
 
     //<editor-fold desc="useless">

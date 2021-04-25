@@ -27,76 +27,12 @@ public class TransactionsService {
     public List<Transaction> query(Integer pageNum, Integer pageSize,
                                    String accountNum, String transactionNum, String transactionCode,
                                    String orderBy, Date beginDate, Date endDate) {
-        if (orderBy == null) {
-            orderBy = ASC;
-        }
-        orderBy = orderBy.toLowerCase();
-        switch (orderBy) {
-            case ASC:
-            case DESC:
-                break;
-            default:
-                orderBy = ASC;
-        }
 
-        String finalOrderBy = orderBy;
+
+        String finalOrderBy = finalOrderBy(orderBy);
         Stream<Transaction> stream = transactionRepository.findAll().stream();
-        stream = stream.filter(tx -> {
-            Account ac;
-            String acNum;
-            Date txDate;
-
-            if (accountNum != null) {
-                if ((ac = tx.getAccount()) == null) {
-                    return false;
-                }
-                if ((acNum = ac.getAccountNum()) == null) {
-                    return false;
-                }
-                if (!acNum.equals(accountNum)) {
-                    return false;
-                }
-            }
-            if (transactionNum != null) {
-                if (!transactionNum.equals(tx.getTransactionNum())) {
-                    return false;
-                }
-            }
-            if (transactionCode != null) {
-                if (!transactionCode.equals(tx.getTransactionCode())) {
-                    return false;
-                }
-            }
-            if (beginDate != null) {
-                if ((txDate = tx.getOperatedTime()) == null) {
-                    return false;
-                }
-                if (dayBefore(txDate, beginDate)) {
-                    return false;
-                }
-            }
-            if (endDate != null) {
-                if ((txDate = tx.getOperatedTime()) == null) {
-                    return false;
-                }
-                return !dayAfter(txDate, endDate);
-            }
-            return true;
-        });
-        stream = stream.sorted((tx1, tx2) -> {
-            int result;
-            if (tx1.getOperatedTime() == null) {
-                result = 1;
-            } else if (tx2.getOperatedTime() == null) {
-                result = -1;
-            } else {
-                result = tx1.getOperatedTime().compareTo(tx2.getOperatedTime());
-            }
-            if (!finalOrderBy.equals(ASC)) {
-                result = -result;
-            }
-            return result;
-        });
+        stream = streamFiltered(stream, accountNum, transactionNum, transactionCode, beginDate, endDate);
+        stream = streamSorted(stream, finalOrderBy);
 
         if (pageNum == null && pageSize == null) {
             return stream.collect(Collectors.toList());
@@ -107,6 +43,88 @@ public class TransactionsService {
         stream = stream.skip((long) (pageNum - 1) * pageSize).limit(pageSize);
         return stream.collect(Collectors.toList());
     }
-
-
+    private String finalOrderBy(String orderBy){
+        if (orderBy == null) {
+            return ASC;
+        }
+        orderBy = orderBy.toLowerCase();
+        return orderBy.equals(DESC) ? DESC : ASC;
+    }
+    private  Stream<Transaction> streamFiltered(Stream<Transaction> stream, String accountNum,
+                                                String transactionNum, String transactionCode,
+                                                Date beginDate, Date endDate) {
+        return stream.filter(tx ->
+                accountNumFilter(tx, accountNum)
+                && transactionNumFilter(tx, transactionNum)
+                && transactionCodeFilter(tx, transactionCode)
+                && beginDateFilter(tx, beginDate)
+                && endDateFilter(tx, endDate)
+        );
+    }
+    private Stream<Transaction> streamSorted(Stream<Transaction> stream, String finalOrderBy){
+        return stream.sorted((tx1, tx2) -> {
+            int result;
+            if (tx1.getOperatedTime() == null) {
+                result = 1;
+            }
+            else if (tx2.getOperatedTime() == null) {
+                result = -1;
+            }
+            else {
+                result = tx1.getOperatedTime().compareTo(tx2.getOperatedTime());
+            }
+            if (!finalOrderBy.equals(ASC)) {
+                result = -result;
+            }
+            return result;
+        });
+    }
+    private boolean accountNumFilter(Transaction tx, String accountNum){
+        Account ac;
+        String acNum;
+        if (accountNum != null) {
+            if ((ac = tx.getAccount()) == null) {
+                return false;
+            }
+            if ((acNum = ac.getAccountNum()) == null) {
+                return false;
+            }
+            if (!acNum.equals(accountNum)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean transactionNumFilter(Transaction tx, String transactionNum){
+        if (transactionNum != null) {
+            return transactionNum.equals(tx.getTransactionNum());
+        }
+        return true;
+    }
+    private boolean transactionCodeFilter(Transaction tx, String transactionCode){
+        if (transactionCode != null) {
+            return transactionCode.equals(tx.getTransactionCode());
+        }
+        return true;
+    }
+    private boolean beginDateFilter(Transaction tx, Date beginDate){
+        Date txDate;
+        if (beginDate != null) {
+            if ((txDate = tx.getOperatedTime()) == null) {
+                return false;
+            }
+            return !dayBefore(txDate, beginDate);
+        }
+        return true;
+    }
+    private boolean endDateFilter(Transaction tx, Date endDate){
+        Date txDate;
+        if (endDate != null) {
+            if ((txDate = tx.getOperatedTime()) == null) {
+                return false;
+            }
+            return !dayAfter(txDate, endDate);
+        }
+        return true;
+    }
 }

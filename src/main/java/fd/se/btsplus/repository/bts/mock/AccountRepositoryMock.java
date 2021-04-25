@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.bts.mock;
 
 import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.bts.Customer;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.bts.AccountRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -17,27 +18,34 @@ import java.util.stream.Collectors;
 @Profile("!prod")
 @Component
 @AllArgsConstructor
-public class AccountRepositoryMock implements AccountRepository {
-    private static final String path = "json/bts/accounts.json";
+public class AccountRepositoryMock implements AccountRepository, IRepositoryMock {
+    private static final String PATH = "json/bts/accounts.json";
     private final ResourceUtils resourceUtils;
     private final JsonUtils jsonUtils;
-    private Set<Account> accounts;
+    private Set<Account> set;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.accounts = new HashSet<>(jsonUtils.readList(jsonStr, Account.class));
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, Account.class));
     }
 
     @Override
     public List<Account> findAll() {
-        return new ArrayList<>(accounts);
+        return new ArrayList<>(set);
     }
 
     @Override
     public Account findByAccountNumAndPassword(String accountNum, String password) {
-        return accounts.stream().filter(ac -> {
+        return set.stream().filter(ac -> {
             final String acNum = ac.getAccountNum();
             final String acPass = ac.getPassword();
             return acNum != null && acPass != null && acNum.equals(accountNum) && acPass.equals(password);
@@ -51,15 +59,15 @@ public class AccountRepositoryMock implements AccountRepository {
 
     @Override
     public List<Account> findByCustomerCode(String customerCode) {
-        return this.accounts.stream().
+        return this.set.stream().
                 filter(ac -> ac.getCustomer().getCode().equals(customerCode)).
                 collect(Collectors.toList());
     }
 
     @Override
     public <S extends Account> S save(S entity) {
-        this.accounts.remove(entity);
-        this.accounts.add(entity);
+        this.set.remove(entity);
+        this.set.add(entity);
         return entity;
     }
 

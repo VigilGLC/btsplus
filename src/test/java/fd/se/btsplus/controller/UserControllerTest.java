@@ -15,9 +15,6 @@ import static java.net.HttpURLConnection.HTTP_OK;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
 class UserControllerTest {
 
     @Autowired

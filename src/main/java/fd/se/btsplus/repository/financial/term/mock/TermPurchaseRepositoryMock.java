@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.financial.term.mock;
 
 import fd.se.btsplus.model.entity.financial.term.Term;
 import fd.se.btsplus.model.entity.financial.term.TermPurchase;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.financial.term.TermPurchaseRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -21,32 +22,38 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 @Profile("!prod")
 @Component
 @RequiredArgsConstructor
-public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
-    private static final String path = "json/financial/term/termPurchase's.json";
+public class TermPurchaseRepositoryMock implements TermPurchaseRepository, IRepositoryMock {
+    private static final String PATH = "json/financial/term/termPurchase's.json";
     @NonNull
     private final ResourceUtils resourceUtils;
     @NonNull
     private final JsonUtils jsonUtils;
-    private Set<TermPurchase> termPurchases;
+    private Set<TermPurchase> set;
 
     private volatile long nextId;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.termPurchases = new HashSet<>(jsonUtils.readList(jsonStr, TermPurchase.class));
-        this.nextId = this.termPurchases.stream().mapToLong(TermPurchase::getId).max().orElse(0L) + 1;
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, TermPurchase.class));
     }
 
     @Override
     public List<TermPurchase> findAll() {
-        return new ArrayList<>(this.termPurchases);
+        return new ArrayList<>(this.set);
     }
 
     @Override
     public List<TermPurchase> findByCustomerCode(String customerCode) {
-        return this.termPurchases.stream().
+        return this.set.stream().
                 filter(tp -> tp.getCustomer().getCode().equals(customerCode)).
                 collect(Collectors.toList());
     }
@@ -57,7 +64,7 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
             return entity;
         }
         entity.setId(nextId++);
-        this.termPurchases.add(entity);
+        this.set.add(entity);
         return entity;
     }
 
@@ -71,7 +78,7 @@ public class TermPurchaseRepositoryMock implements TermPurchaseRepository {
 
     @Override
     public List<TermPurchase> findByTermAndCurrDateAndEndDateAfter(Term term, Date currDate, Date nextDate) {
-        return this.termPurchases.stream().
+        return this.set.stream().
                 filter(fp -> fp.getTerm().equals(term) && dayEqual(fp.getCurrDate(), currDate)
                         && dayAfter(fp.getEndDate(), nextDate)).
                 collect(Collectors.toList());

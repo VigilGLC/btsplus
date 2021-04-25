@@ -2,6 +2,7 @@ package fd.se.btsplus.repository.financial.fund.mock;
 
 import fd.se.btsplus.model.entity.financial.fund.Fund;
 import fd.se.btsplus.model.entity.financial.fund.FundDaily;
+import fd.se.btsplus.repository.IRepositoryMock;
 import fd.se.btsplus.repository.financial.fund.FundDailyRepository;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
@@ -20,39 +21,45 @@ import static fd.se.btsplus.service.IDateService.dayEqual;
 @Profile("!prod")
 @Component
 @RequiredArgsConstructor
-public class FundDailyRepositoryMock implements FundDailyRepository {
-    private static final String path = "json/financial/fund/fundDaily's.json";
+public class FundDailyRepositoryMock implements FundDailyRepository, IRepositoryMock {
+    private static final String PATH = "json/financial/fund/fundDaily's.json";
     @NonNull
     private final ResourceUtils resourceUtils;
     @NonNull
     private final JsonUtils jsonUtils;
-    private Set<FundDaily> fundDailies;
+    private Set<FundDaily> set;
 
     private volatile long nextId;
 
     @SneakyThrows
     @PostConstruct
-    private void init() {
+    @Override
+    public void init() {
+        init(PATH);
+    }
+
+    @SneakyThrows
+    @Override
+    public void init(String path) {
         final String jsonStr = resourceUtils.readFileAsString(path);
-        this.fundDailies = new HashSet<>(jsonUtils.readList(jsonStr, FundDaily.class));
-        this.nextId = fundDailies.stream().mapToLong(FundDaily::getId).max().orElse(0L) + 1;
+        this.set = new HashSet<>(jsonUtils.readList(jsonStr, FundDaily.class));
     }
 
     @Override
     public List<FundDaily> findAll() {
-        return new ArrayList<>(this.fundDailies);
+        return new ArrayList<>(this.set);
     }
 
     @Override
     public FundDaily findByFundAndDate(Fund fund, Date date) {
-        return this.fundDailies.stream().
+        return this.set.stream().
                 filter(fd -> fd.getFund().equals(fund) && dayEqual(fd.getDate(), date)).
                 findFirst().orElse(null);
     }
 
     @Override
     public List<FundDaily> findByDate(Date date) {
-        return this.fundDailies.stream().
+        return this.set.stream().
                 filter(fd -> dayEqual(fd.getDate(), date)).
                 collect(Collectors.toList());
     }
@@ -63,7 +70,7 @@ public class FundDailyRepositoryMock implements FundDailyRepository {
             return entity;
         }
         entity.setId(nextId++);
-        this.fundDailies.add(entity);
+        this.set.add(entity);
         return entity;
     }
 
