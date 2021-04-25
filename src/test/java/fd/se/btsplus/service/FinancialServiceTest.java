@@ -161,7 +161,7 @@ class FinancialServiceTest {
         assertNotNull(financialService.queryProducts(Constant.FUND));
         assertNotNull(financialService.queryProducts(Constant.STOCK));
         assertNotNull(financialService.queryProducts(Constant.TERM));
-        assertNotNull(financialService.queryProducts(Constant.NO_PRODUCT));
+        assertTrue(financialService.queryProducts(Constant.NO_PRODUCT).size()==0);
     }
 
     @Test
