@@ -74,11 +74,9 @@ class UpdaterServiceTest {
 
         accountRepository = new AccountRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
         accountService = new AccountService(accountRepository);
-
         publisher = Mockito.mock(ApplicationContext.class);
         btsProperties = new BtsProperties();
         iDateService = new SystemDateService(publisher, btsProperties);
-
         financialService = new FinancialService(fundRepository, stockRepository, termRepository,
                 fundDailyRepository, stockDailyRepository, termDailyRepository,
                 fundPurchaseRepository, stockPurchaseRepository, termPurchaseRepository,
