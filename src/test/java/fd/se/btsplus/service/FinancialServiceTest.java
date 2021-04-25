@@ -40,10 +40,10 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.lang.reflect.Method;
 import java.time.Period;
-import java.util.Date;
 
 import static java.net.HttpURLConnection.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FinancialServiceTest {
     private static final JsonUtils JSON_UTILS = new JsonUtils();
@@ -92,25 +92,25 @@ class FinancialServiceTest {
                 accountService, iDateService);
 
         ((AccountRepositoryMock) accountRepository).
-                init("test-json/UpdaterServiceTest/accounts.json");
+                init("test-json/FinancialServiceTest/accounts.json");
         ((FundRepositoryMock) fundRepository).
-                init("test-json/UpdaterServiceTest/funds.json");
+                init("test-json/FinancialServiceTest/funds.json");
         ((StockRepositoryMock) stockRepository).
-                init("test-json/UpdaterServiceTest/stocks.json");
+                init("test-json/FinancialServiceTest/stocks.json");
         ((TermRepositoryMock) termRepository).
-                init("test-json/UpdaterServiceTest/terms.json");
+                init("test-json/FinancialServiceTest/terms.json");
         ((FundDailyRepositoryMock) fundDailyRepository).
-                init("test-json/UpdaterServiceTest/fundDaily's.json");
+                init("test-json/FinancialServiceTest/fundDaily's.json");
         ((StockDailyRepositoryMock) stockDailyRepository).
-                init("test-json/UpdaterServiceTest/stockDaily's.json");
+                init("test-json/FinancialServiceTest/stockDaily's.json");
         ((TermDailyRepositoryMock) termDailyRepository).
-                init("test-json/UpdaterServiceTest/termDaily's.json");
+                init("test-json/FinancialServiceTest/termDaily's.json");
         ((FundPurchaseRepositoryMock) fundPurchaseRepository).
-                init("test-json/UpdaterServiceTest/fundPurchase's.json");
+                init("test-json/FinancialServiceTest/fundPurchase's.json");
         ((StockPurchaseRepositoryMock) stockPurchaseRepository).
-                init("test-json/UpdaterServiceTest/stockPurchase's.json");
+                init("test-json/FinancialServiceTest/stockPurchase's.json");
         ((TermPurchaseRepositoryMock) termPurchaseRepository).
-                init("test-json/UpdaterServiceTest/termPurchase's.json");
+                init("test-json/FinancialServiceTest/termPurchase's.json");
 
         //    CustomerCode: AB2121202103281
 

@@ -1,0 +1,162 @@
+[
+  {
+    "id": 3,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-05",
+    "price": 100.0
+  },
+  {
+    "id": 4,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-06",
+    "price": 103.0
+  },
+  {
+    "id": 5,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-07",
+    "price": 110.0
+  },
+  {
+    "id": 6,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-08",
+    "price": 112.0
+  },
+  {
+    "id": 7,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-09",
+    "price": 115.0
+  },
+  {
+    "id": 8,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-10",
+    "price": 119.0
+  },
+  {
+    "id": 9,
+    "stock": {
+      "id": 1,
+      "name": "Bilibili 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-11",
+    "price": 120.0
+  },
+  {
+    "id": 9,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-03",
+    "price": 100.0
+  },
+  {
+    "id": 10,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-04",
+    "price": 100.0
+  },
+  {
+    "id": 11,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-05",
+    "price": 100.0
+  },
+  {
+    "id": 12,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-06",
+    "price": 105.0
+  },
+  {
+    "id": 13,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-07",
+    "price": 106.0
+  },
+  {
+    "id": 14,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-08",
+    "price": 110.0
+  },
+  {
+    "id": 15,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-09",
+    "price": 115.0
+  },
+  {
+    "id": 16,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-10",
+    "price": 107.0
+  },
+  {
+    "id": 17,
+    "stock": {
+      "id": 11,
+      "name": "huawei 股票",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "date": "2021-04-11",
+    "price": 120.0
+  }
+]
