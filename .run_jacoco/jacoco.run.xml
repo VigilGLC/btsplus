@@ -1,13 +1,13 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Jacoco" type="JUnit" factoryName="JUnit">
+  <configuration default="false" name="jacoco" type="JUnit" factoryName="JUnit">
     <module name="btsplus" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="fd.se.btsplus.service.*" />
+        <option name="PATTERN" value="fd.se.btsplus.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="PACKAGE_NAME" value="fd.se.btsplus.service" />
+    <option name="PACKAGE_NAME" value="fd.se.btsplus" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
