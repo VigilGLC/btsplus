@@ -31,12 +31,19 @@ public class TransactionsService {
 
         String finalOrderBy = finalOrderBy(orderBy);
         Stream<Transaction> stream = transactionRepository.findAll().stream();
-        stream = streamFiltered(stream, accountNum, transactionNum, transactionCode, beginDate, endDate);
+        stream = stream.filter(tx ->
+                accountNumFilter(tx, accountNum)
+                        && transactionNumFilter(tx, transactionNum)
+                        && transactionCodeFilter(tx, transactionCode)
+                        && beginDateFilter(tx, beginDate)
+                        && endDateFilter(tx, endDate)
+        );
         stream = streamSorted(stream, finalOrderBy);
 
         if (pageNum == null && pageSize == null) {
             return stream.collect(Collectors.toList());
-        } else if (pageNum == null || pageSize == null || pageNum < 0 || pageSize < 0) {
+        }
+        else if (pageNum == null || pageSize == null || pageNum <= 0 || pageSize <= 0) {
             return Collections.emptyList();
         }
 
@@ -49,17 +56,6 @@ public class TransactionsService {
         }
         orderBy = orderBy.toLowerCase();
         return orderBy.equals(DESC) ? DESC : ASC;
-    }
-    private  Stream<Transaction> streamFiltered(Stream<Transaction> stream, String accountNum,
-                                                String transactionNum, String transactionCode,
-                                                Date beginDate, Date endDate) {
-        return stream.filter(tx ->
-                accountNumFilter(tx, accountNum)
-                && transactionNumFilter(tx, transactionNum)
-                && transactionCodeFilter(tx, transactionCode)
-                && beginDateFilter(tx, beginDate)
-                && endDateFilter(tx, endDate)
-        );
     }
     private Stream<Transaction> streamSorted(Stream<Transaction> stream, String finalOrderBy){
         return stream.sorted((tx1, tx2) -> {
