@@ -42,8 +42,7 @@ import java.lang.reflect.Method;
 import java.time.Period;
 
 import static java.net.HttpURLConnection.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FinancialServiceTest {
     private static final JsonUtils JSON_UTILS = new JsonUtils();
@@ -161,7 +160,7 @@ class FinancialServiceTest {
         assertNotNull(financialService.queryProducts(Constant.FUND));
         assertNotNull(financialService.queryProducts(Constant.STOCK));
         assertNotNull(financialService.queryProducts(Constant.TERM));
-        assertTrue(financialService.queryProducts(Constant.NO_PRODUCT).size()==0);
+        assertEquals(0, financialService.queryProducts(Constant.NO_PRODUCT).size());
     }
 
     @Test
