@@ -12,7 +12,7 @@ class ResourceUtilsTest {
         String expected = "123";
 
         try {
-            Assertions.assertEquals(expected, resourceUtils.readFileAsString("test-resources/test"));
+            Assertions.assertEquals(expected, resourceUtils.readFileAsString("test"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -21,7 +21,7 @@ class ResourceUtilsTest {
 
     @Test
     void testReadFileAsString() {
-        String path = "test-resources/test.txt";
+        String path = "test.txt";
         ResourceUtils resourceUtils = new ResourceUtils();
         try {
             Assertions.assertNull(resourceUtils.readFileAsString(path));
