@@ -1,0 +1,61 @@
+[
+  {
+    "id": 1,
+    "customer": {
+      "id": 13,
+      "code": "AB2121202104031",
+      "name": "请不要侮辱二次元",
+      "idNum": "331355200005085616",
+      "creator": {
+        "id": 208,
+        "username": "JT2103253794",
+        "password": "imbus123",
+        "role": 1,
+        "nickname": "高龙超",
+        "sex": 1,
+        "phone": "13832789992",
+        "email": "31937@fudan.edu.cn",
+        "address": "上海市杨浦区邯郸2500号"
+      },
+      "createdTime": "2021-04-03 19:33:41",
+      "sex": 0,
+      "phone": "13333333333",
+      "email": "3333333@fudan.edu.cn",
+      "address": "上海市杨浦区键盘侠只能出门右转2500号"
+    },
+    "fund": {
+      "id": 1,
+      "name": "Bilibili 基金",
+      "createdTime": "2021-04-03 20:14:07"
+    },
+    "initAmount": 2000.0,
+    "currAmount": 2187.4,
+    "currDate": "2021-04-11",
+    "beginDate": "2021-04-03",
+    "endDate": "2021-05-03"
+  },
+  {
+    "id": 11,
+    "customer": {
+      "id": 17,
+      "code": "AB2121202104043",
+      "name": "柔弱的富婆",
+      "creator": null,
+      "createdTime": "2021-04-04 21:44:14",
+      "sex": 0,
+      "phone": "13030559075",
+      "email": "18302@fudan.edu.cn",
+      "address": "上海市复旦大学杨浦区"
+    },
+    "fund": {
+      "id": 11,
+      "name": "tangtang 基金",
+      "createdTime": "2021-04-02 19:14:07"
+    },
+    "initAmount": 2000.0,
+    "currAmount": 1800.8,
+    "currDate": "2021-04-11",
+    "beginDate": "2021-04-05",
+    "endDate": "2021-05-11"
+  }
+]
