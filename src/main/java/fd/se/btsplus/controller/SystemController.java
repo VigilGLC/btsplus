@@ -25,7 +25,7 @@ public class SystemController {
 
     @Operation(method = HTTP_GET, tags = "System", summary = "获取时间")
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.SystemTimeRes)))
+            examples = @ExampleObject(value = OpenApiExamples.SYSTEM_TIME_RES)))
     @GetMapping("/time")
     public ResponseEntity<?> time() {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, dateService.currDate()));

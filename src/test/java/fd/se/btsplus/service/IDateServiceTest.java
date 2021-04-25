@@ -117,18 +117,18 @@ class IDateServiceTest {
 
         iDateService = null;
     }
-}
 
-class IDateServiceImpl implements IDateService {
-    public final static Date curr = new Date(2001 - 1900, Calendar.FEBRUARY, 3);
+    static class IDateServiceImpl implements IDateService {
+        public final static Date curr = new Date(2001 - 1900, Calendar.FEBRUARY, 3);
 
-    @Override
-    public Date currDate() {
-        return curr;
-    }
+        @Override
+        public Date currDate() {
+            return curr;
+        }
 
-    @Override
-    public DateEvent emit() {
-        return null;
+        @Override
+        public DateEvent emit() {
+            return null;
+        }
     }
 }

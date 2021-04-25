@@ -25,57 +25,55 @@ public class RequestCacheFilter extends OncePerRequestFilter {
         request = new CachedBodyHttpServletRequest(request);
         filterChain.doFilter(request, response);
     }
+}
 
-    private static class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
+class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
-        private final byte[] cachedBody;
+    private final byte[] cachedBody;
 
-        public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
-            super(request);
-            InputStream requestInputStream = request.getInputStream();
-            this.cachedBody = StreamUtils.copyToByteArray(requestInputStream);
-        }
-
-        @Override
-        public ServletInputStream getInputStream() {
-            return new CachedBodyServletInputStream(this.cachedBody);
-        }
-
-        @Override
-        public BufferedReader getReader() {
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.cachedBody);
-            return new BufferedReader(new InputStreamReader(byteArrayInputStream));
-        }
-
-
+    public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
+        super(request);
+        InputStream requestInputStream = request.getInputStream();
+        this.cachedBody = StreamUtils.copyToByteArray(requestInputStream);
     }
 
-    private static class CachedBodyServletInputStream extends ServletInputStream {
+    @Override
+    public ServletInputStream getInputStream() {
+        return new CachedBodyServletInputStream(this.cachedBody);
+    }
 
-        private final InputStream cachedBodyInputStream;
+    @Override
+    public BufferedReader getReader() {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.cachedBody);
+        return new BufferedReader(new InputStreamReader(byteArrayInputStream));
+    }
+}
+class CachedBodyServletInputStream extends ServletInputStream {
 
-        public CachedBodyServletInputStream(byte[] cachedBody) {
-            this.cachedBodyInputStream = new ByteArrayInputStream(cachedBody);
-        }
+    private final InputStream cachedBodyInputStream;
 
-        @Override
-        public int read() throws IOException {
-            return cachedBodyInputStream.read();
-        }
+    public CachedBodyServletInputStream(byte[] cachedBody) {
+        this.cachedBodyInputStream = new ByteArrayInputStream(cachedBody);
+    }
 
-        @SneakyThrows
-        @Override
-        public boolean isFinished() {
-            return cachedBodyInputStream.available() == 0;
-        }
+    @Override
+    public int read() throws IOException {
+        return cachedBodyInputStream.read();
+    }
 
-        @Override
-        public boolean isReady() {
-            return true;
-        }
+    @SneakyThrows
+    @Override
+    public boolean isFinished() {
+        return cachedBodyInputStream.available() == 0;
+    }
 
-        @Override
-        public void setReadListener(ReadListener listener) {
-        }
+    @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
+    public void setReadListener(ReadListener listener) {
+        //Do nothing
     }
 }

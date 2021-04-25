@@ -36,7 +36,7 @@ public class LoanController {
     @Operation(method = HTTP_GET, tags = "Loan", summary = "贷款查询")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.LoansRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.LOANS_RESP_OK)))
     @GetMapping("/customer/{idNum}/loans")
     public ResponseEntity<?> loans(@PathVariable String idNum) {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, loanService.queryByIdNum(idNum)));
@@ -45,7 +45,7 @@ public class LoanController {
     @Operation(method = HTTP_GET, tags = "Loan", summary = "账单查询")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.BillsRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.BILLS_RESP_OK)))
     @GetMapping("/customer/loan/{iouNum}/bills")
     public ResponseEntity<?> bills(@PathVariable String iouNum) {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, billService.query(iouNum)));
@@ -54,7 +54,7 @@ public class LoanController {
     @Operation(method = HTTP_PUT, tags = "Loan", summary = "偿还账单")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PaymentRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PAYMENT_RESP_OK)))
     @PutMapping("/customer/loan/bill/{billId}/payment")
     public ResponseEntity<?> payment(@PathVariable Long billId, @RequestBody AccountRequest request) {
         final OperationResult result = customerService.payBill(billId,
@@ -69,7 +69,7 @@ public class LoanController {
     @Operation(method = HTTP_POST, tags = "Loan", summary = "自动还款")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.AutoPaymentRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.AUTO_PAYMENT_RESP_OK)))
     @PostMapping("/loans/bills/auto-payment")
     public ResponseEntity<?> autoPayment() {
         final OperationResult result = customerService.autoPayBill();

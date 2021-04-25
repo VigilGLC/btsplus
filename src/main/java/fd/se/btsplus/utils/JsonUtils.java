@@ -13,9 +13,9 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class JsonUtils {
-    private final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-    {
+    static {
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm"));
     }
 

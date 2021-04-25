@@ -37,9 +37,9 @@ public class FinancialController {
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
             examples = {
-                    @ExampleObject(name = "for stocks", value = OpenApiExamples.StocksRespOk),
-                    @ExampleObject(name = "for funds", value = OpenApiExamples.FundsRespOk),
-                    @ExampleObject(name = "for terms", value = OpenApiExamples.TermsRespOk)
+                    @ExampleObject(name = "for stocks", value = OpenApiExamples.STOCKS_RESP_OK),
+                    @ExampleObject(name = "for funds", value = OpenApiExamples.FUNDS_RESP_OK),
+                    @ExampleObject(name = "for terms", value = OpenApiExamples.TERMS_RESP_OK)
             }))
     @GetMapping("/financial/{prodType}")
     public ResponseEntity<?> products(@PathVariable String prodType) {
@@ -51,7 +51,7 @@ public class FinancialController {
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买基金")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PURCHASE_RESP_OK)))
     @PostMapping("/financial/fund/{fundId}/purchase")
     public ResponseEntity<?> purchaseFund(@PathVariable long fundId, @RequestBody FundPurchaseRequest request) {
         Account account = subject.getAccount();
@@ -66,7 +66,7 @@ public class FinancialController {
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看基金")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.FundPurchasesRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.FUND_PURCHASES_RESP_OK)))
     @GetMapping("/customer/{customerCode}/financial/funds/purchases")
     public ResponseEntity<?> fundPurchases(@PathVariable String customerCode) {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, financialService.queryFundPurchases(customerCode)));
@@ -79,7 +79,7 @@ public class FinancialController {
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买股票")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PURCHASE_RESP_OK)))
     @PostMapping("/financial/stock/{stockId}/purchase")
     public ResponseEntity<?> purchaseStock(@PathVariable long stockId, @RequestBody StockPurchaseRequest request) {
         Account account = subject.getAccount();
@@ -93,7 +93,7 @@ public class FinancialController {
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看股票")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.StockPurchasesRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.STOCK_PURCHASES_RESP_OK)))
     @GetMapping("/customer/{customerCode}/financial/stocks/purchases")
     public ResponseEntity<?> stockPurchases(@PathVariable String customerCode) {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, financialService.queryStockPurchases(customerCode)));
@@ -106,7 +106,7 @@ public class FinancialController {
     @Operation(method = HTTP_POST, tags = "Financial", summary = "购买定期理财")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.PurchaseRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.PURCHASE_RESP_OK)))
     @PostMapping("/financial/term/{termId}/purchase")
     public ResponseEntity<?> purchaseTerm(@PathVariable long termId, @RequestBody TermPurchaseRequest request) {
         Account account = subject.getAccount();
@@ -121,7 +121,7 @@ public class FinancialController {
     @Operation(method = HTTP_GET, tags = "Financial", summary = "查看定期理财")
     @Parameter(in = ParameterIn.HEADER, required = true, name = LOGIN_TOKEN_HEADER, schema = @Schema(type = "string"))
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json",
-            examples = @ExampleObject(value = OpenApiExamples.TermPurchasesRespOk)))
+            examples = @ExampleObject(value = OpenApiExamples.TERM_PURCHASES_RESP_OK)))
     @GetMapping("/customer/{customerCode}/financial/terms/purchases")
     public ResponseEntity<?> termPurchases(@PathVariable String customerCode) {
         return ResponseEntity.ok(ResponseWrapper.wrap(HTTP_OK, financialService.queryTermPurchases(customerCode)));
