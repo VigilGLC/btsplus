@@ -53,7 +53,7 @@ public class FinancialService {
     private final TermPurchaseRepository termPurchaseRepository;
 
     private final AccountService accountService;
-    private final IDateService dateService;
+    public IDateService dateService;
 
 
     /**
@@ -131,9 +131,6 @@ public class FinancialService {
         if (fund == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
         }
-        if (account.getBalance() < amount) {
-            return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
-        }
         OperationResult result = pay(account, amount);
         if (result.getCode() != HTTP_OK) return result;
 
@@ -166,9 +163,6 @@ public class FinancialService {
             return OperationResult.of(HTTP_NOT_FOUND, "StockDaily not exists.");
         }
         double price = stockDaily.getPrice();
-        if (account.getBalance() < count * price) {
-            return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
-        }
         OperationResult result = pay(account, count * price);
         if (result.getCode() != HTTP_OK) return result;
         //save stock purchase record
@@ -191,9 +185,6 @@ public class FinancialService {
         Term term = termRepository.findById(termId.longValue());
         if (term == null) {
             return OperationResult.of(HTTP_NOT_FOUND, "product not found");
-        }
-        if (account.getBalance() < amount) {
-            return OperationResult.of(HTTP_NOT_ACCEPTABLE, "balance not enough");
         }
         OperationResult result = pay(account, amount);
         if (result.getCode() != HTTP_OK) return result;
