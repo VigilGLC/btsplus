@@ -1,15 +1,22 @@
 package fd.se.btsplus.service;
 
+import fd.se.btsplus.model.entity.bts.Account;
 import fd.se.btsplus.model.entity.bts.Transaction;
 import fd.se.btsplus.repository.bts.TransactionRepository;
 import fd.se.btsplus.repository.bts.mock.TransactionRepositoryMock;
 import fd.se.btsplus.utils.JsonUtils;
 import fd.se.btsplus.utils.ResourceUtils;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static fd.se.btsplus.model.consts.Constant.ASC;
 import static fd.se.btsplus.model.consts.Constant.DESC;
@@ -21,11 +28,12 @@ class TransactionsServiceTest {
     private TransactionRepository transactionRepository;
     private TransactionsService transactionsService;
     private List<Transaction> transactions;
+
     @BeforeEach
     void setUp() {
         transactionRepository = new TransactionRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
         // 3 items in transactionRepository
-        ((TransactionRepositoryMock)transactionRepository).init("test-json/TransactionServiceTest/transactions.json");
+        ((TransactionRepositoryMock) transactionRepository).init("test-json/TransactionServiceTest/transactions.json");
         transactionsService = new TransactionsService(transactionRepository);
     }
 
@@ -51,8 +59,9 @@ class TransactionsServiceTest {
         transactions = getTransactionsWithPage(2, 2);
         assertEquals(1, transactions.size());
     }
+
     @Test
-    void queryWithWrongPage(){
+    void queryWithWrongPage() {
         // wrong pageNum
         transactions = getTransactionsWithPage(null, 2);
         assertEquals(0, transactions.size());
@@ -74,7 +83,7 @@ class TransactionsServiceTest {
     }
 
     @Test
-    void queryWithOrderBy(){
+    void queryWithOrderBy() {
         // ASC
         transactions = getTransactionsWithOrderBy(null);
         assertTrue(isOrderCorrect(true));
@@ -85,8 +94,9 @@ class TransactionsServiceTest {
         transactions = getTransactionsWithOrderBy(DESC);
         assertTrue(isOrderCorrect(false));
     }
+
     @Test
-    void queryWithAccountNum(){
+    void queryWithAccountNum() {
         // correct
         transactions = getTransactionsWithAccountNum("6161710619136431439");
         assertEquals(1, transactions.size());
@@ -98,7 +108,7 @@ class TransactionsServiceTest {
     }
 
     @Test
-    void queryWithTransactionNum(){
+    void queryWithTransactionNum() {
         // correct
         transactions = getTransactionsWithTransactionNum("AB21210001206202103251803061");
         assertEquals(1, transactions.size());
@@ -108,8 +118,9 @@ class TransactionsServiceTest {
         transactions = getTransactionsWithTransactionNum("");
         assertEquals(0, transactions.size());
     }
+
     @Test
-    void queryWithTransactionCode(){
+    void queryWithTransactionCode() {
         // correct
         transactions = getTransactionsWithTransactionCode("0001");
         assertEquals(2, transactions.size());
@@ -119,54 +130,157 @@ class TransactionsServiceTest {
         assertEquals(0, transactions.size());
     }
 
-    private List<Transaction> getTransactionsWithPage(Integer pageNum, Integer pageSize){
+    private List<Transaction> getTransactionsWithPage(Integer pageNum, Integer pageSize) {
         return transactionsService.query(
                 pageNum, pageSize, null,
                 null, null, null,
                 null, null);
     }
-    private List<Transaction> getTransactionsWithOrderBy(String orderBy){
+
+    private List<Transaction> getTransactionsWithOrderBy(String orderBy) {
         return transactionsService.query(
                 null, null, null,
                 null, null, orderBy,
                 null, null);
     }
-    private boolean isOrderCorrect(boolean isAsc){
+
+    private boolean isOrderCorrect(boolean isAsc) {
         int index;
-        if (isAsc){
+        if (isAsc) {
             index = 70;
-            for (Transaction transaction : transactions){
+            for (Transaction transaction : transactions) {
                 if (transaction.getId() != index)
                     return false;
-                index ++;
+                index++;
             }
-        }
-        else {
+        } else {
             index = 72;
-            for (Transaction transaction : transactions){
+            for (Transaction transaction : transactions) {
                 if (transaction.getId() != index)
                     return false;
-                index --;
+                index--;
             }
         }
         return true;
     }
-    private List<Transaction> getTransactionsWithAccountNum(String accountNum){
+
+    private List<Transaction> getTransactionsWithAccountNum(String accountNum) {
         return transactionsService.query(
                 null, null, accountNum,
                 null, null, null,
                 null, null);
     }
-    private List<Transaction> getTransactionsWithTransactionNum(String transactionNum){
+
+    private List<Transaction> getTransactionsWithTransactionNum(String transactionNum) {
         return transactionsService.query(
                 null, null, null,
                 transactionNum, null, null,
                 null, null);
     }
-    private List<Transaction> getTransactionsWithTransactionCode(String transactionCode){
+
+    private List<Transaction> getTransactionsWithTransactionCode(String transactionCode) {
         return transactionsService.query(
                 null, null, null,
                 null, transactionCode, null,
                 null, null);
     }
+
+    @SneakyThrows
+    Stream<Transaction> invokeStreamSorted(Stream<Transaction> stream, String finalOrderBy) {
+        final Method method = transactionsService.getClass().
+                getDeclaredMethod("streamSorted", Stream.class, String.class);
+        method.setAccessible(true);
+        @SuppressWarnings("unchecked") final Stream<Transaction> ret =
+                (Stream<Transaction>) method.invoke(transactionsService, stream,
+                        finalOrderBy);
+        return ret;
+    }
+
+    @Test
+    void testStreamSortedOperatedTimeNull() {
+        final Transaction tx1 = new Transaction();
+        final Transaction tx2 = new Transaction();
+        tx2.setOperatedTime(new Date(0));
+        final Transaction tx3 = new Transaction();
+        Stream<Transaction> stream = Stream.of(tx1, tx2, tx3);
+        final List<Transaction> list = invokeStreamSorted(stream, ASC).collect(Collectors.toList());
+        Assertions.assertNotNull(list.get(0).getOperatedTime());
+    }
+
+    @Test
+    void testStreamSortedOperatedTimeNotNull() {
+        final Transaction tx1 = new Transaction();
+        tx1.setOperatedTime(new Date(1));
+        final Transaction tx2 = new Transaction();
+        tx2.setOperatedTime(new Date(0));
+        Stream<Transaction> stream = Stream.of(tx1, tx2);
+        final List<Transaction> list = invokeStreamSorted(stream, ASC).collect(Collectors.toList());
+        Assertions.assertEquals(tx2, list.get(0));
+    }
+
+    @SneakyThrows
+    boolean invokeAccountNumFilter(Transaction transaction, String accountNum) {
+        final Method method = transactionsService.getClass().
+                getDeclaredMethod("accountNumFilter", Transaction.class, String.class);
+        method.setAccessible(true);
+        return (Boolean) method.invoke(transactionsService, transaction,
+                accountNum);
+    }
+
+    @Test
+    void testAccountNumberFilterInvalidTransaction() {
+        final Transaction tx = new Transaction();
+        Assertions.assertFalse(invokeAccountNumFilter(tx, "123"));
+        tx.setAccount(new Account());
+        Assertions.assertFalse(invokeAccountNumFilter(tx, "123456"));
+    }
+
+    @Test
+    void testAccountNumberFilterAccountNumNull() {
+        final Transaction tx = new Transaction();
+        Assertions.assertTrue(invokeAccountNumFilter(tx, null));
+    }
+
+    @Test
+    void testAccountNumberFilterAccountNormal() {
+        final Transaction tx = new Transaction();
+        final Account account = new Account();
+        account.setAccountNum("9527");
+        tx.setAccount(account);
+        Assertions.assertTrue(invokeAccountNumFilter(tx, "9527"));
+    }
+
+    @SneakyThrows
+    private boolean invokeBeginDateFilter(Transaction tx, Date beginDate) {
+        final Method method = transactionsService.getClass().
+                getDeclaredMethod("beginDateFilter", Transaction.class, Date.class);
+        method.setAccessible(true);
+        return (Boolean) method.invoke(transactionsService, tx, beginDate);
+    }
+
+    @SneakyThrows
+    private boolean invokeEndDateFilter(Transaction tx, Date endDate) {
+        final Method method = transactionsService.getClass().
+                getDeclaredMethod("endDateFilter", Transaction.class, Date.class);
+        method.setAccessible(true);
+        return (Boolean) method.invoke(transactionsService, tx, endDate);
+    }
+
+    @Test
+    void testDateFilterOperatedTimeNull() {
+        final Transaction tx = new Transaction();
+        assertFalse(invokeBeginDateFilter(tx, new Date(0)));
+        assertFalse(invokeEndDateFilter(tx, new Date(0)));
+    }
+
+    @Test
+    void testDateFilterNormal() {
+        final Transaction tx = new Transaction();
+        tx.setOperatedTime(new Date(2_000_000_000));
+        assertTrue(invokeBeginDateFilter(tx, new Date(1_000_000_000)));
+        assertFalse(invokeBeginDateFilter(tx, new Date(2_100_000_000)));
+        assertFalse(invokeEndDateFilter(tx, new Date(436_000_000)));
+        assertTrue(invokeEndDateFilter(tx, new Date(2_100_000_000)));
+    }
+
 }

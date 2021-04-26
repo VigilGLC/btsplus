@@ -85,9 +85,7 @@ public class TransactionsService {
             if ((acNum = ac.getAccountNum()) == null) {
                 return false;
             }
-            if (!acNum.equals(accountNum)) {
-                return false;
-            }
+            return acNum.equals(accountNum);
         }
         return true;
     }
