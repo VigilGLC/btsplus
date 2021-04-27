@@ -283,4 +283,15 @@ class TransactionsServiceTest {
         assertTrue(invokeEndDateFilter(tx, new Date(2_100_000_000)));
     }
 
+    @Test
+    void testQueryByDates() {
+        transactionRepository = new TransactionRepositoryMock(RESOURCE_UTILS, JSON_UTILS, null);
+        // 3 items in transactionRepository
+        ((TransactionRepositoryMock) transactionRepository).init("test-json/TransactionServiceTest/transactions-extra.json");
+        transactionsService = new TransactionsService(transactionRepository);
+        List<Transaction> list = transactionsService.query(1, 20,
+                null, null, null,
+                null, new Date(1617033600000L), new Date(1619798400000L));
+        Assertions.assertEquals(1,list.size());
+    }
 }
